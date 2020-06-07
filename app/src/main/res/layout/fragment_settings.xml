@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccentllight"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.settingsFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp">
+
+            <com.airbnb.lottie.LottieAnimationView
+                app:tint="@color/colorAccentllight"
+                android:id="@+id/usericon"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                app:lottie_rawRes="@raw/support"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+
+                >
+
+
+            </com.airbnb.lottie.LottieAnimationView>
+
+
+
+            <RelativeLayout
+                android:id="@+id/cardcontacto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/usericon"
+                >
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardtecnicoinformatico"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="12dp"
+                    android:backgroundTint="@color/colorAccent"
+                    android:clickable="true"
+                    app:cardCornerRadius="30dp"
+                    app:cardElevation="6dp">
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+
+                        <LinearLayout
+                            android:id="@+id/contacto"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="20dp"
+                                android:textAlignment="center"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Contacto"
+                                android:gravity="center_horizontal"></TextView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/txtemailcontato"
+                            android:layout_width="match_parent"
+
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/contacto"
+                            android:layout_marginTop="20dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:textSize="16dp"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:layout_height="wrap_content"
+                                android:text="Email Contacto"
+                                android:gravity="center_horizontal">
+
+                            </TextView>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/txtemailcontato2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/txtemailcontato"
+                            android:layout_marginTop="5dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:textAlignment="center"
+                                android:textSize="18dp"
+                                android:layout_height="wrap_content"
+                                android:text="Empresa_Empresa@Empresa.cl"
+                                android:textColor="@color/colorPrimary"
+                                android:gravity="center_horizontal"></TextView>
+
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/txttelefonocontacto"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/txtemailcontato2"
+                            android:layout_marginTop="15dp">
+
+                            <TextView
+                                android:textAlignment="center"
+                                android:textSize="16dp"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Telefono Contacto"
+                                android:gravity="center_horizontal">
+
+                            </TextView>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+
+                            android:id="@+id/telefonocontacto2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/txttelefonocontacto"
+                            android:layout_marginTop="5dp"
+                            android:gravity="center_horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:textAlignment="center"
+                                android:textSize="18dp"
+                                android:layout_height="wrap_content"
+                                android:text="9 8436 3287"
+                                android:textColor="@color/colorPrimary"
+                                android:gravity="center_horizontal"></TextView>
+
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutbtnpreguntasfrecuentes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardcontacto"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp">
+
+                <Button
+                    android:id="@+id/btnpreguntas"
+                    android:layout_width="220dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/botonripple"
+                    android:text="Preguntas Frecuentes" />
+
+
+            </RelativeLayout>
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layoutbtnpreguntasfrecuentes"
+                android:layout_centerHorizontal="true">
+
+                <Button
+                    android:id="@+id/btncambiodetiempoactualizacion"
+                    android:layout_width="190dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/botonripple"
+                    android:text="Tiempo Sync de la app" />
+
+
+            </RelativeLayout>
+
+
+            <Button
+                android:id="@+id/btnsalir"
+                android:layout_width="170dp"
+                android:layout_height="45dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/colordark"
+                android:background="@drawable/botonripple"
+                android:text="Salir De La Sesion"
+                android:textColor="@color/colorAccentllight" />
+
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+
+
+
+</FrameLayout>

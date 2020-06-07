@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorAccentllight"
+    tools:context=".fragments.passperfilFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+
+            <androidx.cardview.widget.CardView
+
+                android:id="@+id/cardcambiodepass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_centerVertical="true"
+                android:layout_margin="12dp"
+                android:backgroundTint="@color/colordark"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="6dp">
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+
+                    <LinearLayout
+                        android:id="@+id/contacto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="Cambio de Contraseña"
+                            android:fontFamily="sans-serif-condensed-medium"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="20dp"></TextView>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/txtemailcontato"
+                        android:layout_width="match_parent"
+
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/contacto"
+                        android:layout_marginTop="20dp">
+
+                        <TextView
+                            android:fontFamily="sans-serif-condensed-medium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="Contraseña Actual"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16dp">
+
+                        </TextView>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/txtcontrasenactual"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtemailcontato"
+                        android:layout_marginTop="5dp">
+
+                        <EditText
+                            android:inputType="textPassword"
+                            android:id="@+id/passactual"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text=""
+                            android:textAlignment="center"
+                            android:textColor="@color/colorAccentllight"
+                            android:textSize="18dp"></EditText>
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/txtnuevacontrasena"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtemailcontato"
+                        android:layout_marginTop="15dp">
+
+                        <TextView
+                            android:fontFamily="sans-serif-condensed-medium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="Nueva Contraseña"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16dp">
+
+                        </TextView>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+
+                        android:id="@+id/txtnuevacontrasena2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txttelefonocontacto"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_horizontal">
+
+                        <EditText
+                            android:inputType="textPassword"
+                            android:id="@+id/cambiocontraseñaperfil"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text=""
+                            android:textAlignment="center"
+                            android:textColor="@color/colorAccentllight"
+                            android:textSize="18dp"></EditText>
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/txttelefonocontacto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtemailcontato"
+                        android:layout_marginTop="15dp">
+
+                        <TextView
+                            android:fontFamily="sans-serif-condensed-medium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="Repíta Nueva Contraseña"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16dp">
+
+                        </TextView>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txttelefonocontacto"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_horizontal">
+
+                        <EditText
+                            android:inputType="textPassword"
+                            android:id="@+id/cambiocontraseña2perfil"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text=""
+                            android:textAlignment="center"
+                            android:textColor="@color/colorAccentllight"
+                            android:textSize="18dp"></EditText>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <RelativeLayout
+                android:layout_marginTop="30dp"
+                android:layout_below="@id/cardcambiodepass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <Button
+                    android:id="@+id/btncambiocontrasena"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="40dp"
+                    android:textColor="@color/colorAccent"
+                    android:background="@drawable/bg_ripplepass"
+                    android:text="Cambiar Mi Contraseña" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+
+
+
+
+
+</FrameLayout>

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "130921637510",
+    "firebase_url": "https://tesistrabajador.firebaseio.com",
+    "project_id": "tesistrabajador",
+    "storage_bucket": "tesistrabajador.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:130921637510:android:97b0ba0d2335cfe3715307",
+        "android_client_info": {
+          "package_name": "com.example.tesistrabajador"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "130921637510-mgfjtqsed52to1d5h0sh52gtpqdnsl9c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tesistrabajador",
+            "certificate_hash": "9ca5a15cca04d25d53d0f1edcf78c4c851b63c39"
+          }
+        },
+        {
+          "client_id": "130921637510-kro0aenoup5nc7gf33j2pdupra16lv5r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT4pvXidV9PsdukHjlj1KmWPGOnKKCSdY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "130921637510-kro0aenoup5nc7gf33j2pdupra16lv5r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorAccentllight"
+    android:layout_height="match_parent"
+    tools:context=".fragments.DetalleSolicitudFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+        <RelativeLayout
+            android:id="@+id/layoutdetalle"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_centerHorizontal="true"
+                android:id="@+id/mydashboard"
+                android:text="Detalle Solicitud"
+                android:textAlignment="center"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textSize="30sp"
+                android:layout_marginLeft="62dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal">
+            </TextView>
+
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/detallesolitudinfo"
+            android:padding="16dp"
+            android:layout_below="@id/layoutdetalle"
+            android:layout_width="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content">
+
+
+            <RelativeLayout
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imgperfilfilasolicitud"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:src="@drawable/userprofile"></ImageView>
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/txtnumerosolicitud"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colordark"
+                        android:textSize="15dp"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/txtfechasolicitud"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtnumerosolicitud"
+                        android:textColor="@color/colordark"
+                        android:textSize="15dp"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="">
+
+                    </TextView>
+                    <TextView
+                        android:id="@+id/txtfechadetallesolicitud"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtfechasolicitud"
+                        android:textColor="@color/colordark"
+                        android:textSize="15dp"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="">
+
+                    </TextView>
+
+
+
+                    <TextView
+                        android:layout_below="@id/txttrabajadorsolicituddetalle"
+                        android:id="@+id/txtrubrosolicituddetalle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colordark"
+                        android:textSize="15dp"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="">
+
+                    </TextView>
+
+
+
+                    <TextView
+                        android:id="@+id/txttrabajadorsolicituddetalle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtfechadetallesolicitud"
+                        android:textColor="@color/colordark"
+                        android:textSize="15dp"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="">
+
+                    </TextView>
+
+
+                    <TextView
+                        android:id="@+id/txtpreciosolicitud"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtrubrosolicituddetalle"
+                        android:textColor="@color/colordark"
+                        android:textSize="15dp"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="">
+
+                    </TextView>
+
+
+                    <TextView
+                        android:id="@+id/txtestadosolicitud"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtpreciosolicitud"
+                        android:textColor="@color/colordark"
+                        android:textSize="15dp"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="">
+
+                    </TextView>
+
+
+
+
+
+
+                </RelativeLayout>
+
+
+
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+
+
+        <GridLayout
+            android:layout_below="@id/detallesolitudinfo"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="70dp"
+            android:layout_height="match_parent"
+            >
+
+
+            <RelativeLayout
+                android:id="@+id/cardcontacto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/usericon"
+                >
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/carddescripcionproblema"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="12dp"
+                    android:backgroundTint="@color/colorAccent"
+                    android:clickable="true"
+                    app:cardCornerRadius="30dp"
+                    app:cardElevation="6dp">
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+
+                        <LinearLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:fontFamily="sans-serif-condensed-medium"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:text="Descripcion Problema "
+                                android:textAlignment="center"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="20dp"></TextView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:layout_below="@id/txtemailcontato"
+                            android:layout_marginTop="5dp">
+
+                            <TextView
+                                android:id="@+id/txtdescripciondetallesolicitud"
+                                android:inputType="textMultiLine"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:text=""
+                                android:textAlignment="center"
+                                android:textColor="@color/colordark"
+                                android:textSize="18dp"></TextView>
+
+
+                        </LinearLayout>
+
+
+
+
+
+
+                    </LinearLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/carddiagnosticodetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="12dp"
+                    android:layout_below="@id/carddescripcionproblema"
+                    android:backgroundTint="@color/colorAccent"
+                    android:clickable="true"
+                    app:cardCornerRadius="30dp"
+                    app:cardElevation="6dp">
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+
+                        <LinearLayout
+                            android:id="@+id/contacto"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/txtdiagnosticodetallesolicitud"
+                                android:fontFamily="sans-serif-condensed-medium"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:text="Diagnostico "
+                                android:textAlignment="center"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="20dp"></TextView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:layout_below="@id/txtemailcontato"
+                            android:layout_marginTop="5dp">
+
+                            <TextView
+                                android:id="@+id/txtdiagnosticodetallesolicitud1"
+                                android:inputType="textMultiLine"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:text=""
+                                android:textAlignment="center"
+                                android:textColor="@color/colordark"
+                                android:textSize="18dp"></TextView>
+
+
+                        </LinearLayout>
+
+
+
+
+
+
+                    </LinearLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardsolucionsolicitud"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="12dp"
+                    android:layout_below="@id/carddiagnosticodetalle"
+                    android:backgroundTint="@color/colorAccent"
+                    android:clickable="true"
+                    app:cardCornerRadius="30dp"
+                    app:cardElevation="6dp">
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+
+                        <LinearLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:fontFamily="sans-serif-condensed-medium"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:text="Solucion /Obsrvaciones "
+                                android:textAlignment="center"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="20dp"></TextView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:layout_below="@id/txtemailcontato"
+                            android:layout_marginTop="5dp">
+
+                            <TextView
+                                android:id="@+id/txtsoluciondetallesolicitud"
+                                android:inputType="textMultiLine"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:text=""
+                                android:textAlignment="center"
+                                android:textColor="@color/colordark"
+                                android:textSize="18dp"></TextView>
+
+
+                        </LinearLayout>
+
+
+
+
+
+
+                    </LinearLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/carfotossolicitud"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="12dp"
+                    android:layout_below="@id/cardsolucionsolicitud"
+                    android:backgroundTint="@color/colorAccent"
+                    android:clickable="true"
+                    app:cardCornerRadius="30dp"
+                    app:cardElevation="6dp">
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+
+                        <LinearLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:fontFamily="sans-serif-condensed-medium"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:text="Fotos"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="20dp"></TextView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:layout_below="@id/txtemailcontato"
+                            android:layout_marginTop="5dp">
+
+                            <ImageView
+                                android:id="@+id/imgclientesacada"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textAlignment="center"
+
+                                android:textColor="@color/colordark"
+                                android:textSize="18dp"></ImageView>
+
+
+                        </LinearLayout>
+
+
+
+
+
+
+                    </LinearLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+
+        </GridLayout>
+
+
+
+        /*  <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+
+        android:layout_marginTop="20dp">
+
+        <Button
+
+            android:id="@+id/btnvolver"
+            android:layout_width="220dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/botonripple"
+            android:text="Actualizar" />
+
+
+    </RelativeLayout>*/
+
+
+
+    </RelativeLayout>
+
+
+
+
+
+
+
+</ScrollView>

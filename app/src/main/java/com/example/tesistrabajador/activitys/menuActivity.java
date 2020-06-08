@@ -24,6 +24,7 @@ import com.example.tesistrabajador.clases.Solicitud;
 import com.example.tesistrabajador.fragments.listanotificacionesFragment;
 import com.example.tesistrabajador.fragments.perfilFragment;
 import com.example.tesistrabajador.fragments.settingsFragment;
+import com.example.tesistrabajador.fragments.solicitudesFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -97,7 +98,7 @@ public class menuActivity extends AppCompatActivity {
                 //se muestra el fragment de la lista de solicitudes
                 if(menuItem.getItemId()==R.id.menu_solicitud){
                     //   showSelectedFragment(new solicitudeFragment());
-
+                    showSelectedFragment(new solicitudesFragment());
                 }
                 //se muestra el fragment de configuracion y setting
                 if(menuItem.getItemId()== R.id.menu_settings){

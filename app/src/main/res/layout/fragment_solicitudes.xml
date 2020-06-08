@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorAccentllight"
+    android:layout_height="wrap_content">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/txtmisoli"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_centerHorizontal="true"
+                android:id="@+id/mydashboard"
+                android:text="Mis Solicitudes"
+                android:textAlignment="center"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textSize="35sp"
+                android:textColor="@color/colordark"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal">
+            </TextView>
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_below="@id/txtmisoli"
+            android:layout_width="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/cardcontacto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/xxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:textColor="@color/colordark"
+                    android:textAlignment="center"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:text="Solicitudes Terminadas"
+                    android:textSize="25dp"
+
+                    android:gravity="center_horizontal"></TextView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_below="@+id/xxt"
+                    android:id="@+id/cardtecnicoinformatico"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:backgroundTint="@color/colorAccent"
+                    android:clickable="true"
+                    app:cardCornerRadius="30dp"
+                    app:cardElevation="6dp">
+
+
+
+                    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                        android:id="@+id/refreshterminadas"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <LinearLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+
+
+                            <ListView
+
+                                android:id="@+id/listadosolicitudescliente"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+
+
+
+                            </ListView>
+
+
+
+
+
+
+                        </LinearLayout>
+
+
+                    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+
+
+
+
+
+
+                </androidx.cardview.widget.CardView>
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+
+
+
+
+</RelativeLayout>

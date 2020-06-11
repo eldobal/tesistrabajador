@@ -22,6 +22,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tesistrabajador.R;
+import com.example.tesistrabajador.clases.Alertdialoglogin;
 import com.example.tesistrabajador.clases.Usuario;
 import com.example.tesistrabajador.interfaces.tesisAPI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -63,14 +64,8 @@ public class loginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        AlertDialog.Builder builderlogin = new AlertDialog.Builder(this);
-        LayoutInflater inflaterload = getLayoutInflater();
-        View viewlogin = inflaterload.inflate(R.layout.alertdialogloaginglogin,null);
-
-        builderlogin.setView(viewlogin);
-        AlertDialog dialog = builderlogin.create();
-        dialog.show();
-
+        Alertdialoglogin alertdialoglogin = new Alertdialoglogin(loginActivity.this);
+        alertdialoglogin.startalertdialog();
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         asycprefs = getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
 
@@ -81,9 +76,9 @@ public class loginActivity extends AppCompatActivity implements GoogleApiClient.
             Intent intent = new Intent(loginActivity.this, menuActivity.class);
             saveOnPreferences(usuarioconectado,contraseñausuarioconectado,idciudad);
             startActivity(intent);
-            dialog.dismiss();
+            alertdialoglogin.cancelalerdialog();
         }else{
-            dialog.dismiss();
+            alertdialoglogin.cancelalerdialog();
         }
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -112,14 +107,7 @@ public class loginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onClick(View arg0) {
                 if(!TextUtils.isEmpty(txtrut.getText()) && !TextUtils.isEmpty(txtpass.getText())){
-                    AlertDialog.Builder builderlogin2 = new AlertDialog.Builder(loginActivity.this);
-                    LayoutInflater inflaterload2 = getLayoutInflater();
-                    View viewlogin2 = inflaterload2.inflate(R.layout.alertdialogloaginglogin,null);
-
-                    builderlogin2.setView(viewlogin2);
-                    AlertDialog dialog2 = builderlogin2.create();
-                    dialog2.show();
-
+                    alertdialoglogin.startalertdialog();
                     String rut = txtrut.getText().toString();
                     String contrasena = txtpass.getText().toString();
 
@@ -136,7 +124,7 @@ public class loginActivity extends AppCompatActivity implements GoogleApiClient.
                             //si esta malo se ejecuta este trozo
                             if(!response.isSuccessful()){
                                 Toast.makeText(getApplicationContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
-                                dialog2.dismiss();
+                               alertdialoglogin.cancelalerdialog();
                             }
                             //de lo contrario se ejecuta esta parte
                             else {
@@ -156,7 +144,7 @@ public class loginActivity extends AppCompatActivity implements GoogleApiClient.
                                     saveOnPreferences(rut,contrasena,idciudad);
                                     startActivity(intent);
                                     finish();
-                                    dialog2.dismiss();
+                                    alertdialoglogin.cancelalerdialog();
                                 }
                             }
                         }
@@ -164,6 +152,7 @@ public class loginActivity extends AppCompatActivity implements GoogleApiClient.
                         @Override
                         public void onFailure(Call<Usuario> call, Throwable t) {
                             Toast.makeText(getApplicationContext(), " Error al Iniciar Sesion", Toast.LENGTH_LONG).show();
+                            alertdialoglogin.cancelalerdialog();
                         }
                     });
                 }else{

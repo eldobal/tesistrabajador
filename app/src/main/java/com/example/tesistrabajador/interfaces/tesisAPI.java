@@ -114,4 +114,37 @@ public interface tesisAPI {
     Call<Solicitud> getSolicitudCliente(@Query("id") int id);
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @GET("api/UsuarioAPI")
+    Call<Usuario> getLoginTrabajador(@Query("RUT") String id,
+                           @Query("pass") String pass
+    );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

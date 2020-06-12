@@ -11,7 +11,7 @@
     <string name="err_rut">Ingrese un rut valido</string>
     <string name="err_name">Ingrese un nombre valido</string>
     <string name="err_apellido">Ingrese un apellido valido</string>
-    <string name="err_fono">Ingrese un fono valido</string>
+    <string name="err_fono">Ingrese un fono valido con 569</string>
     <string name="err_correo">Ingrese un correo valido</string>
     <string name="err_contraseña">Ingrese una contraseña valida</string>
     <string name="err_contraseña2">Ingrese una contraseña valida</string>

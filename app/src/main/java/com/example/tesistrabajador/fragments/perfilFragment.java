@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.bumptech.glide.Glide;
 import com.example.tesistrabajador.R;
@@ -58,6 +59,7 @@ public class perfilFragment extends Fragment {
     private ImageView fotoperfil;
     SharedPreferences prefs;
     SweetAlertDialog dp;
+    LottieAnimationView loadingdots2;
     private GoogleSignInClient googleSignInClient;
     private String rutperfil ="",contrasenaperfil="",rutaurl="";
     final static String rutaservidor= "http://proyectotesis.ddns.net";
@@ -98,7 +100,7 @@ public class perfilFragment extends Fragment {
         fotoperfil = (ImageView) v.findViewById(R.id.usericon);
         editardatos = (Button) v.findViewById(R.id.actualizarperfil);
         editarpass = (Button) v.findViewById(R.id.actualizarcontraseña);
-
+        loadingdots2 =(LottieAnimationView) v.findViewById(R.id.loadindots2);
         prefs = this.getActivity().getSharedPreferences("Preferences",Context.MODE_PRIVATE);
 
         if (networkInfo != null && networkInfo.isConnected()) {
@@ -317,6 +319,8 @@ public class perfilFragment extends Fragment {
                     telefono.setText(usuarios.getFono().toString());
                     idCiudad = usuarios.getIdCiudad();
                     rutaurl = usuarios.getFoto();
+                    loadingdots2.setVisibility(View.INVISIBLE);
+                    loadingdots2.cancelAnimation();
                     Glide.with(getContext()).load(String.valueOf(rutaservidor+rutaurl)).into(fotoperfil);
 
                     boolean encontrado = false;

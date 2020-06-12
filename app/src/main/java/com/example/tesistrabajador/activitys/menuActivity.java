@@ -25,6 +25,7 @@ import com.example.tesistrabajador.fragments.listanotificacionesFragment;
 import com.example.tesistrabajador.fragments.perfilFragment;
 import com.example.tesistrabajador.fragments.settingsFragment;
 import com.example.tesistrabajador.fragments.solicitudesFragment;
+import com.example.tesistrabajador.interfaces.tesisAPI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -32,8 +33,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class menuActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
@@ -62,6 +69,7 @@ public class menuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         setcredentiasexist();
+
         //al momento de crear el home en el onCreate cargar con el metodo sin backtostack
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -82,6 +90,7 @@ public class menuActivity extends AppCompatActivity {
             Toast.makeText(menuActivity.this, "Nombre"+personName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
         }
 
+
         mbottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomnavigation);
 
         mbottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -97,8 +106,8 @@ public class menuActivity extends AppCompatActivity {
                 }
                 //se muestra el fragment de la lista de solicitudes
                 if(menuItem.getItemId()==R.id.menu_solicitud){
-                    //   showSelectedFragment(new solicitudeFragment());
-                    showSelectedFragment(new solicitudesFragment());
+                       showSelectedFragment(new solicitudesFragment());
+
                 }
                 //se muestra el fragment de configuracion y setting
                 if(menuItem.getItemId()== R.id.menu_settings){
@@ -116,6 +125,59 @@ public class menuActivity extends AppCompatActivity {
 
 
     }
+
+
+   /* private void iniciarfragmentsolitudes() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://proyectotesis.ddns.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
+        Call<List<Solicitud>> call = tesisAPI.getSolicitudes(rut);
+        call.enqueue(new Callback<List<Solicitud>>() {
+            @Override
+            public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(menuActivity.this, "error :" + response.code(), Toast.LENGTH_LONG).show();
+                } else {
+                    listasolicitudactivas.clear();
+                    listasolicitudesterminadas.clear();
+                    List<Solicitud> solicituds = response.body();
+                    for (Solicitud solicitud : solicituds) {
+                        Solicitud Solicitud1 = new Solicitud();
+                        //se setean los valores del trabajador
+                        Solicitud1.setIdSolicitud(solicitud.getIdSolicitud());
+                        Solicitud1.setFechaS(solicitud.getFechaS());
+                        Solicitud1.setNombre(solicitud.getNombre());
+                        Solicitud1.setApellido(solicitud.getApellido());
+                        Solicitud1.setEstado(solicitud.getEstado());
+                        Solicitud1.setFotoT(rutaservidor+solicitud.getFotoT());
+                        Solicitudes.add(Solicitud1);
+                    }
+                    if(Solicitudescomparar !=Solicitudes) {
+
+                        if (Solicitudes.size() > 0) {
+
+                            Solicitudescomparar = Solicitudes;
+                            for (int i = 0; i < Solicitudes.size(); i++) {
+                                Solicitud soli = new Solicitud();
+                                soli = Solicitudes.get(i);
+                                if (soli.getEstado().equals("PENDIENTE") || soli.getEstado().equals("ATENDIENDO") || soli.getEstado().equals("CONFIRMADA")  ) {
+                                    listasolicitudesterminadas.add(soli);
+                                } else {
+                                  // listasolicitudesterminadas.add(soli);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Solicitud>> call, Throwable t) {
+                Toast.makeText(menuActivity.this, "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }  */
 
 
     //metodo que permite elejir un fragment

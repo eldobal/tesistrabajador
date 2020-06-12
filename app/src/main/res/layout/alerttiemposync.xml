@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorAccentllight"
 
@@ -22,176 +22,116 @@
     </com.airbnb.lottie.LottieAnimationView>
 
 
-        <TextView
-            android:id="@+id/txttiempoactualizacion"
-            android:layout_marginTop="10dp"
+    <TextView
+        android:id="@+id/txttiempoactualizacion"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textColor="@color/colordark"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:text=""
+        >
+
+    </TextView>
+
+
+
+    <LinearLayout
+        android:id="@+id/LinearLayout02"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:id="@+id/alertbtn15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_btnsync"
+            android:text="15 Segundos">
+        </Button>
+
+        <Button
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:id="@+id/alertbtn30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_btnsync"
+            android:text="30 Segundos">
+        </Button>
+
+
+
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/LinearLayout03"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true">
+
+
+
+        <Button
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="14dp"
+            android:id="@+id/alertbtn1m"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:textColor="@color/colordark"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:text=""
-            >
-
-        </TextView>
+            android:background="@drawable/bg_btnsync"
+            android:text="1 minuto">
+        </Button>
 
 
-        <RelativeLayout
+        <Button
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="14dp"
+            android:id="@+id/alertbtn5m"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_btnsync"
+            android:text="5 minutos">
+        </Button>
 
 
-
-            <Button
-
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginTop="30dp"
-                android:id="@+id/alertbtn15"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btnsync"
-                android:text="15 Segundos">
-            </Button>
-
-            <Button
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginTop="14dp"
-                android:id="@+id/alertbtn30"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btnsync"
-                android:text="30 Segundos">
-            </Button>
-
-
-            <Button
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginTop="14dp"
-                android:id="@+id/alertbtn1m"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btnsync"
-                android:text="1 minuto">
-            </Button>
-
-
-            <Button
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginTop="14dp"
-                android:id="@+id/alertbtn5m"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btnsync"
-                android:text="5 minutos">
-            </Button>
+    </LinearLayout>
 
 
 
 
-            <Button
+    <Button
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="14dp"
+        android:id="@+id/alertbtnguardarcambios"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_ripple"
+        android:text="Guardar Cambios">
+    </Button>
 
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="14dp"
-                android:id="@+id/alertbtnguardarcambios"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_ripple"
-                android:text="Guardar Cambios">
-            </Button>
-
-            <Button
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="20dp"
-                android:id="@+id/alertbtncancelarcambios"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_ripplepass"
-                android:text="Cancelar"/>
-            <Button
-
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginTop="30dp"
-                android:id="@+id/alertbtn15"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btnsync"
-                android:text="15 Segundos">
-            </Button>
-
-            <Button
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginTop="14dp"
-                android:id="@+id/alertbtn30"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btnsync"
-                android:text="30 Segundos">
-            </Button>
-
-
-            <Button
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginTop="14dp"
-                android:id="@+id/alertbtn1m"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btnsync"
-                android:text="1 minuto">
-            </Button>
-
-
-            <Button
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginTop="14dp"
-                android:id="@+id/alertbtn5m"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btnsync"
-                android:text="5 minutos">
-            </Button>
-
-
-
-
-            <Button
-
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="14dp"
-                android:id="@+id/alertbtnguardarcambios"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_ripple"
-                android:text="Guardar Cambios">
-            </Button>
-
-            <Button
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="20dp"
-                android:id="@+id/alertbtncancelarcambios"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_ripplepass"
-                android:text="Cancelar"/>
-
-
-        </RelativeLayout>
-
-
-
+    <Button
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/alertbtncancelarcambios"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_ripplepass"
+        android:text="Cancelar"/>
 
 </LinearLayout>

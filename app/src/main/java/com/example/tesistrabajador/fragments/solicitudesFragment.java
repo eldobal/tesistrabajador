@@ -3,6 +3,7 @@ package com.example.tesistrabajador.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.L;
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.activitys.loginActivity;
 import com.example.tesistrabajador.clases.Adaptador;
@@ -49,7 +52,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * A simple {@link Fragment} subclass.
  */
 public class solicitudesFragment extends Fragment  {
+
     SweetAlertDialog dp;
+    LottieAnimationView loadinglista,listavacia;
     private static LayoutInflater inflater = null;
     private TextView tvNoRegistros;
     private ListView lista,listaactivas;
@@ -63,6 +68,7 @@ public class solicitudesFragment extends Fragment  {
     SwipeRefreshLayout refreshLayout,refreshLayoutterminadas;
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     Adaptador ads,ads2;
+    TextView notfound;
     NetworkInfo NetworkInfo;
     public solicitudesFragment() {
         // Required empty public constructor
@@ -77,17 +83,20 @@ public class solicitudesFragment extends Fragment  {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         Solicitudescomparar = new ArrayList<Solicitud>();
         listasolicitudesterminadas  = new ArrayList<Solicitud>();
         listasolicitudactivas  = new ArrayList<Solicitud>();
         listasolicitudactivasinterna   = new ArrayList<Solicitud>();
         listasolicitudterminadasinterna   = new ArrayList<Solicitud>();
       //  listasolicitudactivas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistaspendientes");
-      //  listasolicitudesterminadas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistasterminadas");
+       // listasolicitudesterminadas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistasterminadas");
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo = connectivityManager.getActiveNetworkInfo();
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,14 +104,25 @@ public class solicitudesFragment extends Fragment  {
         View v = inflater.inflate(R.layout.fragment_solicitudes, container, false);
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-        rutusuario="fdsfsds";
+        ads2 = new Adaptador(getContext(), listasolicitudterminadasinterna);
+        loadinglista = (LottieAnimationView) v.findViewById(R.id.idanimacionlistasolicitud);
+        listavacia = (LottieAnimationView) v.findViewById(R.id.idanimacionlistavacia);
+
+        listavacia.setVisibility(View.INVISIBLE);
+
         settiempoasyncexist();
         setcredentiasexist();
-        reiniciarfragment(rutusuario);
+      //  reiniciarfragment(rutusuario);
         reiniciarfragmentterminadas(rutusuario);
         lista = (ListView) v.findViewById(R.id.listadosolicitudescliente);
         //declaracion de los swiperefresh para intanciarlos
         refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
+
+
+        notfound =(TextView) v.findViewById(R.id.txtnotfoundlistasolicitudes);
+        notfound.setText("");
+
+
 
         //comprueba si es que existe coneccion
         if (NetworkInfo != null && NetworkInfo.isConnected()) {
@@ -115,19 +135,12 @@ public class solicitudesFragment extends Fragment  {
                 //if (Solicitudes.size() > 0) {
                 final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
                 //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
-                if (listasolicitudactivas.size() != 0) {
-                    ads = new Adaptador(getContext(), listasolicitudactivas);
-                    //se setea el adaptador a la lista del fragments
-                    listaactivas.setAdapter(ads);
-                }
-                if (listasolicitudesterminadas.size() != 0) {
-                    ads2 = new Adaptador(getContext(), listasolicitudesterminadas);
+
+                if (listasolicitudterminadasinterna.size() != 0) {
                     //se setea el adaptador a la lista del fragments
                     lista.setAdapter(ads2);
                 }
-
             }
-
 
             final Handler handler = new Handler();
             Timer timer = new Timer();
@@ -137,19 +150,21 @@ public class solicitudesFragment extends Fragment  {
                 public void run() {
                     handler.post(new Runnable() {
                         public void run() {
-                            try {
-                                //Ejecuta tu AsyncTask!
-                                reiniciarfragment(rutusuario);
-                                reiniciarfragmentterminadas(rutusuario);
-                            } catch (Exception e) {
-                                Log.e("error", e.getMessage());
+                            if (isAdded() && isVisible() && getUserVisibleHint()) {
+                                // ... do your thing
+                                try {
+                                    //Ejecuta tu AsyncTask!
+                                    // reiniciarfragment(rutusuario);
+                                    reiniciarfragmentterminadas(rutusuario);
+                                } catch (Exception e) {
+                                    Log.e("error", e.getMessage());
+                                }
                             }
                         }
                     });
                 }
             };
-            timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
-
+            timer.schedule(task, 15000, azynctiempo);  //ejecutar en intervalo definido por el programador
 
 
 
@@ -192,60 +207,6 @@ public class solicitudesFragment extends Fragment  {
         return v;
     }
 
-    private void reiniciarfragment(String rut) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-        Call<List<Solicitud>> call = tesisAPI.getSolicitudes(rut);
-        call.enqueue(new Callback<List<Solicitud>>() {
-            @Override
-            public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
-                if (!response.isSuccessful()) {
-                    Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
-                } else {
-                    List<Solicitud> solicituds = response.body();
-                    Solicitudes.clear();
-                    listasolicitudactivas.clear();
-                    for (Solicitud solicitud : solicituds) {
-                        Solicitud Solicitud1 = new Solicitud();
-                        //se setean los valores del trabajador
-                        Solicitud1.setIdSolicitud(solicitud.getIdSolicitud());
-                        Solicitud1.setFechaS(solicitud.getFechaS());
-                        Solicitud1.setNombre(solicitud.getNombre());
-                        Solicitud1.setApellido(solicitud.getApellido());
-                        Solicitud1.setEstado(solicitud.getEstado());
-                        Solicitud1.setFotoT(rutaservidor+solicitud.getFotoT());
-                        Solicitudes.add(Solicitud1);
-                    }
-                    listasolicitudactivas.clear();
-                    for (int i = 0; i < Solicitudes.size(); i++) {
-                        Solicitud soli = new Solicitud();
-                        soli = Solicitudes.get(i);
-
-                        if (soli.getEstado().equals("PENDIENTE") || soli.getEstado().equals("ATENDIENDO") || soli.getEstado().equals("CONFIRMADA")  ) {
-                            listasolicitudactivas.add(soli);
-                        }else{
-
-                        }
-                    }
-                    //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
-                    if (listasolicitudactivas.size() != 0) {
-                        //se instancia la recarga de los items que se encuentan en la lista de activas / pendientes
-                        ads.refresh(listasolicitudactivas);
-                    }
-               //  refreshLayout.setRefreshing(false);
-                }
-            }
-            @Override
-            public void onFailure(Call<List<Solicitud>> call, Throwable t) {
-                Toast.makeText(getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-    }
-
 
     private void reiniciarfragmentterminadas(String rut) {
         Retrofit retrofit = new Retrofit.Builder()
@@ -262,6 +223,7 @@ public class solicitudesFragment extends Fragment  {
                 } else {
                     List<Solicitud> solicituds = response.body();
                     Solicitudesterminadas.clear();
+                    listasolicitudterminadasinterna.clear();
                     for (Solicitud solicitud : solicituds) {
                         Solicitud Solicitud1 = new Solicitud();
                         //se setean los valores del trabajador
@@ -273,21 +235,40 @@ public class solicitudesFragment extends Fragment  {
                         Solicitud1.setFotoT(rutaservidor+solicitud.getFotoT());
                         Solicitudesterminadas.add(Solicitud1);
                     }
-                    listasolicitudterminadasinterna.clear();
+
                     for (int i = 0; i < Solicitudesterminadas.size(); i++) {
                         Solicitud soli = new Solicitud();
                         soli = Solicitudesterminadas.get(i);
-                        if (soli.getEstado().equals("COMPLETADA Y PAGADA") || soli.getEstado().equals("COMPLETADA Y NO PAGADA") ) {
+                        if ( soli.getEstado().equals("ATENDIENDO") ) {
                             listasolicitudterminadasinterna.add(soli);
                         } else {
-
+                            listasolicitudterminadasinterna.add(soli);
                         }
                     }
                     //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
                     if (listasolicitudterminadasinterna.size() != 0) {
                         //se instancia la recarga de los items que se encuentan en la lista de aceptadas / finalisadas
                         ads2.refresh(listasolicitudterminadasinterna);
+                        lista.setAdapter(ads2);
+                        loadinglista.setVisibility(View.INVISIBLE);
+                        loadinglista.pauseAnimation();
+
+                        listavacia.setVisibility(View.INVISIBLE);
+                        listavacia.pauseAnimation();
+
+                    }else{
+                        loadinglista.setVisibility(View.INVISIBLE);
+                        loadinglista.pauseAnimation();
+
+                        listavacia.setVisibility(View.VISIBLE);
+                        listavacia.playAnimation();
+
+                        notfound.setText("No Posee Solicitudes");
+
+
+
                     }
+
                     refreshLayoutterminadas.setRefreshing(false);
                 }
             }

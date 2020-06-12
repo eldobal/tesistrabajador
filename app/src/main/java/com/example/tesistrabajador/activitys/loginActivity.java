@@ -34,6 +34,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
@@ -117,13 +118,16 @@ public class loginActivity extends AppCompatActivity implements GoogleApiClient.
                             .build();
                     tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
                     //metodo para llamar a la funcion que queramos
-                    Call<Usuario> call = tesisAPI.getLogin(rut,contrasena);
+                    Call<Usuario> call = tesisAPI.getLoginTrabajador(rut,contrasena);
                     call.enqueue(new Callback<Usuario>() {
                         @Override
                         public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                             //si esta malo se ejecuta este trozo
                             if(!response.isSuccessful()){
-                                Toast.makeText(getApplicationContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                                Snackbar snackBar = Snackbar.make(loginActivity.this.findViewById(android.R.id.content),
+                                        "Este Usuario no es un Trabajador", Snackbar.LENGTH_LONG);
+                                snackBar.show();
+
                                alertdialoglogin.cancelalerdialog();
                             }
                             //de lo contrario se ejecuta esta parte
@@ -151,23 +155,17 @@ public class loginActivity extends AppCompatActivity implements GoogleApiClient.
                         //si falla el request a la pagina mostrara este error
                         @Override
                         public void onFailure(Call<Usuario> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), " Error al Iniciar Sesion", Toast.LENGTH_LONG).show();
+                            Snackbar snackBar = Snackbar.make(loginActivity.this.findViewById(android.R.id.content),
+                                    "Error al Iniciar Sesion", Snackbar.LENGTH_LONG);
                             alertdialoglogin.cancelalerdialog();
                         }
                     });
                 }else{
-                    Toast.makeText(getApplicationContext(), "introdusca datos antes de logear", Toast.LENGTH_LONG).show();
+                    Snackbar snackBar = Snackbar.make(loginActivity.this.findViewById(android.R.id.content),
+                            "introdusca datos antes de logear", Snackbar.LENGTH_LONG);
                 }
-
             }
         });
-
-
-
-
-
-
-
 
 
         btnregister.setOnClickListener(new View.OnClickListener() {

@@ -81,7 +81,7 @@
                         android:layout_height="wrap_content">
 
 
-                        <LinearLayout
+                        <RelativeLayout
 
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -90,15 +90,50 @@
                             android:padding="12dp">
 
 
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/idanimacionlistasolicitud"
+                                app:lottie_rawRes="@raw/loadinglistasolicitudes"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                android:layout_centerInParent="true"
+                                android:layout_marginBottom="100dp"
+                                android:layout_marginTop="100dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+                            </com.airbnb.lottie.LottieAnimationView>
+
+
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/idanimacionlistavacia"
+                                app:lottie_rawRes="@raw/listasolicitudesvacia"
+                                app:lottie_autoPlay="false"
+                                app:lottie_loop="false"
+                                android:layout_centerInParent="true"
+                                android:layout_width="match_parent"
+                                android:layout_marginBottom="100dp"
+                                android:layout_marginTop="100dp"
+                                android:layout_height="match_parent">
+                            </com.airbnb.lottie.LottieAnimationView>
+
+
+                            <TextView
+                                android:layout_marginTop="-100dp"
+                                android:gravity="center"
+                                android:textColor="@color/colordark"
+                                android:textSize="18dp"
+                                android:fontFamily="sans-serif-condensed-medium"
+                                android:id="@+id/txtnotfoundlistasolicitudes"
+                                android:layout_width="match_parent"
+                                android:text=""
+                                android:layout_below="@+id/idanimacionlistasolicitud"
+                                android:layout_height="wrap_content">
+
+                            </TextView>
 
                             <ListView
-
                                 android:id="@+id/listadosolicitudescliente"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent">
-
-
-
 
                             </ListView>
 
@@ -107,7 +142,7 @@
 
 
 
-                        </LinearLayout>
+                        </RelativeLayout>
 
 
                     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

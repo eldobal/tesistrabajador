@@ -15,7 +15,7 @@
             android:layout_gravity="center"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/loadingdots">
+            app:lottie_rawRes="@raw/loadinglistasolicitudes">
 
         </com.airbnb.lottie.LottieAnimationView>
 

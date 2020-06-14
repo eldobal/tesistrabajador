@@ -127,6 +127,7 @@ public class solicitudesFragment extends Fragment  {
         //comprueba si es que existe coneccion
         if (NetworkInfo != null && NetworkInfo.isConnected()) {
 
+            rutusuario="wuw";
             if (rutusuario.isEmpty()){
                 //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
                 Intent intent = new Intent(getContext(), loginActivity.class);

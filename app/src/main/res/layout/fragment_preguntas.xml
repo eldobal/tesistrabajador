@@ -16,8 +16,7 @@
 
         <RelativeLayout
             android:layout_marginTop="40dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -25,7 +24,7 @@
                 android:textColor="@color/colordark"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/mydashboard"
-                android:text="Preguntas Frecuentes "
+                android:text="Preguntas Frecuentes"
                 android:textAlignment="center"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:textSize="35sp"

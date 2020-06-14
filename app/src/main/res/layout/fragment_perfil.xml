@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,15 +24,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp">
 
+
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/loadindots2"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_centerInParent="true"
-                app:lottie_rawRes="@raw/loadingdots2"
+                app:lottie_rawRes="@raw/loadinglistasolicitudes"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
-                ></com.airbnb.lottie.LottieAnimationView>
+                android:layout_centerInParent="true"
+                android:layout_width="100dp"
+                android:layout_height="100dp">
+            </com.airbnb.lottie.LottieAnimationView>
+
+
+
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/usericon"
@@ -50,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="30dp"
-
+            android:layout_marginTop="25dp"
             android:layout_marginRight="30dp"
             android:layout_marginBottom="5dp">
 
@@ -320,4 +324,4 @@
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

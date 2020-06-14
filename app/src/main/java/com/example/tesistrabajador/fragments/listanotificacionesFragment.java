@@ -82,7 +82,7 @@ public class listanotificacionesFragment extends Fragment {
         settiempoasyncexist();
         listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
         animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
-
+        rutusuario="aaaa";
 
         if (rutusuario.isEmpty()){
             //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje

@@ -3,6 +3,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -117,6 +119,8 @@ public class settingsFragment extends Fragment {
                 builder.setView(viewsync);
                 AlertDialog dialog = builder.create();
                 dialog.show();
+
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
                 TextView azyncactual= (TextView) viewsync.findViewById(R.id.txttiempoactualizacion);
                 azyncactual.setText("Tiempo de Actualizacion Actual: "+tiempo);

@@ -8,8 +8,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -22,10 +20,9 @@ import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.clases.Notificacion;
 import com.example.tesistrabajador.clases.Solicitud;
 import com.example.tesistrabajador.fragments.listanotificacionesFragment;
-import com.example.tesistrabajador.fragments.perfilFragment;
 import com.example.tesistrabajador.fragments.settingsFragment;
+import com.example.tesistrabajador.fragments.sobrenosotrosFragment;
 import com.example.tesistrabajador.fragments.solicitudesFragment;
-import com.example.tesistrabajador.interfaces.tesisAPI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -33,14 +30,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class menuActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
@@ -98,7 +89,7 @@ public class menuActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 //se muestra el fragment de peril
                 if(menuItem.getItemId()== R.id.menu_profile){
-                    showSelectedFragment(new perfilFragment());
+                    showSelectedFragment(new sobrenosotrosFragment());
                 }
                 //se muestra el fragment de rubros
                 if(menuItem.getItemId()== R.id.menu_home){

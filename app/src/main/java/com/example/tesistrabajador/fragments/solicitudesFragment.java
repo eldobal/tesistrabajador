@@ -31,6 +31,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.activitys.loginActivity;
 import com.example.tesistrabajador.clases.Adaptador;
+import com.example.tesistrabajador.clases.Adaptadornotificaciones;
 import com.example.tesistrabajador.clases.Solicitud;
 import com.example.tesistrabajador.interfaces.tesisAPI;
 import com.google.android.material.snackbar.Snackbar;
@@ -60,7 +61,7 @@ public class solicitudesFragment extends Fragment  {
     private ListView lista,listaactivas;
     private ImageButton btnVolver;
     private SharedPreferences prefs,asycprefs;
-    private String rutusuario;
+    private String rutusuario="";
     int azynctiempo =0;
     ArrayList<Solicitud> listasolicitudesterminadas,listasolicitudactivas,listasolicitudactivasinterna,listasolicitudterminadasinterna,Solicitudescomparar;
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
@@ -104,44 +105,53 @@ public class solicitudesFragment extends Fragment  {
         View v = inflater.inflate(R.layout.fragment_solicitudes, container, false);
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-        ads2 = new Adaptador(getContext(), listasolicitudterminadasinterna);
+
         loadinglista = (LottieAnimationView) v.findViewById(R.id.idanimacionlistasolicitud);
         listavacia = (LottieAnimationView) v.findViewById(R.id.idanimacionlistavacia);
-
         listavacia.setVisibility(View.INVISIBLE);
 
+        //se buscan el usuario y el tiempo de sync de la app
         settiempoasyncexist();
         setcredentiasexist();
-      //  reiniciarfragment(rutusuario);
-        reiniciarfragmentterminadas(rutusuario);
-        lista = (ListView) v.findViewById(R.id.listadosolicitudescliente);
-        //declaracion de los swiperefresh para intanciarlos
-        refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
 
-
-        notfound =(TextView) v.findViewById(R.id.txtnotfoundlistasolicitudes);
-        notfound.setText("");
-
-
-
-        //comprueba si es que existe coneccion
         if (NetworkInfo != null && NetworkInfo.isConnected()) {
 
-            rutusuario="wuw";
-            if (rutusuario.isEmpty()){
-                //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
-                Intent intent = new Intent(getContext(), loginActivity.class);
-                startActivity(intent);
-            }else {
-                //if (Solicitudes.size() > 0) {
-                final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
-                //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
+        if(rutusuario.equals("")){
+            //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
+            Intent intent = new Intent(getContext(), loginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            //linea que termina la ejecucion y no permite hacer onback
+            getActivity().finish();
+            Toast.makeText(getContext(), "el Usuario no es valido ", Toast.LENGTH_LONG).show();
+        }else{
+            reiniciarfragmentterminadas(rutusuario);
+            lista = (ListView) v.findViewById(R.id.listadosolicitudescliente);
+            //declaracion de los swiperefresh para intanciarlos
+            refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
 
-                if (listasolicitudterminadasinterna.size() != 0) {
-                    //se setea el adaptador a la lista del fragments
-                    lista.setAdapter(ads2);
+
+            notfound =(TextView) v.findViewById(R.id.txtnotfoundlistasolicitudes);
+            notfound.setText("");
+            final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
+
+
+
+            new CountDownTimer(1500,1000){
+                @Override
+                public void onTick(long millisUntilFinished) {
                 }
-            }
+                @Override
+                public void onFinish() {
+                    if (listasolicitudterminadasinterna.size() != 0) {
+                        //se setea el adaptador a la lista del fragments
+                        ads2 = new Adaptador(getContext(), listasolicitudterminadasinterna);
+                        lista.setAdapter(ads2);
+                    }
+                }
+            }.start();
+
+
 
             final Handler handler = new Handler();
             Timer timer = new Timer();
@@ -184,25 +194,15 @@ public class solicitudesFragment extends Fragment  {
                 }
             });
 
-            /*
-            refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    new CountDownTimer(1000,1000){
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-                        }
-                        @Override
-                        public void onFinish() {
-                            reiniciarfragment(rutusuario);
-                        }
-                    }.start();
-                }
-            });
-            */
-        }else{
-            //manejar excepcion
 
+
+
+        }
+
+
+        }else{
+            getActivity().finish();
+            Toast.makeText(getContext(), "Error en la conecctacion del dispocitivo, asegurese de que tenga coneccion", Toast.LENGTH_LONG).show();
         }
 
         return v;

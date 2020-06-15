@@ -53,7 +53,7 @@ public class listanotificacionesFragment extends Fragment {
     LottieAnimationView animationnotification ;
     ArrayList<Notificacion> arraylistanotificaciones= new ArrayList<Notificacion>();;
     Adaptadornotificaciones ads ,adsnoti;
-    private String rutusuario;
+    private String rutusuario="";
     int azynctiempo =0;
     TextView notfound;
     public listanotificacionesFragment() {
@@ -76,47 +76,86 @@ public class listanotificacionesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_listanotificaciones, container, false);
-        reiniciarfragmentnotificacionesASYNC(rutusuario);
-        //prefs que contienen datos del usuario
-        setcredentiasexist();
-        settiempoasyncexist();
-        listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
-        animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
-        rutusuario="aaaa";
 
-        if (rutusuario.isEmpty()){
-            //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
-            Intent intent = new Intent(getContext(), loginActivity.class);
-            startActivity(intent);
-        }else{
-            //if (Solicitudes.size() > 0) {
-            final View vista = inflater.inflate(R.layout.elementonotificacion, null);
-            //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
-            if (arraylistanotificaciones.size() != 0) {
-                adsnoti = new Adaptadornotificaciones(getContext(), arraylistanotificaciones);
-                //se setea el adaptador a la lista del fragments
-                listanotificaciones.setAdapter(adsnoti);
-            }
-        }
 
-        final Handler handler = new Handler();
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            //Ejecuta tu AsyncTask!
-                            reiniciarfragmentnotificacionesASYNC(rutusuario);
-                        } catch (Exception e) {
-                            Log.e("error", e.getMessage());
+        if(NetworkInfo != null && NetworkInfo.isConnected()){
+            //declaracion de la lista y la animacion
+            listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
+            animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
+            //prefs que contienen datos del usuario
+            setcredentiasexist();
+            //prefs del tiempo de sync de la app
+            settiempoasyncexist();
+
+
+
+
+
+            if (rutusuario.equals("")){
+                //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
+                Intent intent = new Intent(getContext(), loginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                //linea que termina la ejecucion y no permite hacer onback
+                getActivity().finish();
+
+            }else{
+                //llamada azyn la cual busca las notificaciones que tiene el trabajador
+                reiniciarfragmentnotificacionesASYNC(rutusuario);
+
+                final View vista = inflater.inflate(R.layout.elementonotificacion, null);
+
+
+                new CountDownTimer(1500,1000){
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                    }
+                    @Override
+                    public void onFinish() {
+
+                        if (arraylistanotificaciones.size() != 0) {
+                            //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
+                            adsnoti = new Adaptadornotificaciones(getContext(), arraylistanotificaciones);
+                            //se setea el adaptador a la lista del fragments
+                            listanotificaciones.setAdapter(adsnoti);
                         }
                     }
-                });
+                }.start();
+
+
+                final Handler handler = new Handler();
+                Timer timer = new Timer();
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+                        handler.post(new Runnable() {
+                            public void run() {
+                                if (isAdded() && isVisible() && getUserVisibleHint()) {
+                                    try {
+                                        //Ejecuta tu AsyncTask!
+                                        reiniciarfragmentnotificacionesASYNC(rutusuario);
+                                    } catch (Exception e) {
+                                        Log.e("error", e.getMessage());
+                                    }
+                                }
+
+                            }
+                        });
+                    }
+                };
+                timer.schedule(task, 5000, azynctiempo);  //ejecutar en intervalo definido por el programador
+
+
             }
-        };
-        timer.schedule(task, 5000, azynctiempo);  //ejecutar en intervalo definido por el programador
+
+
+
+
+        }else{
+            getActivity().finish();
+            Toast.makeText(getContext(), "Error en la conecctacion del dispocitivo, asegurese de que tenga coneccion", Toast.LENGTH_LONG).show();
+        }
+
 
        /* refreshnotificaciones.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -171,10 +210,11 @@ public class listanotificacionesFragment extends Fragment {
                         animationnotification.playAnimation();
                     }
                 }
+
             }
             @Override
             public void onFailure(Call<List<Notificacion>> call, Throwable t) {
-                Toast.makeText(getActivity(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "error con el servidor" , Toast.LENGTH_LONG).show();
             }
         });
     }

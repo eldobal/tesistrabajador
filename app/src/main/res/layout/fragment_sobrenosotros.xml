@@ -19,8 +19,8 @@
 
     <LinearLayout
         android:id="@+id/content_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="408dp"
+        android:layout_height="297dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,7 +34,7 @@
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
             android:paddingBottom="32dp"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+            android:text="Somos una compañia con un sueño poder mejorar la vida de las personas facilitandoles mejores servicios . esta aplicacion cumple el objetivo de poder otorgar una posibilidad de empleo a muchas personas y a su vez de generar ingresos de forma autonoma por lo que sentimos que es un enorme aporte hacia nuestra comunidad. Este proyecto fue dado a la luz para poder cumplir con lo anterior mencionado y para poder mejorar las opciones laborarles exitentes dentro de nuestro pais. muchas gracias por ser parte de esto."
             app:lineHeight="26dp" />
     </LinearLayout>
 
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed-medium"
             android:padding="32dp"
-            android:text="Explore The Himalayas"
+            android:text="Sobre MegaloDevs"
             android:textColor="@android:color/background_dark"
             android:textSize="22sp" />
     </LinearLayout>

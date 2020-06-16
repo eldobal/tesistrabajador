@@ -109,10 +109,10 @@ public class Adaptador extends BaseAdapter implements Serializable {
 
             detalle.setText("Detalle");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
-            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
-            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
-            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
-            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colordark));
             //boton sobre el detalle de una solicitud individual
             detalle.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -134,10 +134,10 @@ public class Adaptador extends BaseAdapter implements Serializable {
 
             detalle.setText("Confirmar");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
-            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
-            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
-            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
-            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colordark));
             detalle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -212,10 +212,10 @@ public class Adaptador extends BaseAdapter implements Serializable {
         }if(listasolicitudes.get(i).getEstado().equals("PENDIENTE")) {
             detalle.setText("Cancelar");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
-            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
-            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
-            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
-            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colordark));
             detalle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

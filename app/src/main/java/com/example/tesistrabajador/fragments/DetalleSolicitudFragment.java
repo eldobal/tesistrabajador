@@ -82,7 +82,7 @@ public class DetalleSolicitudFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-        Call<Solicitud> call = tesisAPI.getSolicitudCliente(idsolicitud);
+        Call<Solicitud> call = tesisAPI.getSolicitudTrabajador(idsolicitud);
         call.enqueue(new Callback<Solicitud>() {
             @Override
             public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
@@ -94,7 +94,7 @@ public class DetalleSolicitudFragment extends Fragment {
                     numerosolicitud.setText("N Solicitud: "+solicituds.getIdSolicitud());
                     fechasolicitud.setText("Creada: "+solicituds.getFechaS());
                     fechadetallesolicitud.setText("Atendida: "+solicituds.getFechaA());
-                    trabajador.setText("Rut trabajador: "+solicituds.getRUT());
+                    trabajador.setText("Rut Cliente: "+solicituds.getRUT());
                     rubro.setText("Rubro: "+solicituds.getRubro());
                     precio.setText("Precio aprox: "+solicituds.getPrecio());
                     estadosolicitud.setText("Estado : "+solicituds.getEstado());

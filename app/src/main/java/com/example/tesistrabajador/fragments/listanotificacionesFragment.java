@@ -50,7 +50,7 @@ public class listanotificacionesFragment extends Fragment {
     NetworkInfo NetworkInfo;
     SwipeRefreshLayout refreshnotificaciones;
     SharedPreferences prefs,asycprefs;
-    LottieAnimationView animationnotification ;
+    LottieAnimationView animationnotification,animationnotificationloadign ;
     ArrayList<Notificacion> arraylistanotificaciones= new ArrayList<Notificacion>();;
     Adaptadornotificaciones ads ,adsnoti;
     private String rutusuario="";
@@ -81,11 +81,15 @@ public class listanotificacionesFragment extends Fragment {
         if(NetworkInfo != null && NetworkInfo.isConnected()){
             //declaracion de la lista y la animacion
             listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
+            animationnotificationloadign = (LottieAnimationView) v.findViewById(R.id.animationotificationloading);
             animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
+            animationnotification.setVisibility(View.INVISIBLE);
             //prefs que contienen datos del usuario
             setcredentiasexist();
             //prefs del tiempo de sync de la app
             settiempoasyncexist();
+
+
 
 
 
@@ -101,9 +105,10 @@ public class listanotificacionesFragment extends Fragment {
 
             }else{
                 //llamada azyn la cual busca las notificaciones que tiene el trabajador
+                final View vista = inflater.inflate(R.layout.elementonotificacion, null);
+                adsnoti = new Adaptadornotificaciones(getContext(), arraylistanotificaciones);
                 reiniciarfragmentnotificacionesASYNC(rutusuario);
 
-                final View vista = inflater.inflate(R.layout.elementonotificacion, null);
 
 
                 new CountDownTimer(1500,1000){
@@ -115,7 +120,7 @@ public class listanotificacionesFragment extends Fragment {
 
                         if (arraylistanotificaciones.size() != 0) {
                             //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
-                            adsnoti = new Adaptadornotificaciones(getContext(), arraylistanotificaciones);
+
                             //se setea el adaptador a la lista del fragments
                             listanotificaciones.setAdapter(adsnoti);
                         }
@@ -186,8 +191,9 @@ public class listanotificacionesFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Notificacion>> call, Response<List<Notificacion>> response) {
                 if (!response.isSuccessful()) {
-                    Toast.makeText(getActivity(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "error/noti/onresponse" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
+
                     arraylistanotificaciones.clear();
                     List<Notificacion> notificaciones = response.body();
                     for (Notificacion notificacion : notificaciones) {
@@ -202,9 +208,15 @@ public class listanotificacionesFragment extends Fragment {
                     }
                     if (arraylistanotificaciones.size() != 0) {
                         adsnoti.refresh(arraylistanotificaciones);
+                        listanotificaciones.setAdapter(adsnoti);
                         animationnotification.setVisibility(View.INVISIBLE);
                         animationnotification.pauseAnimation();
-                        //se instancia la recarga de los items que se encuentan en la lista de activas / pendientes
+
+
+                        animationnotificationloadign.setVisibility(View.INVISIBLE);
+                        animationnotificationloadign.pauseAnimation();
+
+
                     }else {
                         animationnotification.setVisibility(View.VISIBLE);
                         animationnotification.playAnimation();
@@ -215,6 +227,7 @@ public class listanotificacionesFragment extends Fragment {
             @Override
             public void onFailure(Call<List<Notificacion>> call, Throwable t) {
                 Toast.makeText(getActivity(), "error con el servidor" , Toast.LENGTH_LONG).show();
+
             }
         });
     }

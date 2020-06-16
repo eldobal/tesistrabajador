@@ -92,7 +92,6 @@ public class solicitudesFragment extends Fragment  {
         listasolicitudterminadasinterna   = new ArrayList<Solicitud>();
       //  listasolicitudactivas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistaspendientes");
        // listasolicitudesterminadas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistasterminadas");
-
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo = connectivityManager.getActiveNetworkInfo();
     }
@@ -125,6 +124,7 @@ public class solicitudesFragment extends Fragment  {
             getActivity().finish();
             Toast.makeText(getContext(), "el Usuario no es valido ", Toast.LENGTH_LONG).show();
         }else{
+            ads2 = new Adaptador(getContext(), listasolicitudterminadasinterna);
             reiniciarfragmentterminadas(rutusuario);
             lista = (ListView) v.findViewById(R.id.listadosolicitudescliente);
             //declaracion de los swiperefresh para intanciarlos
@@ -145,7 +145,7 @@ public class solicitudesFragment extends Fragment  {
                 public void onFinish() {
                     if (listasolicitudterminadasinterna.size() != 0) {
                         //se setea el adaptador a la lista del fragments
-                        ads2 = new Adaptador(getContext(), listasolicitudterminadasinterna);
+
                         lista.setAdapter(ads2);
                     }
                 }
@@ -215,12 +215,12 @@ public class solicitudesFragment extends Fragment  {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-        Call<List<Solicitud>> call = tesisAPI.getSolicitudes(rut);
+        Call<List<Solicitud>> call = tesisAPI.TrabajadorSolicitudes(rut);
         call.enqueue(new Callback<List<Solicitud>>() {
             @Override
             public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
                 if (!response.isSuccessful()) {
-                    Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "error/soli/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     List<Solicitud> solicituds = response.body();
                     Solicitudesterminadas.clear();
@@ -275,7 +275,14 @@ public class solicitudesFragment extends Fragment  {
             }
             @Override
             public void onFailure(Call<List<Solicitud>> call, Throwable t) {
-                Toast.makeText(getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "error/soli/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                loadinglista.setVisibility(View.INVISIBLE);
+                loadinglista.pauseAnimation();
+
+                listavacia.setVisibility(View.VISIBLE);
+                listavacia.playAnimation();
+
+                notfound.setText("No Posee Solicitudes");
             }
         });
 

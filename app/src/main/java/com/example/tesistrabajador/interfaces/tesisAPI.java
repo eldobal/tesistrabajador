@@ -134,12 +134,13 @@ public interface tesisAPI {
     );
 
 
+    @GET("api/SolicitudAPI")
+    Call<List<Solicitud>> TrabajadorSolicitudes(@Query("trabajadorRUT") String rut);
 
 
 
-
-
-
+    @GET("api/SolicitudAPI")
+    Call<Solicitud> getSolicitudTrabajador(@Query("idSolicitudT") int id);
 
 
 

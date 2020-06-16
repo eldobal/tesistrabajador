@@ -1,10 +1,14 @@
 package com.example.tesistrabajador.clases;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -91,14 +95,25 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
             @Override
             public void onClick(View v) {
 
-                dp = new SweetAlertDialog(vista.getContext(), SweetAlertDialog.WARNING_TYPE);
-                dp.setTitleText("Confirmar La solicitud?");
-                dp.setContentText("si confirma esta solicitud el trbajador realizara el trabajo. so la cancela se eliminara esta solicitud");
-                dp.setConfirmText("Confirmar!");
-                dp.setCancelText("Cancelar!");
-                dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                View viewsync = inflater.inflate(R.layout.alertconfirmacionnotificacion,null);
+                builder.setView(viewsync);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                TextView textoalertnotificacion= (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+
+                Button btnconfirmar = viewsync.findViewById(R.id.btnconfirmarnotificacion);
+                Button btncancelar = viewsync.findViewById(R.id.btncancelarnotificacion);
+
+                textoalertnotificacion.setText("Si Apreta el boton confirmar devera especificar un precio aprox y luego se le notificara al cliente" +
+                        ". Si selecciona cancelar se eliminara esta solicitud y se le notificara de igual manera al cliente.(si no desea realizar ninguna accion seleeccione fuerta de este recuadro)");
+
+
+                btnconfirmar.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(SweetAlertDialog sDialog) {
+                    public void onClick(View v) {
                         Calendar calendar = Calendar.getInstance();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                         final String Fechasolicitud = sdf.format(calendar.getTime());
@@ -125,12 +140,13 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                 Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
-                        sDialog.dismissWithAnimation();
                     }
-                }).show();
-                dp.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                });
+
+
+                btncancelar.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(SweetAlertDialog sDialog) {
+                    public void onClick(View v) {
                         Retrofit retrofit = new Retrofit.Builder()
                                 .baseUrl("http://proyectotesis.ddns.net/")
                                 .addConverterFactory(GsonConverterFactory.create())
@@ -153,10 +169,9 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                 Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
-                        sDialog.dismissWithAnimation();
                     }
-                })
-                        .show();
+                });
+
 
             }
         });

@@ -70,7 +70,7 @@ public class perfilFragment extends Fragment {
     private ArrayList<Ciudad> listaciudades = new ArrayList<Ciudad>();
     private Button editardatos,editarpass;
     AwesomeValidation mAwesomeValidation = new AwesomeValidation(BASIC);
-    NetworkInfo networkInfo;
+    NetworkInfo NetworkInfo;
     public perfilFragment() {
         // Required empty public constructor
     }
@@ -82,8 +82,7 @@ public class perfilFragment extends Fragment {
         mAwesomeValidation.addValidation(getActivity(), R.id.nombre, "[a-zA-Z\\s]+", R.string.err_name);
         mAwesomeValidation.addValidation(getActivity(), R.id.apellido, "[a-zA-Z\\s]+", R.string.err_apellido);
         //realizar validacion
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        networkInfo = connectivityManager.getActiveNetworkInfo();
+
 
     }
 
@@ -91,6 +90,8 @@ public class perfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
         View v= inflater.inflate(R.layout.fragment_perfil, container, false);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo = connectivityManager.getActiveNetworkInfo();
         rut= (EditText) v.findViewById(R.id.rut);
         nombre = (EditText) v.findViewById(R.id.nombre);
         apellido = (EditText) v.findViewById(R.id.apellido);
@@ -103,7 +104,7 @@ public class perfilFragment extends Fragment {
         loadingdots2 =(LottieAnimationView) v.findViewById(R.id.loadindots2);
         prefs = this.getActivity().getSharedPreferences("Preferences",Context.MODE_PRIVATE);
 
-        if (networkInfo != null && networkInfo.isConnected()) {
+        if (NetworkInfo != null && NetworkInfo.isConnected()) {
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail()
                     .build();
@@ -179,7 +180,7 @@ public class perfilFragment extends Fragment {
                                     //metodo para hacer request de cambio de datos por parte del usuario
                                     if (mAwesomeValidation.validate()) {
 
-                                        if (networkInfo != null && networkInfo.isConnected()) {
+                                        if (NetworkInfo != null && NetworkInfo.isConnected()) {
                                             actualizarperfil();
                                             dp = new SweetAlertDialog(v.getContext(), SweetAlertDialog.SUCCESS_TYPE);
                                             dp.setTitleText("Has Actualizado tu perfil !");
@@ -323,7 +324,7 @@ public class perfilFragment extends Fragment {
             public void onResponse( Call<Usuario>call, Response<Usuario> response) {
                 //si esta malo se ejecuta este trozo
                 if(!response.isSuccessful()){
-                    Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "error/perfil/cargar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
                 }
                 //de lo contrario se ejecuta esta parte
                 else {
@@ -353,7 +354,7 @@ public class perfilFragment extends Fragment {
             //si falla el request a la pagina mostrara este error
             @Override
             public void onFailure(Call<Usuario> call, Throwable t) {
-                Toast.makeText(getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "error/perfil/cargar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -375,7 +376,7 @@ public class perfilFragment extends Fragment {
                 public void onResponse( Call<List<Ciudad>>call, Response<List<Ciudad>>response) {
                     //si esta malo se ejecuta este trozo
                     if(!response.isSuccessful()){
-                        Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "error/perfil/cargarspinner/onresponse:"+response.code(), Toast.LENGTH_LONG).show();
                     }
                     //de lo contrario se ejecuta esta parte
                     else {
@@ -402,7 +403,7 @@ public class perfilFragment extends Fragment {
                 //si falla el request a la pagina mostrara este error
                 @Override
                 public void onFailure(Call<List<Ciudad>> call, Throwable t) {
-                    Toast.makeText(getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "error/perfil/cargarspinner/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
         }catch (Exception e){
@@ -432,7 +433,7 @@ public class perfilFragment extends Fragment {
                 public void onResponse( Call<Usuario>call, Response<Usuario> response) {
                     //si esta malo se ejecuta este trozo
                     if(!response.isSuccessful()){
-                        Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "error/perfil/actualizar perfil/onfailure:"+response.code(), Toast.LENGTH_LONG).show();
                     }
                     //de lo contrario se ejecuta esta parte
                     else {
@@ -443,7 +444,7 @@ public class perfilFragment extends Fragment {
                 //si falla el request a la pagina mostrara este error
                 @Override
                 public void onFailure(Call<Usuario> call, Throwable t) {
-                    Toast.makeText(getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "error/perfil/actualizar perfil/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
         }catch (Exception e){

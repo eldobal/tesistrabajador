@@ -59,6 +59,7 @@ public class settingsFragment extends Fragment {
         final Button btnsalir = (Button) v.findViewById(R.id.btnsalir);
         final Button btnpreguntas = (Button) v.findViewById(R.id.btnpreguntas);
         final Button btntiemposync = (Button) v.findViewById(R.id.btncambiodetiempoactualizacion);
+        final Button btnsobrenosotros = (Button) v.findViewById(R.id.btnsobrenosotros);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -192,6 +193,15 @@ public class settingsFragment extends Fragment {
                 showSelectedFragment(new preguntasFragment());
             }
         });
+
+
+        btnsobrenosotros.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSelectedFragment(new sobrenosotrosFragment());
+            }
+        });
+
         return v;
     }
 

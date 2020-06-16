@@ -51,7 +51,7 @@
 
 
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/layoutanimacion"
             android:layout_width="match_parent"
             android:layout_marginTop="10dp"
@@ -70,8 +70,23 @@
 
             </com.airbnb.lottie.LottieAnimationView>
 
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_gravity="center"
+                android:id="@+id/animationotificationloading"
+                android:layout_width="match_parent"
+                app:lottie_rawRes="@raw/loadinglistasolicitudes"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                android:layout_height="match_parent">
 
-        </LinearLayout>
+            </com.airbnb.lottie.LottieAnimationView>
+
+        </RelativeLayout>
+
+
+
+
+
 
     </RelativeLayout>
 

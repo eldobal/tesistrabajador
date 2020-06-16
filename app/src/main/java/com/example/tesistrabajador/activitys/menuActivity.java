@@ -20,6 +20,7 @@ import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.clases.Notificacion;
 import com.example.tesistrabajador.clases.Solicitud;
 import com.example.tesistrabajador.fragments.listanotificacionesFragment;
+import com.example.tesistrabajador.fragments.perfilFragment;
 import com.example.tesistrabajador.fragments.settingsFragment;
 import com.example.tesistrabajador.fragments.sobrenosotrosFragment;
 import com.example.tesistrabajador.fragments.solicitudesFragment;
@@ -89,7 +90,7 @@ public class menuActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 //se muestra el fragment de peril
                 if(menuItem.getItemId()== R.id.menu_profile){
-                    showSelectedFragment(new sobrenosotrosFragment());
+                    showSelectedFragment(new perfilFragment());
                 }
                 //se muestra el fragment de rubros
                 if(menuItem.getItemId()== R.id.menu_home){

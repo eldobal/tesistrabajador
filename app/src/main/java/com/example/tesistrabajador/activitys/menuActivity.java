@@ -6,17 +6,23 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.tesistrabajador.R;
+import com.example.tesistrabajador.clases.Adaptadornotificaciones;
 import com.example.tesistrabajador.clases.Notificacion;
 import com.example.tesistrabajador.clases.Solicitud;
 import com.example.tesistrabajador.fragments.listanotificacionesFragment;
@@ -24,6 +30,7 @@ import com.example.tesistrabajador.fragments.perfilFragment;
 import com.example.tesistrabajador.fragments.settingsFragment;
 import com.example.tesistrabajador.fragments.sobrenosotrosFragment;
 import com.example.tesistrabajador.fragments.solicitudesFragment;
+import com.example.tesistrabajador.interfaces.tesisAPI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -31,8 +38,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class menuActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
@@ -42,7 +55,8 @@ public class menuActivity extends AppCompatActivity {
     SweetAlertDialog dp;
     private SharedPreferences prefs;
     int contador=0;
-
+    ListView listanotificacion;
+    Adaptadornotificaciones adsnoti;
     SwipeRefreshLayout refreshLayout;
 
     String rut="";
@@ -50,7 +64,7 @@ public class menuActivity extends AppCompatActivity {
     ArrayList<Solicitud> listasolicitudactivas = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudescomparar = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
-
+    ArrayList<Notificacion> arraylistanotificaciones= new ArrayList<Notificacion>();;
     ArrayList<Notificacion> listanotificaciones = new ArrayList<Notificacion>();
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     @Override
@@ -58,10 +72,16 @@ public class menuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        listanotificacionesFragment listanotificacionesFragment = new listanotificacionesFragment();
+
         setContentView(R.layout.activity_menu);
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         setcredentiasexist();
 
+
+
+
+        reiniciarfragmentnotificacionesASYNC(rut);
         //al momento de crear el home en el onCreate cargar con el metodo sin backtostack
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -81,6 +101,7 @@ public class menuActivity extends AppCompatActivity {
             Uri personPhoto = acct.getPhotoUrl();
             Toast.makeText(menuActivity.this, "Nombre"+personName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
         }
+
 
 
         mbottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomnavigation);
@@ -106,7 +127,17 @@ public class menuActivity extends AppCompatActivity {
                     showSelectedFragment(new settingsFragment());
                 }
                 if(menuItem.getItemId()== R.id.menu_notificaciones){
-                    showSelectedFragment(new listanotificacionesFragment());
+
+
+
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, listanotificacionesFragment, "solicitudtag")
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            //permite regresar hacia atras entre los fragments
+                            .addToBackStack(null)
+                            .commit();
+
+
+                   // showSelectedFragment(new listanotificacionesFragment());
                 }
 
                 return true;
@@ -116,6 +147,51 @@ public class menuActivity extends AppCompatActivity {
 
 
 
+    }
+
+
+    private void reiniciarfragmentnotificacionesASYNC(String rutusuario) {
+        
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://proyectotesis.ddns.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
+        Call<List<Notificacion>> call = tesisAPI.getNotificacion(rutusuario);
+        call.enqueue(new Callback<List<Notificacion>>() {
+            @Override
+            public void onResponse(Call<List<Notificacion>> call, Response<List<Notificacion>> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(getApplicationContext(), "error/noti/onresponse" + response.code(), Toast.LENGTH_LONG).show();
+                } else {
+
+                    arraylistanotificaciones.clear();
+                    List<Notificacion> notificaciones = response.body();
+                    for (Notificacion notificacion : notificaciones) {
+                        Notificacion notificacion1 = new Notificacion();
+                        //se setean los valores del trabajador
+                        notificacion1.setId(notificacion.getId());
+                        notificacion1.setIdSolicitud(notificacion.getIdSolicitud());
+                        notificacion1.setMensaje(notificacion.getMensaje());
+                        notificacion1.setRUT(notificacion.getRUT());
+                        //se guarda la lista con las notificaciones del usuario conectado
+                        arraylistanotificaciones.add(notificacion1);
+                    }
+                    if (arraylistanotificaciones.size() != 0) {
+
+
+                    }else {
+
+                    }
+                }
+
+            }
+            @Override
+            public void onFailure(Call<List<Notificacion>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "error con el servidor" , Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 
 

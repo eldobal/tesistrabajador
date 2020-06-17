@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -61,6 +62,12 @@ public class listanotificacionesFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Toast.makeText(getActivity(), "se a hecho el onatach de listanotificaciones", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) { super.onCreate(savedInstanceState);
         //lista de notificaciones en un array para recibirlas con el get arguments
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
@@ -80,10 +87,10 @@ public class listanotificacionesFragment extends Fragment {
 
         if(NetworkInfo != null && NetworkInfo.isConnected()){
             //declaracion de la lista y la animacion
-            listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
-            animationnotificationloadign = (LottieAnimationView) v.findViewById(R.id.animationotificationloading);
+          listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
+           animationnotificationloadign = (LottieAnimationView) v.findViewById(R.id.animationotificationloading);
             animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
-            animationnotification.setVisibility(View.INVISIBLE);
+           animationnotification.setVisibility(View.INVISIBLE);
             //prefs que contienen datos del usuario
             setcredentiasexist();
             //prefs del tiempo de sync de la app
@@ -107,7 +114,7 @@ public class listanotificacionesFragment extends Fragment {
                 //llamada azyn la cual busca las notificaciones que tiene el trabajador
                 final View vista = inflater.inflate(R.layout.elementonotificacion, null);
                 adsnoti = new Adaptadornotificaciones(getContext(), arraylistanotificaciones);
-                reiniciarfragmentnotificacionesASYNC(rutusuario);
+               reiniciarfragmentnotificacionesASYNC(rutusuario);
 
 
 
@@ -122,7 +129,7 @@ public class listanotificacionesFragment extends Fragment {
                             //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
 
                             //se setea el adaptador a la lista del fragments
-                            listanotificaciones.setAdapter(adsnoti);
+                      //      listanotificaciones.setAdapter(adsnoti);
                         }
                     }
                 }.start();
@@ -152,8 +159,6 @@ public class listanotificacionesFragment extends Fragment {
 
 
             }
-
-
 
 
         }else{

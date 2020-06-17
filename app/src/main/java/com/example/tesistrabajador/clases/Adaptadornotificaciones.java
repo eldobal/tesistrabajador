@@ -44,6 +44,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
         this.contexto = contexto;
         this.listanotificaciones = listanotificaciones;
         inflater = (LayoutInflater) contexto.getSystemService(contexto.LAYOUT_INFLATER_SERVICE);
+
     }
 
     //metodo el cual se utiliza para actualizar la lista con los cambios

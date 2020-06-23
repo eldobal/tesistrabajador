@@ -55,7 +55,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class solicitudesFragment extends Fragment  {
 
     SweetAlertDialog dp;
-    LottieAnimationView loadinglista,listavacia;
+    LottieAnimationView loadinglista,listavacia,loadinglistaactiva,listaactivavacia;
     private static LayoutInflater inflater = null;
     private TextView tvNoRegistros;
     private ListView lista,listaactivas;
@@ -107,7 +107,13 @@ public class solicitudesFragment extends Fragment  {
 
         loadinglista = (LottieAnimationView) v.findViewById(R.id.idanimacionlistasolicitud);
         listavacia = (LottieAnimationView) v.findViewById(R.id.idanimacionlistavacia);
+
+        loadinglistaactiva = (LottieAnimationView) v.findViewById(R.id.idanimacionlistasolicitud2);
+        listaactivavacia = (LottieAnimationView) v.findViewById(R.id.idanimacionlistavacia2);
+
         listavacia.setVisibility(View.INVISIBLE);
+        listaactivavacia.setVisibility(View.INVISIBLE);
+
 
         //se buscan el usuario y el tiempo de sync de la app
         settiempoasyncexist();
@@ -124,8 +130,10 @@ public class solicitudesFragment extends Fragment  {
             getActivity().finish();
             Toast.makeText(getContext(), "el Usuario no es valido ", Toast.LENGTH_LONG).show();
         }else{
+            ads = new Adaptador(getContext(), listasolicitudactivasinterna);
             ads2 = new Adaptador(getContext(), listasolicitudterminadasinterna);
             reiniciarfragmentterminadas(rutusuario);
+            listaactivas = (ListView) v.findViewById(R.id.solicitudactual);
             lista = (ListView) v.findViewById(R.id.listadosolicitudescliente);
             //declaracion de los swiperefresh para intanciarlos
             refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
@@ -145,8 +153,10 @@ public class solicitudesFragment extends Fragment  {
                 public void onFinish() {
                     if (listasolicitudterminadasinterna.size() != 0) {
                         //se setea el adaptador a la lista del fragments
-
                         lista.setAdapter(ads2);
+                    }
+                    if(listasolicitudactivasinterna.size()!=0){
+                        listaactivas.setAdapter(ads);
                     }
                 }
             }.start();
@@ -225,6 +235,7 @@ public class solicitudesFragment extends Fragment  {
                     List<Solicitud> solicituds = response.body();
                     Solicitudesterminadas.clear();
                     listasolicitudterminadasinterna.clear();
+                    listasolicitudactivasinterna.clear();
                     for (Solicitud solicitud : solicituds) {
                         Solicitud Solicitud1 = new Solicitud();
                         //se setean los valores del trabajador
@@ -237,12 +248,14 @@ public class solicitudesFragment extends Fragment  {
                         Solicitudesterminadas.add(Solicitud1);
                     }
 
+
+
                     for (int i = 0; i < Solicitudesterminadas.size(); i++) {
                         Solicitud soli = new Solicitud();
                         soli = Solicitudesterminadas.get(i);
-                        if ( soli.getEstado().equals("ATENDIENDO") ) {
-                            listasolicitudterminadasinterna.add(soli);
-                        } else {
+                        if ( soli.getEstado().equals("PENDIENTE")  ) {
+                            listasolicitudactivasinterna.add(soli);
+                        } if(soli.getEstado().equals("COMPLETADA Y PAGADA") && soli.getEstado().equals("COMPLETADA Y NO PAGADA") ) {
                             listasolicitudterminadasinterna.add(soli);
                         }
                     }
@@ -256,8 +269,11 @@ public class solicitudesFragment extends Fragment  {
 
                         listavacia.setVisibility(View.INVISIBLE);
                         listavacia.pauseAnimation();
+                        notfound.setText("");
 
-                    }else{
+                    }if (listasolicitudterminadasinterna.size()==0){
+                        ads2.refresh(listasolicitudterminadasinterna);
+                        lista.setAdapter(ads2);
                         loadinglista.setVisibility(View.INVISIBLE);
                         loadinglista.pauseAnimation();
 
@@ -270,6 +286,29 @@ public class solicitudesFragment extends Fragment  {
 
                     }
 
+                    if(listasolicitudactivasinterna.size()!=0){
+                        ads.refresh(listasolicitudactivasinterna);
+                        listaactivas.setAdapter(ads);
+                        loadinglistaactiva.setVisibility(View.INVISIBLE);
+                        loadinglistaactiva.pauseAnimation();
+
+                        listaactivavacia.setVisibility(View.INVISIBLE);
+                        listaactivavacia.pauseAnimation();
+
+                    }
+                    if(listasolicitudactivasinterna.size()==0){
+                        ads.refresh(listasolicitudactivasinterna);
+                        listaactivas.setAdapter(ads);
+                        loadinglistaactiva.setVisibility(View.INVISIBLE);
+                        loadinglistaactiva.pauseAnimation();
+
+                        listaactivavacia.setVisibility(View.VISIBLE);
+                        listaactivavacia.playAnimation();
+
+
+                    }
+
+
                     refreshLayoutterminadas.setRefreshing(false);
                 }
             }
@@ -281,6 +320,13 @@ public class solicitudesFragment extends Fragment  {
 
                 listavacia.setVisibility(View.VISIBLE);
                 listavacia.playAnimation();
+
+
+                loadinglistaactiva.setVisibility(View.INVISIBLE);
+                loadinglistaactiva.pauseAnimation();
+
+                listaactivavacia.setVisibility(View.VISIBLE);
+                listaactivavacia.playAnimation();
 
                 notfound.setText("No Posee Solicitudes");
             }

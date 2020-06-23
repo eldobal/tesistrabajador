@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <application
+        android:name=".clases.app"
         android:appComponentFactory="android.support.v4.app.CoreComponentFactory"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -44,7 +45,15 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name="com.example.tesistrabajador.activitys.menuActivity"
             android:screenOrientation="portrait"
-            ></activity>
+            >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activitys.menuActivity"
+                ></meta-data>
+
+        </activity>
+        <receiver android:name=".clases.NotificationReceiver"></receiver>
     </application>
 
 </manifest>

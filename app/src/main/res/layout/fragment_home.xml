@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorAccentllight"
+    android:layout_height="match_parent"
+    tools:context=".fragments.homeFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <RelativeLayout
+            android:id="@+id/homerelative01"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            >
+
+            <RelativeLayout
+
+                android:layout_width="120dp"
+                android:layout_height="120dp">
+
+                <ImageView
+                    android:id="@+id/idimagenperfiltrabajador"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/userprofile"></ImageView>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/ididid"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="125dp"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:gravity="center"
+                        android:textSize="20dp"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:textColor="@color/colordark"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text="Estado:"
+                        ></TextView>
+
+
+                    <RelativeLayout
+                        android:layout_marginLeft="100dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <Button
+                            android:id="@+id/btncambiodeestadotrabajador"
+                            android:text="Activo"
+                            android:gravity="center_horizontal"
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"></Button>
+
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_below="@+id/ididid"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="125dp"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+
+
+                    <RelativeLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+
+
+
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/homerelative02"
+            android:layout_below="@id/homerelative01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+
+                <TextView
+                    android:id="@+id/txt010"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colordark"
+                    android:textAlignment="center"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:text="Solicitud Actual "
+                    android:textSize="25sp"
+                    android:gravity="center_horizontal"></TextView>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.cardview.widget.CardView
+
+                        android:id="@+id/cardsolicitudactual"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentTop="true"
+                        android:padding="8dp"
+                        android:backgroundTint="@color/colorPrimaryDark"
+                        app:cardCornerRadius="30dp"
+                        app:cardElevation="6dp">
+
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/idanimacionlistasolicitud"
+                            app:lottie_rawRes="@raw/loadinglistasolicitudes"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp">
+                        </com.airbnb.lottie.LottieAnimationView>
+
+
+                        <ListView
+                            android:layout_below="@+id/txt010"
+                            android:id="@+id/solicitudactual"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                        </ListView>
+
+                        <TextView
+                            android:id="@+id/txtnotfoundhome"
+                            android:padding="8dp"
+                            android:textSize="18dp"
+                            android:textColor="@color/colordark"
+                            android:gravity="center_horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            ></TextView>
+
+
+
+
+                    </androidx.cardview.widget.CardView>
+                </RelativeLayout>
+
+
+
+            </LinearLayout>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_below="@+id/homerelative02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/piechart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                ></com.github.mikephil.charting.charts.PieChart>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+
+</FrameLayout>

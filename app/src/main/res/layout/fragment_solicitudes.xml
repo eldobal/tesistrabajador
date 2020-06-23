@@ -36,9 +36,117 @@
 
         </RelativeLayout>
 
-
         <RelativeLayout
-            android:layout_below="@id/txtmisoli"
+            android:layout_below="@+id/txtmisoli"
+
+            android:id="@+id/txtsolicitudactual"
+            android:layout_width="match_parent"
+            android:layout_height="250dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/txt010"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colordark"
+                    android:textAlignment="center"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:text="Solicitudes Pendientes "
+                    android:textSize="25sp"
+                    android:gravity="center_horizontal"></TextView>
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/cardcambiodepass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentTop="true"
+                    android:padding="8dp"
+                    android:backgroundTint="@color/colorPrimaryDark"
+                    app:cardCornerRadius="30dp"
+                    app:cardElevation="6dp">
+
+                    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                        android:id="@+id/refresh"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="6dp">
+
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/idanimacionlistasolicitud2"
+                                app:lottie_rawRes="@raw/loadinglistasolicitudes"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                android:layout_centerInParent="true"
+
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+                            </com.airbnb.lottie.LottieAnimationView>
+
+
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/idanimacionlistavacia2"
+                                app:lottie_rawRes="@raw/listasolicitudesvacia"
+                                app:lottie_autoPlay="false"
+                                app:lottie_loop="false"
+                                android:layout_centerInParent="true"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+                            </com.airbnb.lottie.LottieAnimationView>
+
+
+
+                            <ListView
+
+                                android:id="@+id/solicitudactual"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                            </ListView>
+
+                        </RelativeLayout>
+
+
+
+
+                    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_below="@id/txtsolicitudactual"
             android:layout_width="match_parent"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
@@ -97,7 +205,7 @@
                                 app:lottie_loop="true"
                                 android:layout_centerInParent="true"
                                 android:layout_marginBottom="100dp"
-                                android:layout_marginTop="100dp"
+
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent">
                             </com.airbnb.lottie.LottieAnimationView>
@@ -111,7 +219,7 @@
                                 android:layout_centerInParent="true"
                                 android:layout_width="match_parent"
                                 android:layout_marginBottom="100dp"
-                                android:layout_marginTop="100dp"
+
                                 android:layout_height="match_parent">
                             </com.airbnb.lottie.LottieAnimationView>
 

@@ -1,25 +1,37 @@
 package com.example.tesistrabajador.fragments;
 
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,8 +39,10 @@ import android.widget.Toast;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.activitys.loginActivity;
+import com.example.tesistrabajador.activitys.menuActivity;
 import com.example.tesistrabajador.clases.Adaptadornotificaciones;
 import com.example.tesistrabajador.clases.Notificacion;
+import com.example.tesistrabajador.clases.NotificationReceiver;
 import com.example.tesistrabajador.interfaces.tesisAPI;
 
 import java.util.ArrayList;
@@ -41,22 +55,34 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import static android.app.Activity.RESULT_OK;
+import static android.content.Context.NOTIFICATION_SERVICE;
+import static com.example.tesistrabajador.clases.app.CHANNERL_1_ID;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class listanotificacionesFragment extends Fragment {
-
+    private NotificationManagerCompat notificationManager;
     ListView listanotificaciones;
     NetworkInfo NetworkInfo;
     SwipeRefreshLayout refreshnotificaciones;
     SharedPreferences prefs,asycprefs;
     LottieAnimationView animationnotification,animationnotificationloadign ;
     ArrayList<Notificacion> arraylistanotificaciones= new ArrayList<Notificacion>();;
+    ArrayList<Notificacion> listanotificacionescomparar= new ArrayList<Notificacion>();;
     Adaptadornotificaciones ads ,adsnoti;
     private String rutusuario="";
     int azynctiempo =0;
     TextView notfound;
+    private PendingIntent pendingIntent;
+    private final static String CHANNEL_ID = "NOTIFICACION";
+    private final static int NOTIFICACION_ID = 0;
+    String GROUP_KEY_WORK_EMAIL = "com.android.example.Notifications";
+    int SUMMARY_ID = 0;
+    Button btnprueba;
+
+
     public listanotificacionesFragment() {
         // Required empty public constructor
     }
@@ -64,7 +90,7 @@ public class listanotificacionesFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        Toast.makeText(getActivity(), "se a hecho el onatach de listanotificaciones", Toast.LENGTH_LONG).show();
+
     }
 
     @Override
@@ -72,8 +98,8 @@ public class listanotificacionesFragment extends Fragment {
         //lista de notificaciones en un array para recibirlas con el get arguments
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
-      //  arraylistanotificaciones = (ArrayList<Notificacion>) getArguments().getSerializable("arraynotificaciones");
-
+      //
+        notificationManager = NotificationManagerCompat.from(getActivity());
         //refreshnotificaciones =(SwipeRefreshLayout) getActivity().findViewById(R.id.refreshnotificaciones);
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -85,12 +111,31 @@ public class listanotificacionesFragment extends Fragment {
         View v= inflater.inflate(R.layout.fragment_listanotificaciones, container, false);
 
 
+        btnprueba = (Button) v.findViewById(R.id.btnpruebanotification);
+
+
+        btnprueba.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 1; i <=2; i++) {
+                    createNotificationChannel();
+                    crearnotificacion(i);
+                }
+
+
+            }
+        });
+
+       // arraylistanotificaciones = (ArrayList<Notificacion>) getArguments().getSerializable("arraynotificaciones");
+
         if(NetworkInfo != null && NetworkInfo.isConnected()){
             //declaracion de la lista y la animacion
           listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
            animationnotificationloadign = (LottieAnimationView) v.findViewById(R.id.animationotificationloading);
             animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
            animationnotification.setVisibility(View.INVISIBLE);
+
+
             //prefs que contienen datos del usuario
             setcredentiasexist();
             //prefs del tiempo de sync de la app
@@ -114,25 +159,21 @@ public class listanotificacionesFragment extends Fragment {
                 //llamada azyn la cual busca las notificaciones que tiene el trabajador
                 final View vista = inflater.inflate(R.layout.elementonotificacion, null);
                 adsnoti = new Adaptadornotificaciones(getContext(), arraylistanotificaciones);
-               reiniciarfragmentnotificacionesASYNC(rutusuario);
+              // reiniciarfragmentnotificacionesASYNC(rutusuario);
 
 
-
-                new CountDownTimer(1500,1000){
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                    }
-                    @Override
-                    public void onFinish() {
 
                         if (arraylistanotificaciones.size() != 0) {
-                            //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
 
+
+                            animationnotification.setVisibility(View.INVISIBLE);
+                            animationnotificationloadign.setVisibility(View.INVISIBLE);
+                            //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
+                            adsnoti.refresh(arraylistanotificaciones);
                             //se setea el adaptador a la lista del fragments
-                      //      listanotificaciones.setAdapter(adsnoti);
+                            listanotificaciones.setAdapter(adsnoti);
                         }
-                    }
-                }.start();
+
 
 
                 final Handler handler = new Handler();
@@ -145,6 +186,9 @@ public class listanotificacionesFragment extends Fragment {
                                 if (isAdded() && isVisible() && getUserVisibleHint()) {
                                     try {
                                         //Ejecuta tu AsyncTask!
+
+                                       // adsnoti.refresh(arraylistanotificaciones);
+
                                         reiniciarfragmentnotificacionesASYNC(rutusuario);
                                     } catch (Exception e) {
                                         Log.e("error", e.getMessage());
@@ -155,7 +199,7 @@ public class listanotificacionesFragment extends Fragment {
                         });
                     }
                 };
-                timer.schedule(task, 5000, azynctiempo);  //ejecutar en intervalo definido por el programador
+                timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
 
 
             }
@@ -222,9 +266,59 @@ public class listanotificacionesFragment extends Fragment {
                         animationnotificationloadign.pauseAnimation();
 
 
+                        if(listanotificacionescomparar.size()==0){
+
+                        }else{
+
+                            if(listanotificacionescomparar.size() != arraylistanotificaciones.size()){
+
+
+                                if(listanotificacionescomparar.size()>arraylistanotificaciones.size()){
+
+                                    for (int i = 0; i < listanotificacionescomparar.size(); i++) {
+
+                                        for (int j = 0; j <arraylistanotificaciones.size(); j++) {
+
+                                            if(listanotificacionescomparar.get(i).getId() != arraylistanotificaciones.get(i).getId()){
+
+                                                createNotificationChannel();
+                                                crearnotificacion(listanotificacionescomparar.get(i).getId());
+
+                                            }
+                                        }
+                                    }
+
+                                }else{
+
+                                    for (int i = 0; i < arraylistanotificaciones.size(); i++) {
+
+                                        for (int j = 0; j <listanotificacionescomparar.size(); j++) {
+
+                                            if(listanotificacionescomparar.get(i).getId() != arraylistanotificaciones.get(i).getId()){
+
+                                                createNotificationChannel();
+                                                crearnotificacion(arraylistanotificaciones.get(i).getId());
+
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }else{
+
+                            }
+                        }
+
+                       listanotificacionescomparar= arraylistanotificaciones;
+
+
                     }else {
                         animationnotification.setVisibility(View.VISIBLE);
                         animationnotification.playAnimation();
+
+                        animationnotificationloadign.setVisibility(View.INVISIBLE);
+                        animationnotificationloadign.pauseAnimation();
+
                     }
                 }
 
@@ -235,6 +329,37 @@ public class listanotificacionesFragment extends Fragment {
 
             }
         });
+    }
+
+    public void sendOnChannel1(View v , String idsolicitud){
+
+
+        Intent activityIntent = new Intent(getContext(),menuActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(),
+                0,activityIntent,0
+                );
+
+        Intent Broadcastintent = new Intent(getContext(), NotificationReceiver.class);
+        Broadcastintent.putExtra("toastmessage",idsolicitud);
+
+        PendingIntent actionIntent =PendingIntent.getBroadcast(getContext(),0,Broadcastintent,pendingIntent.FLAG_UPDATE_CURRENT);
+
+
+    Notification notification = new NotificationCompat.Builder(getContext(),CHANNERL_1_ID)
+            .setSmallIcon(R.id.usericon)
+            .setContentTitle("Hay una nueva notificacion ")
+            .setContentText("")
+            .setVibrate(new long[]{1000,1000,1000,1000,1000})
+            .setLights(Color.CYAN, 1000, 1000)
+            .setPriority(NotificationManagerCompat.IMPORTANCE_DEFAULT)
+            .setCategory(NotificationCompat.CATEGORY_REMINDER)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .setOnlyAlertOnce(true)
+            .addAction(R.mipmap.ic_launcher,"toast" ,actionIntent)
+            .build();
+
+        notificationManager.notify(1, notification);
     }
 
     //metodo para traer el rut del usuario hacia la variable local
@@ -261,6 +386,88 @@ public class listanotificacionesFragment extends Fragment {
         return asycprefs.getInt("tiempo", 0);
     }
 
+
+
+    //metodo el cual verifica la version del so para crear el canal
+    private void createNotificationChannel(){
+        //se verifica que el SO sea igual o superior a oreo
+        //si es superior crea el notification chanel
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "Noticacion";
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+    }
+
+
+    //metodo para crear la notificacion personalizada
+    private void crearnotificacion(int id) {
+        //se instancia el builder para crear la notificacion
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), CHANNEL_ID);
+        //se declaran las propiedades y atributos
+        builder.setSmallIcon(R.drawable.ic_notificacionicon);
+        builder.setContentTitle("Nueva Notificacion Encontrada id: "+id);
+        builder.setColor(Color.BLUE);
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        builder.setLights(Color.CYAN, 1000, 1000);
+        builder.setVibrate(new long[]{1000,1000,1000,1000,1000});
+        builder.setDefaults(Notification.DEFAULT_SOUND);
+        builder.setGroup(GROUP_KEY_WORK_EMAIL);
+        builder.setAutoCancel(true);
+
+
+        //texto para mostrar de forma exancible
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText("Se ha realizado una actualizacion en la solicitud: "+id));
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getActivity());
+
+        //se instancia la notificacion
+        notificationManagerCompat.notify(id, builder.build() );
+
+
+
+        Notification summaryNotification =
+                new NotificationCompat.Builder(getActivity(), CHANNEL_ID)
+                        .setContentTitle("Nuevas Notificaciones")
+                        //set content text to support devices running API level < 24
+                        .setContentText("tienes "+id+" notificaciones")
+                        .setSmallIcon(R.drawable.ic_notificacionicon)
+                        //build summary info into InboxStyle template
+                        .setStyle(new NotificationCompat.InboxStyle()
+                                .addLine("Alex Faarborg  Check this out")
+                                .addLine("Jeff Chang    Launch Party")
+                                .setBigContentTitle("2 new messages")
+                                .setSummaryText("Notificaciones"))
+                        //specify which group this notification belongs to
+                        .setGroup(GROUP_KEY_WORK_EMAIL)
+                        //set this notification as the summary for the group
+                        .setGroupSummary(true)
+                        .build();
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
+        notificationManager.notify(id, builder.build());
+
+        notificationManager.notify(SUMMARY_ID, summaryNotification);
+
+
+
+
+
+
+
+    }
+
+
+    private void setPendingIntent(){
+
+        Intent notificationIntent = new Intent(getContext(), homeFragment.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getContext());
+        stackBuilder.addParentStack(menuActivity.class);
+        stackBuilder.addNextIntent(notificationIntent);
+        pendingIntent = stackBuilder.getPendingIntent(1, PendingIntent.FLAG_UPDATE_CURRENT);
+
+    }
 
 
 }

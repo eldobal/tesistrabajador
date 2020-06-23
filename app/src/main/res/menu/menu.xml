@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" >
     <item android:id="@+id/menu_home"
         android:title="Home"
-        android:icon="@drawable/ic_action_name"
+        android:icon="@drawable/ic_action_stats"
         />
     <item android:id="@+id/menu_profile"
         android:title="Perfil"

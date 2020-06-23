@@ -2,16 +2,28 @@ package com.example.tesistrabajador.activitys;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.FragmentManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +37,7 @@ import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.clases.Adaptadornotificaciones;
 import com.example.tesistrabajador.clases.Notificacion;
 import com.example.tesistrabajador.clases.Solicitud;
+import com.example.tesistrabajador.fragments.homeFragment;
 import com.example.tesistrabajador.fragments.listanotificacionesFragment;
 import com.example.tesistrabajador.fragments.perfilFragment;
 import com.example.tesistrabajador.fragments.settingsFragment;
@@ -39,6 +52,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
@@ -49,22 +64,28 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class menuActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
+    private NotificationManagerCompat notificationManager;
     TextView nombre,email,id;
     ImageView fotoperfil;
     BottomNavigationView mbottomNavigationView;
     SweetAlertDialog dp;
-    private SharedPreferences prefs;
+    private SharedPreferences prefs,prefsnotificacion;
     int contador=0;
     ListView listanotificacion;
     Adaptadornotificaciones adsnoti;
     SwipeRefreshLayout refreshLayout;
-
+    private PendingIntent pendingIntent;
+    private final static String CHANNEL_ID = "NOTIFICACION";
+    private final static int NOTIFICACION_ID = 0;
+    String latorigen="",longorigen="";
     String rut="";
     ArrayList<Solicitud> listasolicitudesterminadas = new ArrayList<Solicitud>();
     ArrayList<Solicitud> listasolicitudactivas = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudescomparar = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
     ArrayList<Notificacion> arraylistanotificaciones= new ArrayList<Notificacion>();;
+
+    ArrayList<Notificacion> listanotificacionescomparar= new ArrayList<Notificacion>();;
     ArrayList<Notificacion> listanotificaciones = new ArrayList<Notificacion>();
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     @Override
@@ -73,15 +94,17 @@ public class menuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
 
         listanotificacionesFragment listanotificacionesFragment = new listanotificacionesFragment();
-
+        notificationManager = NotificationManagerCompat.from(this);
         setContentView(R.layout.activity_menu);
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        prefsnotificacion = getSharedPreferences("PreferencesNotificacion", Context.MODE_PRIVATE);
         setcredentiasexist();
 
 
 
 
-        reiniciarfragmentnotificacionesASYNC(rut);
+
+
         //al momento de crear el home en el onCreate cargar con el metodo sin backtostack
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -106,21 +129,22 @@ public class menuActivity extends AppCompatActivity {
 
         mbottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomnavigation);
 
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,new listanotificacionesFragment()).commit();
         mbottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 //se muestra el fragment de peril
                 if(menuItem.getItemId()== R.id.menu_profile){
                     showSelectedFragment(new perfilFragment());
+
                 }
                 //se muestra el fragment de rubros
                 if(menuItem.getItemId()== R.id.menu_home){
-
+                    showSelectedFragment(new homeFragment());
                 }
                 //se muestra el fragment de la lista de solicitudes
                 if(menuItem.getItemId()==R.id.menu_solicitud){
                        showSelectedFragment(new solicitudesFragment());
-
                 }
                 //se muestra el fragment de configuracion y setting
                 if(menuItem.getItemId()== R.id.menu_settings){
@@ -128,16 +152,29 @@ public class menuActivity extends AppCompatActivity {
                 }
                 if(menuItem.getItemId()== R.id.menu_notificaciones){
 
+                /*
+                    Bundle bundle2 = new Bundle();
+                    bundle2.putSerializable("arraynotificaciones", listanotificaciones);
+                    listanotificacionesFragment.setArguments(bundle2);
 
+                    if(listanotificacionesFragment.isVisible()){
 
+                        //metodo para recargar el fragment que se esta mostrando
+                        Fragment fragmentnotificacion = getSupportFragmentManager().findFragmentByTag("solicitudtag");
+                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                        ft.detach(fragmentnotificacion);
+                        ft.attach(fragmentnotificacion);
+                        ft.commit();
+                    }
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, listanotificacionesFragment, "solicitudtag")
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             //permite regresar hacia atras entre los fragments
                             .addToBackStack(null)
                             .commit();
 
+                    */
 
-                   // showSelectedFragment(new listanotificacionesFragment());
+                    showSelectedFragment(new listanotificacionesFragment());
                 }
 
                 return true;
@@ -145,13 +182,35 @@ public class menuActivity extends AppCompatActivity {
         });
 
 
+        final Handler handler = new Handler();
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() {
+
+                            try {
+                                //Ejecuta tu AsyncTask!
+                              //  reiniciarfragmentnotificacionesASYNC(rut);
+                            } catch (Exception e) {
+                                Log.e("error", e.getMessage());
+                            }
+                        }
+
+
+                });
+            }
+        };
+        timer.schedule(task, 0, 10000);  //ejecutar en intervalo definido por el programador
+
 
 
     }
 
 
     private void reiniciarfragmentnotificacionesASYNC(String rutusuario) {
-        
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://proyectotesis.ddns.net/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -164,7 +223,7 @@ public class menuActivity extends AppCompatActivity {
                 if (!response.isSuccessful()) {
                     Toast.makeText(getApplicationContext(), "error/noti/onresponse" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
-
+                    listanotificaciones.clear();
                     arraylistanotificaciones.clear();
                     List<Notificacion> notificaciones = response.body();
                     for (Notificacion notificacion : notificaciones) {
@@ -179,6 +238,21 @@ public class menuActivity extends AppCompatActivity {
                     }
                     if (arraylistanotificaciones.size() != 0) {
 
+                        for (int i =0 ; i<arraylistanotificaciones.size();i++){
+                            listanotificaciones.add(arraylistanotificaciones.get(i));
+                        }
+
+                       if(listanotificacionescomparar.size() != arraylistanotificaciones.size()){
+
+                          setPendingIntent();
+                           createNotificationChannel();
+                           crearnotificacion();
+                       }else{
+
+                       }
+
+
+                       listanotificacionescomparar = arraylistanotificaciones;
 
                     }else {
 
@@ -273,6 +347,55 @@ public class menuActivity extends AppCompatActivity {
         //linea la cual guarda todos los valores en la pref antes de continuar
         editor.commit();
         editor.apply();
+    }
+
+
+
+
+    //metodo el cual verifica la version del so para crear el canal
+    private void createNotificationChannel(){
+        //se verifica que el SO sea igual o superior a oreo
+        //si es superior crea el notification chanel
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "Noticacion";
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager notificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+    }
+
+
+    //metodo para crear la notificacion personalizada
+    private void crearnotificacion() {
+        //se instancia el builder para crear la notificacion
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
+        //se declaran las propiedades y atributos
+        builder.setSmallIcon(R.drawable.userprofile);
+        builder.setContentTitle("Nueva Notificacion Encontrada");
+        builder.setColor(Color.BLUE);
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        builder.setLights(Color.CYAN, 1000, 1000);
+        builder.setVibrate(new long[]{1000,1000,1000,1000,1000});
+        builder.setDefaults(Notification.DEFAULT_SOUND);
+        //texto para mostrar de forma exancible
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText("Usted tiene una nueva notificacion, si desea visualizar su lista de notificaciones" +
+                "selcciones el icono notificaciones en la barra de opciones / si desea ir directamente aprete esta notificacion"));
+        builder.setContentIntent(pendingIntent);
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+        //se instancia la notificacion
+        notificationManagerCompat.notify(NOTIFICACION_ID, builder.build());
+    }
+
+
+    private void setPendingIntent(){
+
+        Intent notificationIntent = new Intent(this, listanotificacionesFragment.class);
+        notificationIntent.putExtra("menuFragment", "favoritesMenuItem");
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(menuActivity.class);
+        stackBuilder.addNextIntent(notificationIntent);
+        pendingIntent = stackBuilder.getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT);
+
     }
 
     private void setcredentiasexist() {

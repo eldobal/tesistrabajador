@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,90 +93,167 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
         card.setTag(i);
 
 
-        card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                View viewsync = inflater.inflate(R.layout.alertconfirmacionnotificacion,null);
-                builder.setView(viewsync);
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                TextView textoalertnotificacion= (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
-
-                Button btnconfirmar = viewsync.findViewById(R.id.btnconfirmarnotificacion);
-                Button btncancelar = viewsync.findViewById(R.id.btncancelarnotificacion);
-
-                textoalertnotificacion.setText("Si Apreta el boton confirmar devera especificar un precio aprox y luego se le notificara al cliente" +
-                        ". Si selecciona cancelar se eliminara esta solicitud y se le notificara de igual manera al cliente.(si no desea realizar ninguna accion seleeccione fuerta de este recuadro)");
+        String textocomparar = "Solicitud "+notificacion.getIdSolicitud()+" fue cancelada";
 
 
-                btnconfirmar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Calendar calendar = Calendar.getInstance();
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                        final String Fechasolicitud = sdf.format(calendar.getTime());
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl("http://proyectotesis.ddns.net/")
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
-                        tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-                        Call<Solicitud> call = tesisAPI.EstadoAtendiendo(listanotificaciones.get(i).getIdSolicitud(), Fechasolicitud);
-                        call.enqueue(new Callback<Solicitud>() {
+
+
+
+
+            card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (notificacion.getMensaje().equals(textocomparar)) {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                        View viewsync = inflater.inflate(R.layout.alernotificacioncancelada, null);
+                        builder.setView(viewsync);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                        TextView textoalertnotificacion = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+
+                        Button dismiss2 = viewsync.findViewById(R.id.btnocultaralert2);
+
+
+                        textoalertnotificacion.setText("La notificacion con el id: " + notificacion.getId() + " ha sido cancelada por el cliente" +
+                                "lo cual significa que la solitud se ha eliminado ");
+
+                        dismiss2.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
-                                if (!response.isSuccessful()) {
-                                    Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                            public void onClick(View v) {
+
+                                Retrofit retrofit = new Retrofit.Builder()
+                                        .baseUrl("http://proyectotesis.ddns.net/")
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build();
+                                tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
+                                Call<String> call = tesisAPI.EliminarSoliPermanente(listanotificaciones.get(i).getIdSolicitud());
+                                call.enqueue(new Callback<String>() {
+                                    @Override
+                                    public void onResponse(Call<String> call, Response<String> response) {
+                                        if (!response.isSuccessful()) {
+                                            Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                                        } else {
+                                            listanotificaciones.remove(i);
+                                            refresh(listanotificaciones);
+                                            dialog.dismiss();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<String> call, Throwable t) {
+                                        Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                dialog.dismiss();
+
+                            }
+                        });
+
+                    } else {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                        View viewsync = inflater.inflate(R.layout.alertconfirmacionnotificacion, null);
+                        builder.setView(viewsync);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                        TextView textoalertnotificacion = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+
+                        Button btnconfirmar = viewsync.findViewById(R.id.btnconfirmarnotificacion);
+                        Button btncancelar = viewsync.findViewById(R.id.btncancelarnotificacion);
+                        EditText preciotrabajador = viewsync.findViewById(R.id.preciotrabajadornotificacion);
+                        Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
+
+
+                        textoalertnotificacion.setText("Si Apreta el boton confirmar devera especificar un precio aprox y luego se le notificara al cliente" +
+                                ". Si selecciona cancelar se eliminara esta solicitud y se le notificara de igual manera al cliente.(si no desea realizar ninguna accion seleeccione fuerta de este recuadro)");
+
+                        dismiss.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        btnconfirmar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                if (!preciotrabajador.getText().toString().isEmpty()) {
+
+                                    int precio = Integer.parseInt(preciotrabajador.getText().toString());
+                                    Calendar calendar = Calendar.getInstance();
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                                    final String Fechasolicitud = sdf.format(calendar.getTime());
+                                    Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl("http://proyectotesis.ddns.net/")
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+                                    tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
+                                    Call<String> call = tesisAPI.TrabajadorConfirmar(listanotificaciones.get(i).getIdSolicitud(), Fechasolicitud, precio);
+                                    call.enqueue(new Callback<String>() {
+                                        @Override
+                                        public void onResponse(Call<String> call, Response<String> response) {
+                                            if (!response.isSuccessful()) {
+                                                Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                                            } else {
+                                                listanotificaciones.remove(i);
+                                                refresh(listanotificaciones);
+                                                dialog.dismiss();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<String> call, Throwable t) {
+                                            Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    });
                                 } else {
-                                    listanotificaciones.remove(i);
-                                    refresh(listanotificaciones);
-
+                                    Toast.makeText(v.getContext(), "Si desea confirmar agregue un valor aproximado", Toast.LENGTH_LONG).show();
                                 }
-                            }
 
-                            @Override
-                            public void onFailure(Call<Solicitud> call, Throwable t) {
-                                Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
-                    }
-                });
 
 
-                btncancelar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl("http://proyectotesis.ddns.net/")
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
-                        tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-                        Call<String> call = tesisAPI.CancelarSolicitud(listanotificaciones.get(i).getIdSolicitud());
-                        call.enqueue(new Callback<String>() {
+                        btncancelar.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-                                if(!response.isSuccessful()){
-                                    Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
-                                }
-                                else {
-                                    listanotificaciones.remove(i);
-                                    refresh(listanotificaciones);
-                                }
-                            }
-                            @Override
-                            public void onFailure(Call<String> call, Throwable t) {
-                                Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                            public void onClick(View v) {
+                                Retrofit retrofit = new Retrofit.Builder()
+                                        .baseUrl("http://proyectotesis.ddns.net/")
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build();
+                                tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
+                                Call<String> call = tesisAPI.CancelarSolicitudt(listanotificaciones.get(i).getIdSolicitud());
+                                call.enqueue(new Callback<String>() {
+                                    @Override
+                                    public void onResponse(Call<String> call, Response<String> response) {
+                                        if (!response.isSuccessful()) {
+                                            Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                                        } else {
+                                            listanotificaciones.remove(i);
+                                            refresh(listanotificaciones);
+                                            dialog.dismiss();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<String> call, Throwable t) {
+                                        Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
                             }
                         });
+
+
                     }
-                });
-
-
-            }
-        });
+                }
+            });
 
 
         return vista;

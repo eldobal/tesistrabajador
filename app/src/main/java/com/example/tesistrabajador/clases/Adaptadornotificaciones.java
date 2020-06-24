@@ -96,6 +96,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
         String textocomparar = "Solicitud "+notificacion.getIdSolicitud()+" fue cancelada";
 
 
+        String textocompararconfirmada = "Solicitud "+notificacion.getIdSolicitud()+" fue confirmada";
 
 
 
@@ -153,7 +154,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                             }
                         });
 
-                    } else {
+                    }else if(notificacion.getMensaje().equals(textocompararconfirmada)){} else {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                         View viewsync = inflater.inflate(R.layout.alertconfirmacionnotificacion, null);

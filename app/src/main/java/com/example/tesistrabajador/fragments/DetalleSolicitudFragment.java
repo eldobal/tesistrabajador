@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,9 +39,11 @@ public class DetalleSolicitudFragment extends Fragment {
     private TextView numerosolicitud,fechasolicitud,fechadetallesolicitud,cliente,trabajador,rubro,precio,estadosolicitud,descripciondetallesolicitud,diagnosticodetallesolicitud,soluciondetallesolicitud;
     private ImageView imgperfiltrabajador,imgclientesacada;
     SharedPreferences prefs;
-    private Button btnvolver;
+    private Button btncomollegar;
     private int idsolicitud=0;
     final static String rutaservidor= "http://proyectotesis.ddns.net";
+    double latitud=0.0,longitud=0.0;
+
     public DetalleSolicitudFragment() {
         // Required empty public constructor
     }
@@ -60,7 +63,7 @@ public class DetalleSolicitudFragment extends Fragment {
         soluciondetallesolicitud =(TextView)getActivity().findViewById(R.id.txtsoluciondetallesolicitud);
         imgperfiltrabajador =(ImageView)getActivity().findViewById(R.id.imgperfilfilasolicitud);
         imgclientesacada =(ImageView)getActivity().findViewById(R.id.imgclientesacada);
-        btnvolver = (Button)getActivity().findViewById(R.id.btnvolver);
+
     }
 
     @Override
@@ -68,6 +71,7 @@ public class DetalleSolicitudFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_detalle_solicitud, container, false);
+        btncomollegar = (Button) v.findViewById(R.id.btncomollegar);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         Bundle datosRecuperados = getArguments();
@@ -101,6 +105,8 @@ public class DetalleSolicitudFragment extends Fragment {
                     descripciondetallesolicitud.setText(solicituds.getDescripcionP());
                     diagnosticodetallesolicitud.setText(solicituds.getDiagnostico());
                     soluciondetallesolicitud.setText(solicituds.getSolucion());
+                    latitud=(solicituds.getLatitud());
+                    longitud=solicituds.getLongitud();
                     //carga de la foto del trabajor
                     Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getFotoT())).into(imgperfiltrabajador);
                     //carga de foto cargada por el usuario
@@ -112,6 +118,26 @@ public class DetalleSolicitudFragment extends Fragment {
                 Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+
+
+
+        btncomollegar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putDouble("latitudcliente", latitud);
+                bundle.putDouble("longitudcliente", longitud);
+                comollegarFragment comollegarFragment = new comollegarFragment();
+                comollegarFragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.container,comollegarFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
+            }
+        });
+
+
+
+
         return v;
     }
 }

@@ -44,6 +44,7 @@ import com.example.tesistrabajador.fragments.settingsFragment;
 import com.example.tesistrabajador.fragments.sobrenosotrosFragment;
 import com.example.tesistrabajador.fragments.solicitudesFragment;
 import com.example.tesistrabajador.interfaces.tesisAPI;
+import com.example.tesistrabajador.mapclasses.TaskLoadedCallback;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -62,7 +63,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class menuActivity extends AppCompatActivity {
+public class menuActivity extends AppCompatActivity implements TaskLoadedCallback {
     private GoogleSignInClient googleSignInClient;
     private NotificationManagerCompat notificationManager;
     TextView nombre,email,id;
@@ -416,5 +417,8 @@ public class menuActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onTaskDone(Object... values) {
 
+    }
 }

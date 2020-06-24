@@ -10,6 +10,17 @@
 
 
 
+    <com.airbnb.lottie.LottieAnimationView
+        app:lottie_rawRes="@raw/info01"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"
+
+        android:background="@drawable/round_async01">
+
+    </com.airbnb.lottie.LottieAnimationView>
+
 
 
     <TextView
@@ -47,7 +58,7 @@
             android:id="@+id/btnocultaralert2"
             android:layout_width="175dp"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccentllight"
+            android:background="@drawable/bg_ripple"
             android:text="Entiendo">
         </Button>
     </LinearLayout>

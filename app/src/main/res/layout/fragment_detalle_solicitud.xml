@@ -496,14 +496,14 @@
 
         <Button
 
-            android:id="@+id/btnvolver"
+            android:id="@+id/btncomollegar"
             android:layout_width="220dp"
             android:layout_height="50dp"
             android:layout_centerInParent="true"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/botonripple"
-            android:text="Actualizar Solicitud" />
+            android:text="Como Llegar" />
 
 
     </RelativeLayout>*/

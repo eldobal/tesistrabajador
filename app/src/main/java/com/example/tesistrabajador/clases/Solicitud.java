@@ -19,6 +19,8 @@ public class Solicitud{
     private String Solucion;
     private String idFoto;
     private String FotoT;
+    private double latitud;
+    private double longitud;
 
 
 
@@ -42,6 +44,8 @@ public class Solicitud{
         this.Nombre= Nombre;
         this.Apellido= Apellido;
         this.FotoT=FotoT;
+        this.latitud=latitud;
+        this.longitud=longitud;
     }
 
 
@@ -163,6 +167,22 @@ public class Solicitud{
 
     public void setFotoT(String fotoT) {
         FotoT = fotoT;
+    }
+
+    public double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
+
+    public double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(double longitud) {
+        this.longitud = longitud;
     }
 
     public ArrayList<Solicitud> getLista() {

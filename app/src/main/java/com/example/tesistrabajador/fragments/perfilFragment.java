@@ -1,9 +1,12 @@
 package com.example.tesistrabajador.fragments;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -23,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -164,16 +168,21 @@ public class perfilFragment extends Fragment {
             editardatos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dp = new SweetAlertDialog(v.getContext(), SweetAlertDialog.WARNING_TYPE);
-                    dp.setTitleText("Estas Segur@ De Querer Cambiar Los Datos?");
-                    dp.setContentText("Podras Cambiar Tus Datos Personales!");
-                    dp.setConfirmText("Si,Deseo Actualizar!");
-                    dp.setCancelText("No,No Quiero");
-                    //si preciona el boton si se podran editar los edittext
-                    dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizar, null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    Button btnconfirmar = viewsync.findViewById(R.id.btnalertactualizar);
+                    Button btncancelar = viewsync.findViewById(R.id.btnalertcancelarperfil);
+
+                    btnconfirmar.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(final SweetAlertDialog sDialog) {
-                            //si vuelve a precionar el boton no podra editar los edittext y saldra un mensaje
+                        public void onClick(View view) {
+
                             editardatos.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -182,19 +191,23 @@ public class perfilFragment extends Fragment {
 
                                         if (NetworkInfo != null && NetworkInfo.isConnected()) {
                                             actualizarperfil();
-                                            dp = new SweetAlertDialog(v.getContext(), SweetAlertDialog.SUCCESS_TYPE);
-                                            dp.setTitleText("Has Actualizado tu perfil !");
-                                            dp.setContentText("para volver a editar recargue el perfil!");
-                                            dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                                            View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado, null);
+                                            builder.setView(viewsync);
+                                            AlertDialog dialog3 = builder.create();
+                                            dialog3.show();
+                                            dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                            btncerraralert.setOnClickListener(new View.OnClickListener() {
                                                 @Override
-                                                public void onClick(SweetAlertDialog sDialog) {
-                                                    sDialog.dismissWithAnimation();
+                                                public void onClick(View view) {
+                                                   dialog3.dismiss();
                                                     //metodo para cambiar de activity
-                                                    updateDetail();
+                                                    showSelectedFragment(new perfilFragment());
                                                 }
-                                            })
-                                                    .show();
-                                            //parametros false
+                                            });
+
                                             {
                                                 rut.setEnabled(false);
                                                 rut.setFocusable(false);
@@ -229,7 +242,8 @@ public class perfilFragment extends Fragment {
                                     }
                                 }
                             });
-                            sDialog.dismissWithAnimation();
+
+                            dialog.dismiss();
                             {
                                 rut.setText(rut.getText());
 
@@ -257,9 +271,20 @@ public class perfilFragment extends Fragment {
                                 ciudad.setFocusable(true);
                                 ciudad.setFocusableInTouchMode(true);
                             }
+
+
                         }
-                    })
-                            .show();
+                    });
+
+
+                    btncancelar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                        dialog.dismiss();
+                        }
+                    });
+
+
 
                 }
             });
@@ -268,28 +293,38 @@ public class perfilFragment extends Fragment {
             editarpass.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    SweetAlertDialog dp2 =new SweetAlertDialog(v.getContext(), SweetAlertDialog.WARNING_TYPE);
-                    dp2.setTitleText("Estas Segur@ De Querer Cambiar Tu Contraseña?");
-                    dp2.setContentText("Ten Cuidado!");
-                    dp2.setConfirmText("Si,Deseo Actualizar!");
-                    dp2.setCancelText("No,No Quiero");
-                    //si preciona el boton si se podran editar los edittext
-                    dp2.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    View viewsync = inflater.inflate(R.layout.alertdialogperfilacutalizarpass, null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog2 = builder.create();
+                    dialog2.show();
+                    dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    Button btnconfirmar = viewsync.findViewById(R.id.btnalertactualizarpass);
+                    Button btncancelar = viewsync.findViewById(R.id.btnalertcancelarperfilpass);
+
+                    btnconfirmar.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(SweetAlertDialog sDialog) {
+                        public void onClick(View view) {
                             showSelectedFragment(new passperfilFragment());
-                            sDialog.dismissWithAnimation();
+                            dialog2.dismiss();
                         }
-                    })
-                            .show();
+                    });
+
+
+                    btncancelar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            dialog2.dismiss();
+                        }
+                    });
+
+
                 }
             });
 
 
         }
-
-
-
 
 
         }else{
@@ -306,7 +341,7 @@ public class perfilFragment extends Fragment {
 
     //ir desde un fragment hacia una actividad
     public void updateDetail() {
-        Intent intent = new Intent(getActivity(), menuActivity.class);
+        Intent intent = new Intent(getActivity(), perfilFragment.class);
         startActivity(intent);
     }
 

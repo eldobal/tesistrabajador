@@ -6,6 +6,7 @@ import com.example.tesistrabajador.clases.Solicitud;
 import com.example.tesistrabajador.clases.SolicitudDb;
 import com.example.tesistrabajador.clases.Usuario;
 import com.example.tesistrabajador.clases.UsuarioTrabajador;
+import com.example.tesistrabajador.clases.UsuarioTrabajadorhome;
 
 import java.util.List;
 
@@ -154,6 +155,20 @@ public interface tesisAPI {
     @POST("api/SolicitudAPI")
     Call<String> EliminarSoliPermanente(@Query("Delete") int idSolicitud
     );
+
+
+    //metodo para cancelar la solicitud del cliente
+    @POST("api/UsuarioAPI")
+    Call<String> CambiarEstadoTrabajador(@Query("RUT") String rut
+    );
+
+
+    //metodo para cancelar la solicitud del cliente
+    @GET("api/UsuarioAPI")
+    Call<UsuarioTrabajadorhome> TrabajadorHome(@Query("TRUT") String rut
+    );
+
+
 
 
 }

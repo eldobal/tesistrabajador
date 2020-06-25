@@ -19,15 +19,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.bumptech.glide.Glide;
 import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.activitys.loginActivity;
 import com.example.tesistrabajador.clases.Adaptador;
 import com.example.tesistrabajador.clases.Solicitud;
+import com.example.tesistrabajador.clases.UsuarioTrabajador;
+import com.example.tesistrabajador.clases.UsuarioTrabajadorhome;
 import com.example.tesistrabajador.interfaces.tesisAPI;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -55,7 +60,7 @@ public class homeFragment extends Fragment {
     private String[] xdata ={"sebastian ","daniel","cristobal","pablo","ricardo"};
 
     TextView notfound;
-    LottieAnimationView loadinglista;
+    LottieAnimationView loadinglista,loadingperfil;
     private ListView listaactivas;
     private SharedPreferences prefs,asycprefs;
     private String rutusuario="";
@@ -65,7 +70,14 @@ public class homeFragment extends Fragment {
     ArrayList<Solicitud> Solicitudactual = new ArrayList<Solicitud>();
     Adaptador ads,ads2;
     final static String rutaservidor= "http://proyectotesis.ddns.net";
+    String estadotrabajador = "";
     NetworkInfo NetworkInfo;
+    ImageView fotoperfil;
+    TextView nombretrabajdor;
+    Button btncambiodeestado;
+
+
+
 
     PieChart pieChart;
     public homeFragment() {
@@ -96,14 +108,17 @@ public class homeFragment extends Fragment {
 
         pieChart = (PieChart) v.findViewById(R.id.piechart);
         notfound = (TextView) v.findViewById(R.id.txtnotfoundhome);
-
+        nombretrabajdor =(TextView) v.findViewById(R.id.txthomenombre);
+        btncambiodeestado =(Button) v.findViewById(R.id.btncambiodeestadotrabajador);
+        fotoperfil = (ImageView) v.findViewById(R.id.idimagenperfiltrabajador);
 
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         loadinglista = (LottieAnimationView) v.findViewById(R.id.idanimacionlistasolicitud);
-
-
+        loadingperfil = (LottieAnimationView) v.findViewById(R.id.loadinglistaimgperfilhome);
+       // loadingperfil.setVisibility(View.VISIBLE);
+       // loadingperfil.playAnimation();
 
         //se buscan el usuario y el tiempo de sync de la app
         settiempoasyncexist();
@@ -120,15 +135,26 @@ public class homeFragment extends Fragment {
                 getActivity().finish();
                 Toast.makeText(getContext(), "el Usuario no es valido ", Toast.LENGTH_LONG).show();
             }else{
+                //se cargan los datos del trabajador
+                cargardatostrabajador();
                 ads2 = new Adaptador(getContext(), solicitudinterna);
                 reiniciarfragmentterminadas(rutusuario);
                 listaactivas = (ListView) v.findViewById(R.id.solicitudactual);
                 //declaracion de los swiperefresh para intanciarlos
                // refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
-
                 notfound.setText("");
 
 
+
+
+
+
+                btncambiodeestado.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        cambiarestadotrabajador();
+                    }
+                });
 
 
                 new CountDownTimer(1500,1000){
@@ -213,6 +239,93 @@ public class homeFragment extends Fragment {
 
 
         return v;
+    }
+
+
+
+
+    private void cambiarestadotrabajador() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://proyectotesis.ddns.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
+        Call<String> call = tesisAPI.CambiarEstadoTrabajador(rutusuario);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(getContext(), "error/homedatosESTADO/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
+                } else {
+
+                    String msgestado = response.body();
+
+                    if(estadotrabajador.equals("Disponible")){
+                        btncambiodeestado.setBackgroundResource(R.drawable.btn_homeinactivo);
+                        btncambiodeestado.setText("No Disponible");
+                        estadotrabajador.equals("No disponible");
+                    }
+                    if(estadotrabajador.equals("No disponible")){
+                        btncambiodeestado.setBackgroundResource(R.drawable.btn_homeactivo);
+                        btncambiodeestado.setText("Disponible");
+                        estadotrabajador.equals("Disponible");
+                    }
+
+                }
+            }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(getContext(), "error/homedatosESTADO/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+    }
+
+
+
+
+
+    private void cargardatostrabajador() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://proyectotesis.ddns.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
+        Call<UsuarioTrabajadorhome> call = tesisAPI.TrabajadorHome(rutusuario);
+        call.enqueue(new Callback<UsuarioTrabajadorhome>() {
+            @Override
+            public void onResponse(Call<UsuarioTrabajadorhome> call, Response<UsuarioTrabajadorhome> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(getContext(), "error/homedatos/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
+                } else {
+                    UsuarioTrabajadorhome usuarioTrabajador = response.body();
+                    String rutaurl=usuarioTrabajador.getFoto();
+                    nombretrabajdor.setText(usuarioTrabajador.getNombre()+" "+usuarioTrabajador.getApellido());
+                    Glide.with(getContext()).load(String.valueOf(rutaservidor+rutaurl)).into(fotoperfil);
+                    estadotrabajador=usuarioTrabajador.getEstado();
+
+                    loadingperfil.setVisibility(View.INVISIBLE);
+                    loadingperfil.pauseAnimation();
+
+
+                    if(estadotrabajador.equals("Disponible")){
+                        btncambiodeestado.setBackgroundResource(R.drawable.btn_homeactivo);
+                        btncambiodeestado.setText("Disponible");
+                    }
+                    if(estadotrabajador.equals("No disponible")){
+                        btncambiodeestado.setBackgroundResource(R.drawable.btn_homeinactivo);
+                        btncambiodeestado.setText("No Disponible");
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<UsuarioTrabajadorhome> call, Throwable t) {
+                Toast.makeText(getContext(), "error/homedatos/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        });
+
     }
 
 

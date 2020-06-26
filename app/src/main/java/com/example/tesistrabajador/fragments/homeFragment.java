@@ -260,17 +260,27 @@ public class homeFragment extends Fragment {
 
                     String msgestado = response.body();
 
+                    if(msgestado.equals("Disponible")){
+                        btncambiodeestado.setBackgroundResource(R.drawable.btn_homeactivo);
+                        btncambiodeestado.setText("Disponible");
+                    }
+                    if(msgestado.equals("No Disponible")){
+                        btncambiodeestado.setBackgroundResource(R.drawable.btn_homeinactivo);
+                        btncambiodeestado.setText("No Disponible");
+                    }
+
+                    /*
                     if(estadotrabajador.equals("Disponible")){
                         btncambiodeestado.setBackgroundResource(R.drawable.btn_homeinactivo);
                         btncambiodeestado.setText("No Disponible");
-                        estadotrabajador.equals("No disponible");
+                        estadotrabajador="No disponible";
                     }
                     if(estadotrabajador.equals("No disponible")){
                         btncambiodeestado.setBackgroundResource(R.drawable.btn_homeactivo);
                         btncambiodeestado.setText("Disponible");
-                        estadotrabajador.equals("Disponible");
+                        estadotrabajador="Disponible";
                     }
-
+                    */
                 }
             }
             @Override
@@ -307,6 +317,8 @@ public class homeFragment extends Fragment {
 
                     loadingperfil.setVisibility(View.INVISIBLE);
                     loadingperfil.pauseAnimation();
+
+
 
 
                     if(estadotrabajador.equals("Disponible")){

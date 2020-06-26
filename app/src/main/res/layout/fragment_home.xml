@@ -122,6 +122,16 @@
                         </TextView>
 
 
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/switchbtnestado"
+                            app:lottie_rawRes="@raw/switchbtnestado"
+                            app:lottie_autoPlay="false"
+                            app:lottie_loop="false"
+
+                            android:layout_centerInParent="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                        </com.airbnb.lottie.LottieAnimationView>
 
                     </RelativeLayout>
 

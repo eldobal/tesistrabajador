@@ -4,10 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/round_async_dialog"
-
     android:orientation="vertical">
-
-
 
 
     <com.airbnb.lottie.LottieAnimationView
@@ -16,7 +13,6 @@
         android:layout_height="80dp"
         app:lottie_autoPlay="true"
         app:lottie_loop="false"
-
         android:background="@drawable/round_async01">
 
     </com.airbnb.lottie.LottieAnimationView>

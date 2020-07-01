@@ -1,9 +1,11 @@
 package com.example.tesistrabajador.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
@@ -75,11 +77,8 @@ public class homeFragment extends Fragment {
     ImageView fotoperfil;
     TextView nombretrabajdor;
     Button btncambiodeestado;
-
-
-
-
     PieChart pieChart;
+
     public homeFragment() {
 
     }
@@ -105,16 +104,13 @@ public class homeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_home, container, false);
-
         pieChart = (PieChart) v.findViewById(R.id.piechart);
         notfound = (TextView) v.findViewById(R.id.txtnotfoundhome);
         nombretrabajdor =(TextView) v.findViewById(R.id.txthomenombre);
         btncambiodeestado =(Button) v.findViewById(R.id.btncambiodeestadotrabajador);
         fotoperfil = (ImageView) v.findViewById(R.id.idimagenperfiltrabajador);
-
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-
         loadinglista = (LottieAnimationView) v.findViewById(R.id.idanimacionlistasolicitud);
         loadingperfil = (LottieAnimationView) v.findViewById(R.id.loadinglistaimgperfilhome);
        // loadingperfil.setVisibility(View.VISIBLE);
@@ -143,10 +139,6 @@ public class homeFragment extends Fragment {
                 //declaracion de los swiperefresh para intanciarlos
                // refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
                 notfound.setText("");
-
-
-
-
 
 
                 btncambiodeestado.setOnClickListener(new View.OnClickListener() {
@@ -269,18 +261,23 @@ public class homeFragment extends Fragment {
                         btncambiodeestado.setText("No Disponible");
                     }
 
-                    /*
-                    if(estadotrabajador.equals("Disponible")){
-                        btncambiodeestado.setBackgroundResource(R.drawable.btn_homeinactivo);
-                        btncambiodeestado.setText("No Disponible");
-                        estadotrabajador="No disponible";
-                    }
-                    if(estadotrabajador.equals("No disponible")){
-                        btncambiodeestado.setBackgroundResource(R.drawable.btn_homeactivo);
-                        btncambiodeestado.setText("Disponible");
-                        estadotrabajador="Disponible";
-                    }
-                    */
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alertdialoghomebtncambioestado,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    Button btnaceptar = viewsync.findViewById(R.id.btnhomecambioestadoexito);
+
+                    btnaceptar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+
+
                 }
             }
             @Override
@@ -317,8 +314,6 @@ public class homeFragment extends Fragment {
 
                     loadingperfil.setVisibility(View.INVISIBLE);
                     loadingperfil.pauseAnimation();
-
-
 
 
                     if(estadotrabajador.equals("Disponible")){
@@ -369,15 +364,11 @@ public class homeFragment extends Fragment {
                         Solicitudactual.add(Solicitud1);
                     }
 
-
-
                     for (int i = 0; i < Solicitudactual.size(); i++) {
                         Solicitud soli = new Solicitud();
                         soli = Solicitudactual.get(i);
                         if ( soli.getEstado().equals("ATENDIENDO")  ) {
                             solicitudinterna.add(soli);
-                        } else {
-
                         }
                     }
                     //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
@@ -387,7 +378,6 @@ public class homeFragment extends Fragment {
                         listaactivas.setAdapter(ads2);
                         loadinglista.setVisibility(View.INVISIBLE);
                         loadinglista.pauseAnimation();
-
                         notfound.setText("");
 
                     }else{
@@ -395,11 +385,7 @@ public class homeFragment extends Fragment {
                         listaactivas.setAdapter(ads2);
                         loadinglista.setVisibility(View.INVISIBLE);
                         loadinglista.pauseAnimation();
-
-
-
                         notfound.setText("No Posee Solicitudes");
-
 
                     }
                   //  refreshLayoutterminadas.setRefreshing(false);
@@ -410,9 +396,6 @@ public class homeFragment extends Fragment {
                 Toast.makeText(getContext(), "error/soli/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
                 loadinglista.setVisibility(View.INVISIBLE);
                 loadinglista.pauseAnimation();
-
-
-
                 notfound.setText("No Posee Solicitudes");
             }
         });

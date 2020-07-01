@@ -80,7 +80,6 @@
                         android:layout_height="wrap_content">
 
                         <RelativeLayout
-
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
@@ -93,7 +92,6 @@
                                 app:lottie_autoPlay="true"
                                 app:lottie_loop="true"
                                 android:layout_centerInParent="true"
-
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent">
                             </com.airbnb.lottie.LottieAnimationView>
@@ -110,9 +108,7 @@
                             </com.airbnb.lottie.LottieAnimationView>
 
 
-
                             <ListView
-
                                 android:id="@+id/solicitudactual"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
@@ -132,18 +128,6 @@
             </LinearLayout>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         </RelativeLayout>
         <RelativeLayout
             android:layout_below="@id/txtsolicitudactual"
@@ -161,13 +145,11 @@
                     android:id="@+id/xxt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:textColor="@color/colordark"
                     android:textAlignment="center"
                     android:fontFamily="sans-serif-condensed-medium"
                     android:text="Solicitudes Terminadas"
                     android:textSize="25dp"
-
                     android:gravity="center_horizontal"></TextView>
 
                 <androidx.cardview.widget.CardView
@@ -181,16 +163,12 @@
                     app:cardCornerRadius="30dp"
                     app:cardElevation="6dp">
 
-
-
                     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                         android:id="@+id/refreshterminadas"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-
                         <RelativeLayout
-
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
@@ -205,7 +183,6 @@
                                 app:lottie_loop="true"
                                 android:layout_centerInParent="true"
                                 android:layout_marginBottom="100dp"
-
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent">
                             </com.airbnb.lottie.LottieAnimationView>
@@ -219,7 +196,6 @@
                                 android:layout_centerInParent="true"
                                 android:layout_width="match_parent"
                                 android:layout_marginBottom="100dp"
-
                                 android:layout_height="match_parent">
                             </com.airbnb.lottie.LottieAnimationView>
 
@@ -247,19 +223,10 @@
 
 
 
-
-
-
                         </RelativeLayout>
 
 
                     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-
-
-
-
-
 
 
                 </androidx.cardview.widget.CardView>
@@ -272,8 +239,6 @@
 
 
     </RelativeLayout>
-
-
 
 
 

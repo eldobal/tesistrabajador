@@ -4,11 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/round_async_dialog"
-
     android:orientation="vertical">
-
-
-
 
     <com.airbnb.lottie.LottieAnimationView
         app:lottie_rawRes="@raw/sync"
@@ -16,9 +12,7 @@
         android:layout_height="80dp"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        android:background="@drawable/round_async01"
-        >
-
+        android:background="@drawable/round_async01">
     </com.airbnb.lottie.LottieAnimationView>
 
 
@@ -31,11 +25,8 @@
         android:textColor="@color/colordark"
         android:gravity="center"
         android:textSize="20dp"
-        android:text=""
-        >
-
+        android:text="">
     </TextView>
-
 
 
     <LinearLayout
@@ -78,7 +69,6 @@
         android:layout_alignParentBottom="true">
 
 
-
         <Button
             android:layout_margin="8dp"
             android:layout_weight="1"
@@ -108,8 +98,6 @@
 
 
     </LinearLayout>
-
-
 
 
     <Button

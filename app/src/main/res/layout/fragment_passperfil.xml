@@ -8,23 +8,15 @@
     android:background="@color/colorAccentllight"
     tools:context=".fragments.passperfilFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-
-
+        android:orientation="vertical">
 
         <RelativeLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp">
-
-
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animationdanger"
@@ -40,11 +32,9 @@
 
 
         <RelativeLayout
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
-
             android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp">
 
@@ -55,7 +45,6 @@
                 android:layout_marginBottom="80dp"
                 android:scrollbarThumbVertical="@drawable/colorsroll">
 
-
                 <androidx.cardview.widget.CardView
                     android:layout_marginTop="20dp"
                     android:id="@+id/cardcambiodepass"
@@ -64,20 +53,16 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:layout_below="@+id/animationdanger"
-
                     android:backgroundTint="@color/colordark"
                     app:cardCornerRadius="30dp"
                     app:cardElevation="6dp">
 
                     <LinearLayout
-
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="vertical"
-
                         android:padding="16dp">
-
 
                         <LinearLayout
                             android:id="@+id/contacto"
@@ -99,7 +84,6 @@
                         <LinearLayout
                             android:id="@+id/txtemailcontato"
                             android:layout_width="match_parent"
-
                             android:layout_height="wrap_content"
                             android:layout_below="@id/contacto"
                             android:layout_marginTop="20dp">

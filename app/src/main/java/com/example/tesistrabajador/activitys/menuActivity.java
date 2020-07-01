@@ -85,7 +85,6 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
     ArrayList<Solicitud> Solicitudescomparar = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
     ArrayList<Notificacion> arraylistanotificaciones= new ArrayList<Notificacion>();;
-
     ArrayList<Notificacion> listanotificacionescomparar= new ArrayList<Notificacion>();;
     ArrayList<Notificacion> listanotificaciones = new ArrayList<Notificacion>();
     final static String rutaservidor= "http://proyectotesis.ddns.net";
@@ -101,16 +100,10 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
         prefsnotificacion = getSharedPreferences("PreferencesNotificacion", Context.MODE_PRIVATE);
         setcredentiasexist();
 
-
-
-
-
-
         //al momento de crear el home en el onCreate cargar con el metodo sin backtostack
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-
         // trae el cliende de google
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
@@ -129,7 +122,7 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
 
 
         mbottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomnavigation);
-
+        //se carga como primer fragment la lista de Notificaciones
         getSupportFragmentManager().beginTransaction().replace(R.id.container,new listanotificacionesFragment()).commit();
         mbottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -157,9 +150,7 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
                     Bundle bundle2 = new Bundle();
                     bundle2.putSerializable("arraynotificaciones", listanotificaciones);
                     listanotificacionesFragment.setArguments(bundle2);
-
                     if(listanotificacionesFragment.isVisible()){
-
                         //metodo para recargar el fragment que se esta mostrando
                         Fragment fragmentnotificacion = getSupportFragmentManager().findFragmentByTag("solicitudtag");
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -172,7 +163,6 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
                             //permite regresar hacia atras entre los fragments
                             .addToBackStack(null)
                             .commit();
-
                     */
 
                     showSelectedFragment(new listanotificacionesFragment());
@@ -190,7 +180,6 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-
                             try {
                                 //Ejecuta tu AsyncTask!
                               //  reiniciarfragmentnotificacionesASYNC(rut);

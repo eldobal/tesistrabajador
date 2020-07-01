@@ -7,13 +7,9 @@
     android:layout_height="match_parent"
     tools:context=".fragments.DetalleSolicitudFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
 
         <RelativeLayout
             android:id="@+id/layoutdetalle"
@@ -50,7 +46,6 @@
 
 
             <RelativeLayout
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
@@ -121,7 +116,6 @@
                         android:textSize="15dp"
                         android:fontFamily="sans-serif-condensed-medium"
                         android:text="">
-
                     </TextView>
 
 
@@ -135,7 +129,6 @@
                         android:textSize="15dp"
                         android:fontFamily="sans-serif-condensed-medium"
                         android:text="">
-
                     </TextView>
 
 
@@ -148,7 +141,6 @@
                         android:textSize="15dp"
                         android:fontFamily="sans-serif-condensed-medium"
                         android:text="">
-
                     </TextView>
 
 
@@ -161,12 +153,7 @@
                         android:textSize="15dp"
                         android:fontFamily="sans-serif-condensed-medium"
                         android:text="">
-
                     </TextView>
-
-
-
-
 
 
                 </RelativeLayout>
@@ -184,17 +171,13 @@
             android:layout_below="@id/detallesolitudinfo"
             android:layout_width="match_parent"
             android:layout_marginBottom="70dp"
-            android:layout_height="match_parent"
-            >
-
+            android:layout_height="match_parent">
 
             <RelativeLayout
                 android:id="@+id/cardcontacto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/usericon"
-                >
-
+                android:layout_below="@id/usericon">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/carddescripcionproblema"
@@ -209,16 +192,13 @@
                     app:cardElevation="6dp">
 
                     <LinearLayout
-
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="vertical"
                         android:padding="16dp">
 
-
                         <LinearLayout
-
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
@@ -235,10 +215,8 @@
                         </LinearLayout>
 
                         <LinearLayout
-
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
                             android:layout_below="@id/txtemailcontato"
                             android:layout_marginTop="5dp">
 
@@ -253,13 +231,7 @@
                                 android:textColor="@color/colordark"
                                 android:textSize="18dp"></TextView>
 
-
                         </LinearLayout>
-
-
-
-
-
 
                     </LinearLayout>
 
@@ -280,13 +252,11 @@
                     app:cardElevation="6dp">
 
                     <LinearLayout
-
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="vertical"
                         android:padding="16dp">
-
 
                         <LinearLayout
                             android:id="@+id/contacto"
@@ -307,10 +277,8 @@
                         </LinearLayout>
 
                         <LinearLayout
-
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
                             android:layout_below="@id/txtemailcontato"
                             android:layout_marginTop="5dp">
 
@@ -325,12 +293,7 @@
                                 android:textColor="@color/colordark"
                                 android:textSize="18dp"></TextView>
 
-
                         </LinearLayout>
-
-
-
-
 
 
                     </LinearLayout>
@@ -352,16 +315,13 @@
                     app:cardElevation="6dp">
 
                     <LinearLayout
-
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="vertical"
                         android:padding="16dp">
 
-
                         <LinearLayout
-
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
@@ -378,10 +338,8 @@
                         </LinearLayout>
 
                         <LinearLayout
-
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
                             android:layout_below="@id/txtemailcontato"
                             android:layout_marginTop="5dp">
 
@@ -396,12 +354,7 @@
                                 android:textColor="@color/colordark"
                                 android:textSize="18dp"></TextView>
 
-
                         </LinearLayout>
-
-
-
-
 
 
                     </LinearLayout>
@@ -469,11 +422,6 @@
 
                         </LinearLayout>
 
-
-
-
-
-
                     </LinearLayout>
 
 
@@ -491,11 +439,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-
         android:layout_marginTop="20dp">
 
         <Button
-
             android:id="@+id/btncomollegar"
             android:layout_width="220dp"
             android:layout_height="50dp"

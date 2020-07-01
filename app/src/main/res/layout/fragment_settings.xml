@@ -7,10 +7,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.settingsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-
-
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,10 +14,8 @@
 
 
         <RelativeLayout
-
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="match_parent">
 
             <com.airbnb.lottie.LottieAnimationView
                 app:tint="@color/colorAccentllight"
@@ -32,11 +26,7 @@
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-
-                >
-
-
+                android:layout_centerHorizontal="true">
             </com.airbnb.lottie.LottieAnimationView>
 
 
@@ -45,9 +35,7 @@
                 android:id="@+id/cardcontacto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/usericon"
-                >
-
+                android:layout_below="@id/usericon">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardtecnicoinformatico"
@@ -62,7 +50,6 @@
                     app:cardElevation="6dp">
 
                     <LinearLayout
-
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -89,7 +76,6 @@
                         <LinearLayout
                             android:id="@+id/txtemailcontato"
                             android:layout_width="match_parent"
-
                             android:layout_height="wrap_content"
                             android:layout_below="@id/contacto"
                             android:layout_marginTop="20dp">
@@ -102,7 +88,6 @@
                                 android:layout_height="wrap_content"
                                 android:text="Email Contacto"
                                 android:gravity="center_horizontal">
-
                             </TextView>
 
 
@@ -177,8 +162,7 @@
                             android:layout_below="@id/txttelefonocontacto"
                             android:layout_marginTop="5dp"
                             android:layout_gravity="center"
-                            android:gravity="center"
-                            >
+                            android:gravity="center">
 
                             <Button
                                 android:id="@+id/btnsobrenosotros"

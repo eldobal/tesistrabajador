@@ -25,12 +25,12 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_width="match_parent"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="80dp"
             android:layout_height="45dp"
             android:text="como llegar"
             android:textColor="@color/colordark"
-            android:background="@drawable/btn_comollegar"
+            android:background="@drawable/bg_btncomollegar"
 
             ></Button>
 

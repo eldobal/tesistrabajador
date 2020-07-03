@@ -93,19 +93,25 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
         card.setTag(i);
 
 
-        String textocomparar = "Solicitud "+notificacion.getIdSolicitud()+" fue cancelada";
-
-
-        String textocompararconfirmada = "Solicitud "+notificacion.getIdSolicitud()+" fue confirmada";
-
 
 
 
             card.setOnClickListener(new View.OnClickListener() {
+
+
                 @Override
                 public void onClick(View v) {
 
-                    if (notificacion.getMensaje().equals(textocomparar)) {
+                    String textocomparar = "Solicitud "+listanotificaciones.get(i).getIdSolicitud()+" fue cancelada";
+
+
+
+                    String textocompararconfirmada = "Solicitud "+listanotificaciones.get(i).getIdSolicitud()+" fue confirmada";
+
+
+
+
+                    if (listanotificaciones.get(i).getMensaje().equals(textocomparar)) {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                         View viewsync = inflater.inflate(R.layout.alernotificacioncancelada, null);
@@ -115,17 +121,13 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
                         TextView textoalertnotificacion = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
-
                         Button dismiss2 = viewsync.findViewById(R.id.btnocultaralert2);
-
-
-                        textoalertnotificacion.setText("La notificacion con el id: " + notificacion.getId() + " ha sido cancelada por el cliente" +
+                        textoalertnotificacion.setText("La notificacion con el id: " + notificacion.getIdSolicitud() + " ha sido cancelada por el cliente" +
                                 "lo cual significa que la solitud se ha eliminado ");
 
                         dismiss2.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
                                 Retrofit retrofit = new Retrofit.Builder()
                                         .baseUrl("http://proyectotesis.ddns.net/")
                                         .addConverterFactory(GsonConverterFactory.create())
@@ -154,14 +156,14 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                             }
                         });
 
-                    }else if(notificacion.getMensaje().equals(textocompararconfirmada)){} else {
+                    } if(listanotificaciones.get(i).getMensaje().equals(textocompararconfirmada)){
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                         View viewsync = inflater.inflate(R.layout.alertconfirmacionnotificacion, null);
                         builder.setView(viewsync);
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        AlertDialog dialog2 = builder.create();
+                        dialog2.show();
+                        dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
                         TextView textoalertnotificacion = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
 
@@ -177,7 +179,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                         dismiss.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                dialog.dismiss();
+                                dialog2.dismiss();
                             }
                         });
 
@@ -205,7 +207,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                             } else {
                                                 listanotificaciones.remove(i);
                                                 refresh(listanotificaciones);
-                                                dialog.dismiss();
+                                                dialog2.dismiss();
                                             }
                                         }
 
@@ -239,7 +241,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                         } else {
                                             listanotificaciones.remove(i);
                                             refresh(listanotificaciones);
-                                            dialog.dismiss();
+                                            dialog2.dismiss();
                                         }
                                     }
 

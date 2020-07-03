@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/round_async_dialog"
+    android:orientation="vertical">
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        app:lottie_rawRes="@raw/warningpassperfil"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"
+        android:background="@drawable/round_async01">
+
+    </com.airbnb.lottie.LottieAnimationView>
+
+
+    <TextView
+        android:id="@+id/txtalertnotificacion"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textColor="@color/colordark"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:text="Esta a punto de Salir de la sesion!"
+        >
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/txtalertnotificacio2n"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textColor="@color/colordark"
+        android:gravity="center"
+        android:textSize="18dp"
+        android:text="recuerde que si sale de la secion tendraque volver a iniciar sesion con su identificador y su contraseña."
+        >
+
+    </TextView>
+
+
+
+
+    <LinearLayout
+
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true">
+
+
+
+        <Button
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="14dp"
+            android:id="@+id/btnconfirmarnotificacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_ripple"
+            android:text="Continuar">
+        </Button>
+
+
+        <Button
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="14dp"
+            android:id="@+id/btncancelarnotificacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_btnsync"
+            android:text="SALIR">
+        </Button>
+
+
+    </LinearLayout>
+
+
+
+
+
+
+</LinearLayout>

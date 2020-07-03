@@ -11,11 +11,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.airbnb.lottie.LottieAnimationView;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.bumptech.glide.Glide;
@@ -42,10 +39,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -158,10 +153,8 @@ public class perfilFragment extends Fragment {
             cargardatosperfil();
             //seccion de codigo en el cual se debera traer el json con los datos del usuario
             //donde se setearan los datos a los edittext
-
             ciudad.setEnabled(false);
             ciudad.setClickable(false);
-
             //cuando se apriete el boton se preguntara si desea editar
             //lo cual hara los edittext editables otra vez
             //si el usuario vuevle a apretar los datos devera guardar y volver a poner no editable los edittext

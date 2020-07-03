@@ -16,6 +16,7 @@
     </com.airbnb.lottie.LottieAnimationView>
 
 
+
     <TextView
         android:id="@+id/txttiempoactualizacion"
         android:layout_marginTop="10dp"

@@ -90,19 +90,30 @@ public class settingsFragment extends Fragment {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.btnsalir:
-                        SweetAlertDialog dp3 =  new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE);
-                        dp3.setTitleText("Estas seguro de Querer Cerrar Tu Sesion?");
-                        dp3.setContentText("Tendras que iniciar sesion para volver a ingrar!");
-                        dp3.setConfirmText("Si!");
-                        dp3.setCancelText("No!");
-                        dp3.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        LayoutInflater inflater = getLayoutInflater();
+                        View viewsync = inflater.inflate(R.layout.alertdialogcerrarsesion,null);
+                        builder.setView(viewsync);
+                        AlertDialog dialog2 = builder.create();
+                        dialog2.setCancelable(false);
+                        dialog2.show();
+                        dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                        Button btnsalir = viewsync.findViewById(R.id.btncancelarnotificacion);
+                        Button btncontinuar = viewsync.findViewById(R.id.btnconfirmarnotificacion);
+
+                        btnsalir.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                signOut();
-                                sDialog.dismissWithAnimation();
-                            }
-                        })
-                                .show();
+                            public void onClick(View view) {
+                                //metodo para cerrar la seccion y olvidar las prefs
+                                signOut(); }
+                        });
+                        //btn para cerrar el cuadro informativo
+                        btncontinuar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog2.dismiss(); }
+                        });
                         break;
                 }
             }

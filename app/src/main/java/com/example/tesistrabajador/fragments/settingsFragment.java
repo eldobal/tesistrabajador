@@ -90,6 +90,7 @@ public class settingsFragment extends Fragment {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.btnsalir:
+                        //alertdialog personalizado
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         LayoutInflater inflater = getLayoutInflater();
                         View viewsync = inflater.inflate(R.layout.alertdialogcerrarsesion,null);
@@ -125,6 +126,7 @@ public class settingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mostrartiempoazyncactual(azynctiempo);
+                //alertdialog personalizado
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 LayoutInflater inflater = getLayoutInflater();
                 View viewsync = inflater.inflate(R.layout.alerttiemposync,null);

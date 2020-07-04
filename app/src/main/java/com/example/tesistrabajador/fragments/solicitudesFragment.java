@@ -63,7 +63,7 @@ public class solicitudesFragment extends Fragment  {
     private SharedPreferences prefs,asycprefs;
     private String rutusuario="";
     int azynctiempo =0;
-    ArrayList<Solicitud> listasolicitudesterminadas,listasolicitudactivas,listasolicitudactivasinterna,listasolicitudterminadasinterna,Solicitudescomparar;
+    ArrayList<Solicitud> listasolicitudesterminadas,listasolicitudactivas,listasolicitudactivasinterna,listasolicitudterminadasinterna,Solicitudescomparar,listasolicitudfinalizando;
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudesterminadas = new ArrayList<Solicitud>();
     SwipeRefreshLayout refreshLayout,refreshLayoutterminadas;
@@ -90,6 +90,7 @@ public class solicitudesFragment extends Fragment  {
         listasolicitudactivas  = new ArrayList<Solicitud>();
         listasolicitudactivasinterna   = new ArrayList<Solicitud>();
         listasolicitudterminadasinterna   = new ArrayList<Solicitud>();
+        listasolicitudfinalizando = new ArrayList<Solicitud>();
       //  listasolicitudactivas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistaspendientes");
        // listasolicitudesterminadas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistasterminadas");
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -205,8 +206,6 @@ public class solicitudesFragment extends Fragment  {
             });
 
 
-
-
         }
 
 
@@ -236,6 +235,7 @@ public class solicitudesFragment extends Fragment  {
                     Solicitudesterminadas.clear();
                     listasolicitudterminadasinterna.clear();
                     listasolicitudactivasinterna.clear();
+                    listasolicitudfinalizando.clear();
                     for (Solicitud solicitud : solicituds) {
                         Solicitud Solicitud1 = new Solicitud();
                         //se setean los valores del trabajador
@@ -255,7 +255,7 @@ public class solicitudesFragment extends Fragment  {
                         soli = Solicitudesterminadas.get(i);
                         if ( soli.getEstado().equals("PENDIENTE")  ) {
                             listasolicitudactivasinterna.add(soli);
-                        } if(soli.getEstado().equals("COMPLETADA Y PAGADA") && soli.getEstado().equals("COMPLETADA Y NO PAGADA") ) {
+                        } if(soli.getEstado().equals("COMPLETADA Y PAGADA") || soli.getEstado().equals("COMPLETADA Y NO PAGADA") || soli.getEstado().equals("FINALIZANDO") ) {
                             listasolicitudterminadasinterna.add(soli);
                         }
                     }

@@ -62,7 +62,6 @@ public interface tesisAPI {
     );
 
 
-
     @POST("api/UsuarioAPI")
     Call<Usuario> PostUsuario(@Query("RUT") String RUT,
                               @Query("Nombre") String Nombre,
@@ -122,14 +121,6 @@ public interface tesisAPI {
 
 
 
-
-
-
-
-
-
-
-
     @GET("api/UsuarioAPI")
     Call<Usuario> getLoginTrabajador(@Query("RUT") String id,
                            @Query("pass") String pass
@@ -169,6 +160,23 @@ public interface tesisAPI {
     );
 
 
+
+    //metodo para finalizar la solicitud desde el cliente
+    @POST("api/SolicitudAPI")
+    Call<String> finalizarSolicitud(@Query("RUT") String rut,
+                                       @Query("Contrasena") String contrasena,
+                                       @Query("SolicitudFinalizar") int idsolicitud,
+                                       @Query("PrecioFinal") int preciofinal,
+                                       @Query("Solucion") String solucion
+    );
+
+    //metodo para confirmar si el pago esta correcto
+    @POST("api/SolicitudAPI")
+    Call<String> ConfirmarPago(@Query("RUT") String rut,
+                                    @Query("Contrasena") String contrasena,
+                                    @Query("SolicitudConfirmar") int idsolicitud,
+                                       @Query("Pago") int pago
+    );
 
 
 }

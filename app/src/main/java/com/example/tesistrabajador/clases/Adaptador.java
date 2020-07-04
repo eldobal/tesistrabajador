@@ -245,7 +245,59 @@ public class Adaptador extends BaseAdapter implements Serializable {
 
                 }
             });
+        }if(listasolicitudes.get(i).getEstado().equals("FINALIZANDO")){
+
+            detalle.setText("finalizando");
+            detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
+            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colordark));
+
+            detalle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Solicitud ut;
+                    ut = listasolicitudes.get(posicion);
+                    Bundle bundle = new Bundle();
+                    //id de la solicitud para que se pueda buscar en el detalle
+                    bundle.putInt("idsolicitud", idsolicitud);
+                    DetalleSolicitudFragment detalleSolicitudFragment = new DetalleSolicitudFragment();
+                    detalleSolicitudFragment.setArguments(bundle);
+                    FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    ft.replace(R.id.container, detalleSolicitudFragment);
+                    ft.commit();
+                }
+            });
+
+        }if(listasolicitudes.get(i).getEstado().equals("COMPLETADA Y PAGADA")){
+            detalle.setText("DETALLE");
+            detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
+            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colordark));
+            //boton sobre el detalle de una solicitud individual
+            detalle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Solicitud ut;
+                    ut = listasolicitudes.get(posicion);
+                    Bundle bundle = new Bundle();
+                    //id de la solicitud para que se pueda buscar en el detalle
+                    bundle.putInt("idsolicitud", idsolicitud);
+                    DetalleSolicitudFragment detalleSolicitudFragment = new DetalleSolicitudFragment();
+                    detalleSolicitudFragment.setArguments(bundle);
+                    FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    ft.replace(R.id.container, detalleSolicitudFragment);
+                    ft.commit();
+                }
+            });
         }
+
+
         return vista;
     }
 }

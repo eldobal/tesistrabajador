@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:background="@drawable/round_async_dialog"
+android:orientation="vertical">
+
+
+<com.airbnb.lottie.LottieAnimationView
+    app:lottie_rawRes="@raw/warningpassperfil"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    app:lottie_autoPlay="true"
+    app:lottie_loop="false"
+    android:background="@drawable/round_async01">
+
+</com.airbnb.lottie.LottieAnimationView>
+
+
+<TextView
+    android:id="@+id/txtalertnotificacion"
+    android:layout_marginTop="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fontFamily="sans-serif-condensed-medium"
+    android:textColor="@color/colordark"
+    android:gravity="center"
+    android:textSize="18dp"
+    android:text="Esta a punto de dar por finalizada la solicitud. Tiene que colocar el precio final, el diagnostigo y solucion en caso de ser necesario"
+    >
+
+</TextView>
+
+
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:gravity="center"
+    android:layout_marginTop="20dp"
+    android:fontFamily="sans-serif-condensed-medium"
+    android:text="Porfabor Ingrese el Precio final."
+    android:textColor="@color/colordark"
+    android:textSize="20dp">
+
+</TextView>
+
+
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="18dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textColor="@color/colordark"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:text="$">
+
+    </TextView>
+    <EditText
+        android:id="@+id/preciofinalizarsolicitud"
+        android:layout_marginLeft="18dp"
+        android:layout_width="match_parent"
+        android:inputType="number"
+        android:layout_height="wrap_content"></EditText>
+
+</RelativeLayout>
+
+
+
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:gravity="center"
+    android:layout_marginTop="20dp"
+    android:fontFamily="sans-serif-condensed-medium"
+    android:text="Ingrese la solucion. (opcional)"
+    android:textColor="@color/colordark"
+    android:textSize="20dp">
+</TextView>
+
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <EditText
+        android:id="@+id/solucionfinalizarsolicitud"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:inputType="textMultiLine"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="@color/colordark"
+        android:textSize="18dp"></EditText>
+
+</RelativeLayout>
+
+
+<LinearLayout
+    android:layout_marginTop="25dp"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_alignParentBottom="true">
+
+    <Button
+        android:layout_margin="8dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="14dp"
+        android:id="@+id/btncerraralert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_ripple"
+        android:text="cerrar cuadro">
+    </Button>
+
+
+    <Button
+        android:layout_margin="8dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="14dp"
+        android:id="@+id/btnfinalizarsolicitud"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_btnsync"
+        android:text="finalizar">
+    </Button>
+
+
+</LinearLayout>
+
+
+
+
+</LinearLayout>

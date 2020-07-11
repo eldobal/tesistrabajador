@@ -79,7 +79,7 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
     private final static String CHANNEL_ID = "NOTIFICACION";
     private final static int NOTIFICACION_ID = 0;
     String latorigen="",longorigen="";
-    String rut="";
+    String rut="",contrasenaperfil;
     ArrayList<Solicitud> listasolicitudesterminadas = new ArrayList<Solicitud>();
     ArrayList<Solicitud> listasolicitudactivas = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudescomparar = new ArrayList<Solicitud>();
@@ -173,40 +173,17 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
         });
 
 
-        final Handler handler = new Handler();
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    public void run() {
-                            try {
-                                //Ejecuta tu AsyncTask!
-                              //  reiniciarfragmentnotificacionesASYNC(rut);
-                            } catch (Exception e) {
-                                Log.e("error", e.getMessage());
-                            }
-                        }
-
-
-                });
-            }
-        };
-        timer.schedule(task, 0, 10000);  //ejecutar en intervalo definido por el programador
-
-
-
     }
 
 
-    private void reiniciarfragmentnotificacionesASYNC(String rutusuario) {
+  /*  private void reiniciarfragmentnotificacionesASYNC(String rutusuario) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://proyectotesis.ddns.net/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-        Call<List<Notificacion>> call = tesisAPI.getNotificacion(rutusuario);
+        Call<List<Notificacion>> call = tesisAPI.GetNotificacion(rutusuario,contrasenaperfil);
         call.enqueue(new Callback<List<Notificacion>>() {
             @Override
             public void onResponse(Call<List<Notificacion>> call, Response<List<Notificacion>> response) {
@@ -256,7 +233,7 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
 
             }
         });
-    }
+    } */
 
 
    /* private void iniciarfragmentsolitudes() {
@@ -389,11 +366,11 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
     }
 
     private void setcredentiasexist() {
-        String rutc = getuserrutprefs();
-
-        if (!TextUtils.isEmpty(rutc)) {
-            rut=rutc;
-            //  txtpass.setText(contraseña);
+        String rutq = getuserrutprefs();
+        String contrasena = getusercontraseñaprefs();
+        if (!TextUtils.isEmpty(rutq)&& (!TextUtils.isEmpty(contrasena)) ) {
+            rut=rutq.toString();
+            contrasenaperfil=contrasena.toString();
         }
     }
 

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/round_async_dialog"
+    android:orientation="vertical">
+
+
+    <com.airbnb.lottie.LottieAnimationView
+
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:lottie_rawRes="@raw/erroranimation"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"
+
+        ></com.airbnb.lottie.LottieAnimationView>
+
+
+
+    <TextView
+        android:id="@+id/txtalertnotificacion"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textColor="@color/colordark"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:text="El Usuario que ha ingresado ya existe en la aplicacion. en caso de cualquier duda o molestia por favor comunicarse con nuestro equipo tecnico"
+        >
+
+    </TextView>
+
+
+
+    <LinearLayout
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true">
+
+
+        <Button
+            android:id="@+id/btnusuarioexiste"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginTop="14dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_ripple"
+            android:text="Entiendo"></Button>
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+</LinearLayout>

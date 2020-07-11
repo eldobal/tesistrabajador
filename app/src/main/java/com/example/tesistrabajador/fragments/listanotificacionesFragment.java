@@ -67,7 +67,7 @@ public class listanotificacionesFragment extends Fragment {
     ArrayList<Notificacion> arraylistanotificaciones= new ArrayList<Notificacion>();;
     ArrayList<Notificacion> listanotificacionescomparar= new ArrayList<Notificacion>();;
     Adaptadornotificaciones ads ,adsnoti;
-    private String rutusuario="";
+    private String rutusuario="",contrasena="";
     int azynctiempo =0;
     TextView notfound;
     private PendingIntent pendingIntent;
@@ -115,11 +115,14 @@ public class listanotificacionesFragment extends Fragment {
            animationnotification.setVisibility(View.INVISIBLE);
 
 
+
+
             //prefs que contienen datos del usuario
             setcredentiasexist();
             //prefs del tiempo de sync de la app
             settiempoasyncexist();
 
+            reiniciarfragmentnotificacionesASYNC(rutusuario);
 
 
             if (rutusuario.equals("")){
@@ -135,8 +138,6 @@ public class listanotificacionesFragment extends Fragment {
                 final View vista = inflater.inflate(R.layout.elementonotificacion, null);
                 adsnoti = new Adaptadornotificaciones(getContext(), arraylistanotificaciones);
               // reiniciarfragmentnotificacionesASYNC(rutusuario);
-
-
 
                         if (arraylistanotificaciones.size() != 0) {
                             animationnotification.setVisibility(View.INVISIBLE);
@@ -156,15 +157,9 @@ public class listanotificacionesFragment extends Fragment {
                     public void run() {
                         handler.post(new Runnable() {
                             public void run() {
-                                if (isAdded() && isVisible() && getUserVisibleHint()) {
-                                    try {
                                         //Ejecuta tu AsyncTask!
                                        // adsnoti.refresh(arraylistanotificaciones);
                                         reiniciarfragmentnotificacionesASYNC(rutusuario);
-                                    } catch (Exception e) {
-                                        Log.e("error", e.getMessage());
-                                    }
-                                }
                             }
                         });
                     }
@@ -205,12 +200,13 @@ public class listanotificacionesFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-        Call<List<Notificacion>> call = tesisAPI.getNotificacion(rutusuario);
+        Call<List<Notificacion>> call = tesisAPI.getNotificacion(rutusuario,contrasena);
         call.enqueue(new Callback<List<Notificacion>>() {
             @Override
             public void onResponse(Call<List<Notificacion>> call, Response<List<Notificacion>> response) {
                 if (!response.isSuccessful()) {
-                    Toast.makeText(getActivity(), "error/noti/onresponse" + response.code(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "error/noti/onresponseaca" + response.code(), Toast.LENGTH_LONG).show();
+
                 } else {
 
                     arraylistanotificaciones.clear();
@@ -256,17 +252,24 @@ public class listanotificacionesFragment extends Fragment {
 
 
 
-    //metodo para traer el rut del usuario hacia la variable local
     private void setcredentiasexist() {
-        String rut = getuserrutprefs();
-        if (!TextUtils.isEmpty(rut)) {
-            rutusuario=rut.toString();
+        String rutq = getuserrutprefs();
+        String contrasena2 = getusercontraseñaprefs();
+        if (!TextUtils.isEmpty(rutq)&& (!TextUtils.isEmpty(contrasena2)) ) {
+            rutusuario=rutq.toString();
+            contrasena=contrasena2.toString();
         }
     }
 
     private String getuserrutprefs() {
         return prefs.getString("Rut", "");
     }
+
+    private String getusercontraseñaprefs() {
+        return prefs.getString("ContraseNa", "");
+    }
+
+
 
 
     private void settiempoasyncexist() {

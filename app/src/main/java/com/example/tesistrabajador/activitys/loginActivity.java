@@ -90,7 +90,6 @@ public class loginActivity extends AppCompatActivity implements GoogleApiClient.
         txtrut = (EditText) findViewById(R.id.txtemail);
         txtpass = (EditText) findViewById(R.id.txtpassword);
         btnlogin = (Button) findViewById(R.id.btnlogin);
-        btnregister = (Button) findViewById(R.id.btnregistrarse);
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +124,7 @@ public class loginActivity extends AppCompatActivity implements GoogleApiClient.
                             //si esta malo se ejecuta este trozo
                             if(!response.isSuccessful()){
                                 Snackbar snackBar = Snackbar.make(loginActivity.this.findViewById(android.R.id.content),
-                                        "Este Usuario no es un Trabajador", Snackbar.LENGTH_LONG);
+                                        "Este Usuario no es un Trabajador/Contraseña erronea", Snackbar.LENGTH_LONG);
                                 snackBar.show();
 
                                alertdialoglogin.cancelalerdialog();
@@ -164,15 +163,6 @@ public class loginActivity extends AppCompatActivity implements GoogleApiClient.
                     Snackbar snackBar = Snackbar.make(loginActivity.this.findViewById(android.R.id.content),
                             "introdusca datos antes de logear", Snackbar.LENGTH_LONG);
                 }
-            }
-        });
-
-
-        btnregister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                Intent intent = new Intent(loginActivity.this, menuActivity.class);
-                startActivity(intent);
             }
         });
 

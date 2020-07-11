@@ -36,7 +36,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
-
+ /*
 public class registerActivity extends AppCompatActivity {
     SweetAlertDialog dp;
     private SharedPreferences prefs;
@@ -50,8 +50,11 @@ public class registerActivity extends AppCompatActivity {
     NetworkInfo networkInfo;
     private int idCiudad =0;
     @SuppressLint("MissingPermission")
+
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
@@ -313,4 +316,5 @@ public class registerActivity extends AppCompatActivity {
 
 
 
-}
+} */
+

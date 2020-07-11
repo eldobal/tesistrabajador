@@ -254,12 +254,75 @@
 
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/cardsolucionsolicitud"
+                        android:visibility="gone"
+                        android:id="@+id/carddiagnostico"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_rowWeight="1"
                         android:layout_columnWeight="1"
                         android:layout_below="@id/carddescripcionproblema"
+                        android:layout_margin="12dp"
+                        android:backgroundTint="@color/colorAccent"
+                        android:clickable="true"
+                        app:cardCornerRadius="30dp"
+                        app:cardElevation="6dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:gravity="center_horizontal"
+                                    android:text="Diagnostico"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="20dp"></TextView>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/txtemailcontato"
+                                android:layout_marginTop="5dp">
+
+                                <TextView
+                                    android:id="@+id/txtdiagnosticodetallesolicitud"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_horizontal"
+                                    android:inputType="textMultiLine"
+                                    android:text=""
+                                    android:textAlignment="center"
+                                    android:textColor="@color/colordark"
+                                    android:textSize="18dp"></TextView>
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+
+                        android:id="@+id/cardsolucionsolicitud"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:layout_below="@id/carddiagnostico"
                         android:layout_margin="12dp"
                         android:backgroundTint="@color/colorAccent"
                         android:clickable="true"

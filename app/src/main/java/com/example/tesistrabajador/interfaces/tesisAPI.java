@@ -18,107 +18,50 @@ import retrofit2.http.Query;
 
 public interface tesisAPI {
 
-    //metodo el cual llama a la api la cual entrega un usario /usando actualemente para login
-
-    @GET("api/UsuarioAPI")
-    Call<Usuario> getLogin(@Query("id") String id,
-                           @Query("pass") String pass
-    );
-
     //llamada que se utiliza en el perfilfragment del usuario
     @GET("api/UsuarioAPI")
     Call<Usuario> getUsuario(@Query("RUTUSUARIO") String id,
                              @Query("Contrasena") String pass
     );
 
-    @GET("api/RubroTrabajadorAPI")
-    Call<List<UsuarioTrabajador>> getRubroTrabajador(@Query("idRubro") int id_Rubro,
-                                                     @Query("idciudad") int idCiudad
-    );
 
-
-    @GET("api/UsuarioAPI")
-    Call<UsuarioTrabajador> getUsuarioTrabajador(@Query("RUT") String rut
-
-    );
-
-    //metodo para traer las notificaciones del cliente que esta ocupando la app
+    //metodo para traer las notificaciones del cliente que esta ocupando la app /listanotificacion
     @GET("api/NotificacionAPI")
-    Call<List<Notificacion>> getNotificacion(@Query("RUT") String rut
-
+    Call<List<Notificacion>> getNotificacion(@Query("RUT") String rut,
+                                             @Query("Contrasena") String contrasena
     );
 
 
-    //metodo llamada para hacer el insert de la solicitud del cliente
-    @POST("api/SolicitudAPI")
-    Call<SolicitudDb> PostSolicitud(@Query("Fecha") String Fecha,
-                                    @Query("Descripcion") String Descripcion,
-                                    @Query("RUT_Cliente") String RUT_Cliente,
-                                    @Query("RUT_Trabajador") String RUT_Trabajador,
-                                    @Query("Rubro") int Rubro,
-                                    @Query("latitud") String latitud,
-                                    @Query("longitud") String longitud,
-                                    @Body() String foto
-    );
-
-
-    @POST("api/UsuarioAPI")
-    Call<Usuario> PostUsuario(@Query("RUT") String RUT,
-                              @Query("Nombre") String Nombre,
-                              @Query("Apellido") String Apellido,
-                              @Query("Correo") String Correo,
-                              @Query("Contrasena") String Contrasena,
-                              @Query("Fono") String Fono,
-                              @Query("id_idCiudad") int id_idCiudad,
-                              @Query("id_EstadoUsuario") int id_EstadoUsuario,
-                              @Query("id_TipoUsuario") int id_TipoUsuario
-    );
-
-
+    //api que se encuentra en uso en adaptador /pendiente
     @POST("api/SolicitudAPI")
     Call<String> TrabajadorConfirmar(@Query("idSolicitud") int idsolicitud,
                                      @Query("FechaD") String fechaconfirmacion,
-                                      @Query("Precio") int precio
+                                      @Query("Precio") int precio,
+                                     @Query("RUT") String rut,
+                                     @Query("Contrasena") String contrasena
     );
 
+    //api que se usa en la llamada actualizarperfil de perfilfragment
     @POST("api/UsuarioAPI")
     Call<Usuario> ActualizarUsuario(@Query("RUT") String RUT,
                                     @Query("Nombre") String Nombre,
                                     @Query("Apellido") String Apellido,
                                     @Query("Correo") String Correo,
                                     @Query("Fono") String Fono,
-                                    @Query("id_idCiudad") int id_idCiudad
+                                    @Query("id_idCiudad") int id_idCiudad,
+                                    @Query("Contrasena") String contrasena
     );
+
 
     @POST("api/UsuarioAPI")
     Call<Usuario> UsuarioPass(@Query("RUT") String RUT,
-                              @Query("Contrasena") String Contrasena
+                              @Query("Contrasena") String Contrasena,
+                              @Query("Contrasenaantigua") String contrasenaantigua
     );
 
     //metodo el cual trae el listado de ciudades / usando acutalmente para cargar el spiner de ciudades en el registrar usaurio
     @GET("api/CiudadAPI/")
     Call<List<Ciudad>> getCiudades();
-
-
-    //metodo para cancelar la solicitud del cliente
-    @POST("api/SolicitudAPI")
-    Call<String> CancelarSolicitud(@Query("idSolicitud") int idSolicitud
-    );
-
-
-
-    @GET("api/SolicitudAPI")
-    Call<List<Solicitud>> getSolicitudes(@Query("RUT") String rut);
-
-
-    @GET("api/SolicitudAPI")
-    Call<Solicitud> getSolicitudCliente(@Query("id") int id);
-
-
-
-
-
-
 
 
     @GET("api/UsuarioAPI")
@@ -128,35 +71,47 @@ public interface tesisAPI {
 
 
     @GET("api/SolicitudAPI")
-    Call<List<Solicitud>> TrabajadorSolicitudes(@Query("trabajadorRUT") String rut);
+    Call<List<Solicitud>> TrabajadorSolicitudes(@Query("trabajadorRUT") String rut,
+                                                @Query("Contrasena") String Contrasena
+
+    );
 
 
 
     @GET("api/SolicitudAPI")
-    Call<Solicitud> getSolicitudTrabajador(@Query("idSolicitudT") int id);
+    Call<Solicitud> getSolicitudTrabajador(@Query("idSolicitudT") int id,
+                                           @Query("RUT") String rut,
+                                           @Query("Contrasena") String Contrasena
+                                           );
 
 
 
-    //metodo para cancelar la solicitud del cliente
+    //metodo para cancelar la solicitud del trabajador
     @POST("api/SolicitudAPI")
-    Call<String> CancelarSolicitudt(@Query("idcancelarT") int idSolicitud
+    Call<String> CancelarSolicitudt(@Query("idcancelarT") int idSolicitud,
+                                    @Query("RUT") String rut,
+                                    @Query("Contrasena") String Contrasena
     );
 
     //metodo para cancelar la solicitud del cliente
     @POST("api/SolicitudAPI")
-    Call<String> EliminarSoliPermanente(@Query("Delete") int idSolicitud
+    Call<String> EliminarSoliPermanente(@Query("Delete") int idSolicitud,
+                                        @Query("RUTU") String rut,
+                                        @Query("Contrasena") String Contrasena
     );
 
 
     //metodo para cancelar la solicitud del cliente
     @POST("api/UsuarioAPI")
-    Call<String> CambiarEstadoTrabajador(@Query("RUT") String rut
+    Call<String> CambiarEstadoTrabajador(@Query("RUT") String rut,
+                                         @Query("Contrasena") String Contrasena
     );
 
 
     //metodo para cancelar la solicitud del cliente
     @GET("api/UsuarioAPI")
-    Call<UsuarioTrabajadorhome> TrabajadorHome(@Query("TRUT") String rut
+    Call<UsuarioTrabajadorhome> TrabajadorHome(@Query("TRUT") String rut,
+                                               @Query("Contrasena") String Contrasena
     );
 
 

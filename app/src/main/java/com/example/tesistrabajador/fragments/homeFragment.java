@@ -72,7 +72,7 @@ public class homeFragment extends Fragment {
     ArrayList<Solicitud> Solicitudactual = new ArrayList<Solicitud>();
     Adaptador ads,ads2;
     final static String rutaservidor= "http://proyectotesis.ddns.net";
-    String estadotrabajador = "";
+    String estadotrabajador = "",contrasena="";
     NetworkInfo NetworkInfo;
     ImageView fotoperfil;
     TextView nombretrabajdor;
@@ -242,7 +242,7 @@ public class homeFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-        Call<String> call = tesisAPI.CambiarEstadoTrabajador(rutusuario);
+        Call<String> call = tesisAPI.CambiarEstadoTrabajador(rutusuario,contrasena);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -299,7 +299,7 @@ public class homeFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-        Call<UsuarioTrabajadorhome> call = tesisAPI.TrabajadorHome(rutusuario);
+        Call<UsuarioTrabajadorhome> call = tesisAPI.TrabajadorHome(rutusuario,contrasena);
         call.enqueue(new Callback<UsuarioTrabajadorhome>() {
             @Override
             public void onResponse(Call<UsuarioTrabajadorhome> call, Response<UsuarioTrabajadorhome> response) {
@@ -342,7 +342,7 @@ public class homeFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-        Call<List<Solicitud>> call = tesisAPI.TrabajadorSolicitudes(rut);
+        Call<List<Solicitud>> call = tesisAPI.TrabajadorSolicitudes(rut,contrasena);
         call.enqueue(new Callback<List<Solicitud>>() {
             @Override
             public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
@@ -367,7 +367,7 @@ public class homeFragment extends Fragment {
                     for (int i = 0; i < Solicitudactual.size(); i++) {
                         Solicitud soli = new Solicitud();
                         soli = Solicitudactual.get(i);
-                        if ( soli.getEstado().equals("ATENDIENDO")  ) {
+                        if ( soli.getEstado().equals("ATENDIENDO") || soli.getEstado().equals("FINALIZADO") ) {
                             solicitudinterna.add(soli);
                         }
                     }
@@ -445,9 +445,11 @@ public class homeFragment extends Fragment {
 
     //metodo para traer el rut del usuario hacia la variable local
     private void setcredentiasexist() {
-        String rut = getuserrutprefs();
-        if (!TextUtils.isEmpty(rut)) {
-            rutusuario=rut.toString();
+        String rutq = getuserrutprefs();
+        String contrasena2 = getusercontraseñaprefs();
+        if (!TextUtils.isEmpty(rutq)&& (!TextUtils.isEmpty(contrasena2)) ) {
+            rutusuario=rutq.toString();
+            contrasena=contrasena2.toString();
         }
     }
 
@@ -455,6 +457,9 @@ public class homeFragment extends Fragment {
         return prefs.getString("Rut", "");
     }
 
+    private String getusercontraseñaprefs() {
+        return prefs.getString("ContraseNa", "");
+    }
 
 
     private void settiempoasyncexist() {

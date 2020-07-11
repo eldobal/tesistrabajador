@@ -2,8 +2,10 @@ package com.example.tesistrabajador.clases;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +38,8 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
     private static LayoutInflater inflater = null;
     Context contexto;
     ArrayList<Notificacion> listanotificaciones;
-
+    SharedPreferences prefs;
+    String rutusuario="",contrasena="";
 
     Notificacion notificacion = new Notificacion();
 
@@ -76,8 +79,10 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        final View vista = inflater.inflate(R.layout.elementonotificacion, null);
 
+        prefs = contexto.getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        setcredentiasexist();
+        final View vista = inflater.inflate(R.layout.elementonotificacion, null);
         //datos del elemento en el cual se cargaran los trabajadores
         //  TextView cliente = (TextView) vista.findViewById(R.id.txtclientesolicituddetalle);
         CardView card = (CardView) vista.findViewById(R.id.cardnotificacion);
@@ -133,7 +138,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-                                Call<String> call = tesisAPI.EliminarSoliPermanente(listanotificaciones.get(i).getIdSolicitud());
+                                Call<String> call = tesisAPI.EliminarSoliPermanente(listanotificaciones.get(i).getIdSolicitud(),rutusuario,contrasena);
                                 call.enqueue(new Callback<String>() {
                                     @Override
                                     public void onResponse(Call<String> call, Response<String> response) {
@@ -198,7 +203,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                             .addConverterFactory(GsonConverterFactory.create())
                                             .build();
                                     tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-                                    Call<String> call = tesisAPI.TrabajadorConfirmar(listanotificaciones.get(i).getIdSolicitud(), Fechasolicitud, precio);
+                                    Call<String> call = tesisAPI.TrabajadorConfirmar(listanotificaciones.get(i).getIdSolicitud(), Fechasolicitud, precio,rutusuario,contrasena);
                                     call.enqueue(new Callback<String>() {
                                         @Override
                                         public void onResponse(Call<String> call, Response<String> response) {
@@ -232,7 +237,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-                                Call<String> call = tesisAPI.CancelarSolicitudt(listanotificaciones.get(i).getIdSolicitud());
+                                Call<String> call = tesisAPI.CancelarSolicitudt(listanotificaciones.get(i).getIdSolicitud(),rutusuario,contrasena);
                                 call.enqueue(new Callback<String>() {
                                     @Override
                                     public void onResponse(Call<String> call, Response<String> response) {
@@ -260,6 +265,24 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
 
 
         return vista;
+    }
+
+
+    private void setcredentiasexist() {
+        String rutq = getuserrutprefs();
+        String contrasena2 = getusercontraseñaprefs();
+        if (!TextUtils.isEmpty(rutq)&& (!TextUtils.isEmpty(contrasena2)) ) {
+            rutusuario=rutq.toString();
+            contrasena=contrasena2.toString();
+        }
+    }
+
+    private String getuserrutprefs() {
+        return prefs.getString("Rut", "");
+    }
+
+    private String getusercontraseñaprefs() {
+        return prefs.getString("ContraseNa", "");
     }
 
 

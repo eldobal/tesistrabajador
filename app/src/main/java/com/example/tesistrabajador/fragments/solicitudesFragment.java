@@ -61,7 +61,7 @@ public class solicitudesFragment extends Fragment  {
     private ListView lista,listaactivas;
     private ImageButton btnVolver;
     private SharedPreferences prefs,asycprefs;
-    private String rutusuario="";
+    private String rutusuario="",contrasenaperfil="";
     int azynctiempo =0;
     ArrayList<Solicitud> listasolicitudesterminadas,listasolicitudactivas,listasolicitudactivasinterna,listasolicitudterminadasinterna,Solicitudescomparar,listasolicitudfinalizando;
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
@@ -224,7 +224,7 @@ public class solicitudesFragment extends Fragment  {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-        Call<List<Solicitud>> call = tesisAPI.TrabajadorSolicitudes(rut);
+        Call<List<Solicitud>> call = tesisAPI.TrabajadorSolicitudes(rut,contrasenaperfil);
         call.enqueue(new Callback<List<Solicitud>>() {
             @Override
             public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
@@ -343,16 +343,22 @@ public class solicitudesFragment extends Fragment  {
                 //.addToBackStack(null)
                 .commit();
     }
-    //metodo para traer el rut del usuario hacia la variable local
+
     private void setcredentiasexist() {
-        String rut = getuserrutprefs();
-        if (!TextUtils.isEmpty(rut)) {
-            rutusuario=rut.toString();
+        String rutq = getuserrutprefs();
+        String contrasena = getusercontraseñaprefs();
+        if (!TextUtils.isEmpty(rutq)&& (!TextUtils.isEmpty(contrasena)) ) {
+            rutusuario=rutq.toString();
+            contrasenaperfil=contrasena.toString();
         }
     }
 
     private String getuserrutprefs() {
         return prefs.getString("Rut", "");
+    }
+
+    private String getusercontraseñaprefs() {
+        return prefs.getString("ContraseNa", "");
     }
 
 

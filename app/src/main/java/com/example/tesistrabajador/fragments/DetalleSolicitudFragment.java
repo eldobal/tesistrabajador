@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -54,6 +55,7 @@ public class DetalleSolicitudFragment extends Fragment {
     private String rutperfil ="",contrasenaperfil="";
     double latitud=0.0,longitud=0.0;
     int pago = 0;
+    CardView carddiagnostico;
 
     public DetalleSolicitudFragment() {
         // Required empty public constructor
@@ -70,11 +72,11 @@ public class DetalleSolicitudFragment extends Fragment {
         precio = (TextView)getActivity().findViewById(R.id.txtpreciosolicitud);
         estadosolicitud =(TextView)getActivity().findViewById(R.id.txtestadosolicitud);
         descripciondetallesolicitud =(TextView)getActivity().findViewById(R.id.txtdescripciondetallesolicitud);
-        //  diagnosticodetallesolicitud =(TextView)getActivity().findViewById(R.id.txtdiagnosticodetallesolicitud1);
+        diagnosticodetallesolicitud =(TextView)getActivity().findViewById(R.id.txtdiagnosticodetallesolicitud);
         soluciondetallesolicitud =(TextView)getActivity().findViewById(R.id.txtsoluciondetallesolicitud);
         imgperfiltrabajador =(ImageView)getActivity().findViewById(R.id.imgperfilfilasolicitud);
         imgclientesacada =(ImageView)getActivity().findViewById(R.id.imgclientesacada);
-
+        carddiagnostico =(CardView) getActivity().findViewById(R.id.carddiagnostico);
     }
 
     @Override
@@ -99,24 +101,28 @@ public class DetalleSolicitudFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-        Call<Solicitud> call = tesisAPI.getSolicitudTrabajador(idsolicitud);
+        Call<Solicitud> call = tesisAPI.getSolicitudTrabajador(idsolicitud,rutperfil,contrasenaperfil);
         call.enqueue(new Callback<Solicitud>() {
             @Override
             public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
                 if(!response.isSuccessful()){
+                    //falta alert dialog para avisar del error
                     Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                 }
                 else {
                     Solicitud solicituds = response.body();
-                    if(solicituds.getEstado().equals("FINALIZANDO")){
+                    if(solicituds.getEstado().equals("FINALIZADO")){
                         btncomollegar.setVisibility(View.GONE);
                         btnfinalizar.setVisibility(View.GONE);
                         btnconfirmarpago.setVisibility(View.VISIBLE);
-                    }if(solicituds.getEstado().equals("COMPLETADA Y PAGADA")){
+                    }if(solicituds.getEstado().equals("COMPLETADA Y PAGADA") || solicituds.getEstado().equals("COMPLETADA Y NO PAGADA")){
                         btncomollegar.setVisibility(View.GONE);
                         btnfinalizar.setVisibility(View.GONE);
                         btnconfirmarpago.setVisibility(View.GONE);
-                    }else{
+                        //invisible por mientras
+                        carddiagnostico.setVisibility(View.GONE);
+                       // diagnosticodetallesolicitud.setText(solicituds.getDiagnostico());
+                    }else if (!solicituds.getEstado().equals("FINALIZADO") && !solicituds.getEstado().equals("COMPLETADA Y PAGADA")){
                         btncomollegar.setVisibility(View.VISIBLE);
                         btnfinalizar.setVisibility(View.VISIBLE);
                     }
@@ -133,7 +139,7 @@ public class DetalleSolicitudFragment extends Fragment {
                     estadosolicitud.setText("Estado : "+solicituds.getEstado());
                     descripciondetallesolicitud.setText(solicituds.getDescripcionP());
 
-                   // diagnosticodetallesolicitud.setText(solicituds.getDiagnostico());
+
                     soluciondetallesolicitud.setText(solicituds.getSolucion());
                     latitud=(solicituds.getLatitud());
                     longitud=solicituds.getLongitud();
@@ -276,8 +282,6 @@ public class DetalleSolicitudFragment extends Fragment {
 
 
 
-
-
         btnconfirmarpago.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -286,10 +290,10 @@ public class DetalleSolicitudFragment extends Fragment {
                 LayoutInflater inflater = getLayoutInflater();
                 View viewsync = inflater.inflate(R.layout.alertdialogconfirmarpago, null);
                 builder.setView(viewsync);
-                AlertDialog dialog = builder.create();
-                dialog.setCancelable(false);
-                dialog.show();
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                AlertDialog dialog6 = builder.create();
+                dialog6.setCancelable(false);
+                dialog6.show();
+                dialog6.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 
                 Button dismiss = (Button) viewsync.findViewById(R.id.btncerraralert);
@@ -304,7 +308,7 @@ public class DetalleSolicitudFragment extends Fragment {
                 dismiss.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        dialog.dismiss();
+                        dialog6.dismiss();
                     }
                 });
 
@@ -346,23 +350,29 @@ public class DetalleSolicitudFragment extends Fragment {
 
                                         String respusta = response.body();
 
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                        View viewsync2 = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
-                                        builder.setView(viewsync2);
-                                        AlertDialog dialog3 = builder.create();
-                                        dialog3.show();
-                                        dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                        Button btncerraralert = viewsync2.findViewById(R.id.btnalertperfilexito);
-                                        TextView texto  = (TextView) viewsync2.findViewById(R.id.txtalertnotificacion);
-                                        texto.setText("Ha enviado su respuesta Satisfactoriamente.");
-                                        btncerraralert.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
+                                        if (respusta.equals("Confirmado")){
+                                            btnfinalizar.setVisibility(View.GONE);
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                            View viewsync2 = inflater.inflate(R.layout.alertdialogperfilactualizado, null);
+                                            builder.setView(viewsync2);
+                                            AlertDialog dialog3 = builder.create();
+                                            dialog3.show();
+                                            dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            Button btncerraralert = viewsync2.findViewById(R.id.btnalertperfilexito);
+                                            TextView texto = (TextView) viewsync2.findViewById(R.id.txtalertnotificacion);
+                                            texto.setText("Ha enviado su respuesta Satisfactoriamente.");
+                                            btncerraralert.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
                                                 dialog3.dismiss();
-                                                dialog.dismiss();
-                                            }
-                                        });
+                                                dialog6.dismiss();
 
+                                                }
+                                             });
+                                        }else{
+                                            //alert de error
+                                            dialog6.dismiss();
+                                        }
 
                                     }
                                 }

@@ -2,9 +2,11 @@ package com.example.tesistrabajador.clases;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +46,8 @@ public class Adaptador extends BaseAdapter implements Serializable {
     Context contexto;
     ArrayList<Solicitud> listasolicitudes;
     ArrayList<Solicitud> lista;
-
+    SharedPreferences prefs;
+    String rutusuario="",contrasena="";
     Solicitud soli = new Solicitud();
 
 
@@ -79,7 +82,8 @@ public class Adaptador extends BaseAdapter implements Serializable {
 
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
-
+        prefs = contexto.getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        setcredentiasexist();
         //declaracion de la vista de cada item de la solicitud
         final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
         TextView numerosolicitud = (TextView) vista.findViewById(R.id.txtfilanumerosolicitud);
@@ -109,7 +113,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
         final int posicion = i;
         detalle.setTag(i);
 
-        if(listasolicitudes.get(i).getEstado().equals("ATENDIENDO")) {
+        if(listasolicitudes.get(i).getEstado().equals("ATENDIENDO") ||listasolicitudes.get(i).getEstado().equals("FINALIZADO") ) {
 
             detalle.setText("Detalle");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
@@ -176,7 +180,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                         @Override
                         public void onClick(View v) {
 
-                            if(!preciotrabajador.getText().toString().isEmpty()){
+                            if(!preciotrabajador.getText().toString().isEmpty() ){
 
                                 int precio = Integer.parseInt(preciotrabajador.getText().toString());
                                 Calendar calendar = Calendar.getInstance();
@@ -187,7 +191,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-                                Call<String> call = tesisAPI.TrabajadorConfirmar(idsolicitud, Fechasolicitud, precio);
+                                Call<String> call = tesisAPI.TrabajadorConfirmar(idsolicitud, Fechasolicitud, precio,rutusuario,contrasena);
                                 call.enqueue(new Callback<String>() {
                                     @Override
                                     public void onResponse(Call<String> call, Response<String> response) {
@@ -197,6 +201,23 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                             listasolicitudes.remove(i);
                                             refresh(listasolicitudes);
                                             dialog.dismiss();
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
+                                            View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
+                                            builder.setView(viewsync);
+                                            AlertDialog dialog5 = builder.create();
+                                            dialog5.show();
+                                            dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                            texto.setText("Felicitaciones Ha enviado su respuesta satisfactoriamente!");
+                                            Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                            btncerraralert.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    dialog5.dismiss();
+
+                                                }
+                                            });
                                         }
                                     }
 
@@ -221,7 +242,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
                             tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-                            Call<String> call = tesisAPI.CancelarSolicitudt(idsolicitud);
+                            Call<String> call = tesisAPI.CancelarSolicitudt(idsolicitud,rutusuario,contrasena);
                             call.enqueue(new Callback<String>() {
                                 @Override
                                 public void onResponse(Call<String> call, Response<String> response) {
@@ -229,9 +250,30 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                         Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                                     }
                                     else {
+                                        dialog.dismiss();
                                         listasolicitudes.remove(i);
                                         refresh(listasolicitudes);
-                                        dialog.dismiss();
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
+                                        View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
+                                        builder.setView(viewsync);
+                                        AlertDialog dialog5 = builder.create();
+                                        dialog5.show();
+                                        dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                        texto.setText("Felicitaciones Ha cancelado la solicitud satisfactoriamente!");
+                                        Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                        btncerraralert.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialog5.dismiss();
+
+                                            }
+                                        });
+
+
+
                                     }
                                 }
                                 @Override
@@ -271,7 +313,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                 }
             });
 
-        }if(listasolicitudes.get(i).getEstado().equals("COMPLETADA Y PAGADA")){
+        }if(listasolicitudes.get(i).getEstado().equals("COMPLETADA Y PAGADA") ||listasolicitudes.get(i).getEstado().equals("COMPLETADA Y NO PAGADA")  ){
             detalle.setText("DETALLE");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
             numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
@@ -300,4 +342,29 @@ public class Adaptador extends BaseAdapter implements Serializable {
 
         return vista;
     }
+
+    //metodo para traer el rut del usuario hacia la variable local
+    private void setcredentiasexist() {
+        String rut = getuserrutprefs();
+        String contraseña = getusercontraseñaprefs();
+        if (!TextUtils.isEmpty(rut) && !TextUtils.isEmpty(contraseña)) {
+            rutusuario=rut.toString();
+            contrasena=contraseña.toString();
+        }
+    }
+
+    private String getuserrutprefs() {
+        return prefs.getString("Rut", "");
+    }
+
+    private int getuseridciudadprefs() {
+        return prefs.getInt("idCiudad", 0);
+    }
+
+    private String getusercontraseñaprefs() {
+        return prefs.getString("ContraseNa", "");
+    }
+
+
+
 }

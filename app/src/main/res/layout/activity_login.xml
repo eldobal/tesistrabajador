@@ -25,11 +25,11 @@
             android:layout_marginBottom="30dp">
 
             <com.google.android.gms.common.SignInButton
-
+                android:layout_marginTop="10dp"
                 android:id="@+id/Signbutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/btnregistrarse"
+                android:layout_below="@+id/btnlogin"
                 android:layout_centerHorizontal="true" />
 
 
@@ -103,19 +103,6 @@
                 android:text="Iniciar Sesion "
                 android:textColor="@drawable/botonpressed" />
 
-
-            <Button
-                android:id="@+id/btnregistrarse"
-                android:layout_width="130dp"
-                android:layout_height="40dp"
-                android:layout_below="@+id/btnlogin"
-                android:layout_centerInParent="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10pt"
-                android:layout_marginBottom="30dp"
-                android:background="@drawable/botonripple"
-                android:text="Registrarse"
-                android:textColor="@drawable/botonpressed" />
 
 
 

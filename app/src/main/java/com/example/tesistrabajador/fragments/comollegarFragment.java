@@ -72,10 +72,6 @@ public class comollegarFragment extends Fragment implements OnMapReadyCallback ,
         mapFragment= (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
-
-
-
 /*
         btncomollegarcliente = v.findViewById(R.id.btncomollegarcliente);
         btncomollegarcliente.setOnClickListener(new View.OnClickListener() {
@@ -88,16 +84,7 @@ public class comollegarFragment extends Fragment implements OnMapReadyCallback ,
         //27.667491,85.3208583
         place1 = new MarkerOptions().position(new LatLng(27.658143, 85.3199503)).title("Location 1");
         place2 = new MarkerOptions().position(new LatLng(27.667491, 85.3208583)).title("Location 2");
-
-
-
-
 */
-
-
-
-
-
         return v;
     }
 
@@ -151,18 +138,12 @@ public class comollegarFragment extends Fragment implements OnMapReadyCallback ,
         btncomollegarcliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 ubicacioncliente = new MarkerOptions().position(new LatLng(latitud,longitud)).title("ubicacion cliente");
                 ubicaciontrabajador = new MarkerOptions().position(new LatLng(latitudorigen,longitudorigen)).title("ubicacion trabajador");
-
                 String url =getUrl(ubicacioncliente.getPosition(),ubicaciontrabajador.getPosition(),"driving");
-
                 new FetchURL(comollegarFragment.this).execute(url,"driving");
-
             }
         });
-
-
 
         map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
@@ -177,8 +158,6 @@ public class comollegarFragment extends Fragment implements OnMapReadyCallback ,
 
                     map.addMarker(new MarkerOptions().position(miposicion).title("estoy aqui!"));
                     map.animateCamera(CameraUpdateFactory.newLatLngZoom(miposicion,15));
-
-
 
                     map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                         @Override

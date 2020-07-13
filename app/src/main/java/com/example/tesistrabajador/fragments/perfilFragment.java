@@ -291,16 +291,11 @@ public class perfilFragment extends Fragment {
                     btncancelar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-
                             dialog2.dismiss();
                         }
                     });
-
-
                 }
             });
-
-
         }
 
 
@@ -309,9 +304,6 @@ public class perfilFragment extends Fragment {
             getActivity().finish();
             Toast.makeText(getContext(), "Error en la conecctacion del dispocitivo, asegurese de que tenga coneccion", Toast.LENGTH_LONG).show();
         }
-
-
-
 
         return v;
     }
@@ -336,6 +328,25 @@ public class perfilFragment extends Fragment {
             public void onResponse( Call<Usuario>call, Response<Usuario> response) {
                 //si esta malo se ejecuta este trozo
                 if(!response.isSuccessful()){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog3 = builder.create();
+                    dialog3.setCancelable(false);
+                    dialog3.show();
+                    dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                    texto.setText("Ha ocurrido un error con la respuesta al tratar de cargar los datos del perfil. intente en un momento nuevamente.");
+                    Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog3.dismiss();
+                        }
+                    });
+
                     Toast.makeText(getContext(), "error/perfil/cargar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
                 }
                 //de lo contrario se ejecuta esta parte
@@ -366,6 +377,25 @@ public class perfilFragment extends Fragment {
             //si falla el request a la pagina mostrara este error
             @Override
             public void onFailure(Call<Usuario> call, Throwable t) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                builder.setView(viewsync);
+                AlertDialog dialog4 = builder.create();
+                dialog4.setCancelable(false);
+                dialog4.show();
+                dialog4.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog4.dismiss();
+                    }
+                });
+
                 Toast.makeText(getContext(), "error/perfil/cargar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -373,21 +403,37 @@ public class perfilFragment extends Fragment {
 
     private void cargarspiner(){
         try {
-
             ArrayList<String> listanombres = new ArrayList<String>();
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://proyectotesis.ddns.net/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-
-            //metodo para llamar a la funcion que queramos
             Call<List<Ciudad>> call = tesisAPI.getCiudades();
             call.enqueue(new Callback<List<Ciudad>>() {
                 @Override
                 public void onResponse( Call<List<Ciudad>>call, Response<List<Ciudad>>response) {
                     //si esta malo se ejecuta este trozo
                     if(!response.isSuccessful()){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        LayoutInflater inflater = getLayoutInflater();
+                        View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                        builder.setView(viewsync);
+                        AlertDialog dialog5 = builder.create();
+                        dialog5.setCancelable(false);
+                        dialog5.show();
+                        dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                        texto.setText("Ha ocurrido un error con la respuesta al tratar de cargar el spinner. intente en un momento nuevamente.");
+                        Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                        btncerrar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog5.dismiss();
+                            }
+                        });
+
                         Toast.makeText(getContext(), "error/perfil/cargarspinner/onresponse:"+response.code(), Toast.LENGTH_LONG).show();
                     }
                     //de lo contrario se ejecuta esta parte
@@ -408,13 +454,31 @@ public class perfilFragment extends Fragment {
                         a.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         ciudad.setAdapter(a);
 
-
                     }
                 }
 
                 //si falla el request a la pagina mostrara este error
                 @Override
                 public void onFailure(Call<List<Ciudad>> call, Throwable t) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog6 = builder.create();
+                    dialog6.setCancelable(false);
+                    dialog6.show();
+                    dialog6.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                    texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                    Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog6.dismiss();
+                        }
+                    });
+
                     Toast.makeText(getContext(), "error/perfil/cargarspinner/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
@@ -437,23 +501,19 @@ public class perfilFragment extends Fragment {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-            //metodo para llamar a la funcion que queramos
-            //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )
             Call<Usuario> call = tesisAPI.ActualizarUsuario(RUT,Nombre,Apellido,Correo,Fono,idCiudad,contrasenaperfil);
             call.enqueue(new Callback<Usuario>() {
                 @Override
                 public void onResponse( Call<Usuario>call, Response<Usuario> response) {
                     //si esta malo se ejecuta este trozo
                     if(!response.isSuccessful()){
-
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         View viewsync = getActivity().getLayoutInflater().inflate(R.layout.alertdialogusuarioexistente, null);
                         builder.setView(viewsync);
-                        AlertDialog dialog4 = builder.create();
-                        dialog4.setCancelable(false);
-                        dialog4.show();
-                        dialog4.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
+                        AlertDialog dialog7 = builder.create();
+                        dialog7.setCancelable(false);
+                        dialog7.show();
+                        dialog7.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         TextView texto =(TextView) viewsync.findViewById(R.id.txtalertnotificacion);
                         texto.setText("Ha ocurrido un error al actualizar su perfil.");
                         Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
@@ -462,9 +522,7 @@ public class perfilFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 showSelectedFragment(new perfilFragment());
-                                dialog4.dismiss();
-                                //metodo para cambiar de activity
-
+                                dialog7.dismiss();
                             }
                         });
 
@@ -497,6 +555,25 @@ public class perfilFragment extends Fragment {
                 //si falla el request a la pagina mostrara este error
                 @Override
                 public void onFailure(Call<Usuario> call, Throwable t) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog8 = builder.create();
+                    dialog8.setCancelable(false);
+                    dialog8.show();
+                    dialog8.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                    texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                    Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog8.dismiss();
+                        }
+                    });
+
                     Toast.makeText(getContext(), "error/perfil/actualizar perfil/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
@@ -504,7 +581,6 @@ public class perfilFragment extends Fragment {
             e.printStackTrace();
         }
     }
-
 
     public void getSelectedCiudad(View v){
         Ciudad ciudad1 = (Ciudad) ciudad.getSelectedItem();

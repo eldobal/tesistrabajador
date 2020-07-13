@@ -83,8 +83,6 @@ public class solicitudesFragment extends Fragment  {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         Solicitudescomparar = new ArrayList<Solicitud>();
         listasolicitudesterminadas  = new ArrayList<Solicitud>();
         listasolicitudactivas  = new ArrayList<Solicitud>();
@@ -97,25 +95,18 @@ public class solicitudesFragment extends Fragment  {
         NetworkInfo = connectivityManager.getActiveNetworkInfo();
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_solicitudes, container, false);
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-
         loadinglista = (LottieAnimationView) v.findViewById(R.id.idanimacionlistasolicitud);
         listavacia = (LottieAnimationView) v.findViewById(R.id.idanimacionlistavacia);
-
         loadinglistaactiva = (LottieAnimationView) v.findViewById(R.id.idanimacionlistasolicitud2);
         listaactivavacia = (LottieAnimationView) v.findViewById(R.id.idanimacionlistavacia2);
-
         listavacia.setVisibility(View.INVISIBLE);
         listaactivavacia.setVisibility(View.INVISIBLE);
-
-
         //se buscan el usuario y el tiempo de sync de la app
         settiempoasyncexist();
         setcredentiasexist();
@@ -139,12 +130,9 @@ public class solicitudesFragment extends Fragment  {
             //declaracion de los swiperefresh para intanciarlos
             refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
 
-
             notfound =(TextView) v.findViewById(R.id.txtnotfoundlistasolicitudes);
             notfound.setText("");
             final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
-
-
 
             new CountDownTimer(1500,1000){
                 @Override
@@ -162,32 +150,22 @@ public class solicitudesFragment extends Fragment  {
                 }
             }.start();
 
-
-
             final Handler handler = new Handler();
             Timer timer = new Timer();
-
             TimerTask task = new TimerTask() {
                 @Override
                 public void run() {
                     handler.post(new Runnable() {
                         public void run() {
                             if (isAdded() && isVisible() && getUserVisibleHint()) {
-                                // ... do your thing
-                                try {
-                                    //Ejecuta tu AsyncTask!
                                     // reiniciarfragment(rutusuario);
                                     reiniciarfragmentterminadas(rutusuario);
-                                } catch (Exception e) {
-                                    Log.e("error", e.getMessage());
-                                }
                             }
                         }
                     });
                 }
             };
             timer.schedule(task, 15000, azynctiempo);  //ejecutar en intervalo definido por el programador
-
 
 
             refreshLayoutterminadas.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -204,10 +182,7 @@ public class solicitudesFragment extends Fragment  {
                     }.start();
                 }
             });
-
-
         }
-
 
         }else{
             getActivity().finish();
@@ -229,6 +204,10 @@ public class solicitudesFragment extends Fragment  {
             @Override
             public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
                 if (!response.isSuccessful()) {
+
+
+
+
                     Toast.makeText(getContext(), "error/soli/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     List<Solicitud> solicituds = response.body();
@@ -247,8 +226,6 @@ public class solicitudesFragment extends Fragment  {
                         Solicitud1.setFotoT(rutaservidor+solicitud.getFotoT());
                         Solicitudesterminadas.add(Solicitud1);
                     }
-
-
 
                     for (int i = 0; i < Solicitudesterminadas.size(); i++) {
                         Solicitud soli = new Solicitud();

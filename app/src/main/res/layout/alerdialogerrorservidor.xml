@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/round_async_dialog"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/txtalertnotificacion"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textColor="@color/colorPrimary"
+        android:gravity="center"
+        android:textSize="26dp"
+        android:text="Error con el servidor!"></TextView>
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_marginTop="20dp"
+        android:id="@+id/errorservidor"
+        android:layout_gravity="center"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:lottie_rawRes="@raw/errorservidor"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"></com.airbnb.lottie.LottieAnimationView>
+
+
+    <TextView
+        android:id="@+id/txterrorservidor"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textColor="@color/colordark"
+        android:gravity="center"
+        android:textSize="18dp"
+        android:text="">
+    </TextView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="18dp"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_margin="8dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/btncerraralert"
+            android:layout_width="175dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_ripple"
+            android:text="cerrar este cuadro">
+        </Button>
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

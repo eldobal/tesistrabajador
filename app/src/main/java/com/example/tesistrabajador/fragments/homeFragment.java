@@ -83,8 +83,6 @@ public class homeFragment extends Fragment {
 
     }
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,9 +111,6 @@ public class homeFragment extends Fragment {
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         loadinglista = (LottieAnimationView) v.findViewById(R.id.idanimacionlistasolicitud);
         loadingperfil = (LottieAnimationView) v.findViewById(R.id.loadinglistaimgperfilhome);
-       // loadingperfil.setVisibility(View.VISIBLE);
-       // loadingperfil.playAnimation();
-
         //se buscan el usuario y el tiempo de sync de la app
         settiempoasyncexist();
         setcredentiasexist();
@@ -163,7 +158,6 @@ public class homeFragment extends Fragment {
                 }.start();
 
 
-
                 final Handler handler = new Handler();
                 Timer timer = new Timer();
 
@@ -173,22 +167,14 @@ public class homeFragment extends Fragment {
                         handler.post(new Runnable() {
                             public void run() {
                                 if (isAdded() && isVisible() && getUserVisibleHint()) {
-                                    // ... do your thing
-                                    try {
-                                        //Ejecuta tu AsyncTask!
                                         // reiniciarfragment(rutusuario);
                                         reiniciarfragmentterminadas(rutusuario);
-                                    } catch (Exception e) {
-                                        Log.e("error", e.getMessage());
-                                    }
                                 }
                             }
                         });
                     }
                 };
                 timer.schedule(task, 15000, azynctiempo);  //ejecutar en intervalo definido por el programador
-
-
 
               /*  refreshLayoutterminadas.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
@@ -206,7 +192,6 @@ public class homeFragment extends Fragment {
                 });
                */
 
-
             }
 
 
@@ -214,8 +199,6 @@ public class homeFragment extends Fragment {
             getActivity().finish();
             Toast.makeText(getContext(), "Error en la conecctacion del dispocitivo, asegurese de que tenga coneccion", Toast.LENGTH_LONG).show();
         }
-
-
 
         pieChart.setRotationEnabled(true);
         pieChart.setHoleRadius(25f);
@@ -226,14 +209,8 @@ public class homeFragment extends Fragment {
         addDataSet();
 
 
-
-
-
-
         return v;
     }
-
-
 
 
     private void cambiarestadotrabajador() {
@@ -247,11 +224,28 @@ public class homeFragment extends Fragment {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (!response.isSuccessful()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog = builder.create();
+                    dialog.setCancelable(false);
+                    dialog.show();
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                    texto.setText("Ha ocurrido un error con la respuesta al tratar de cambiar el estado de su perfil. intente en un momento nuevamente.");
+                    Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+
                     Toast.makeText(getContext(), "error/homedatosESTADO/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
-
                     String msgestado = response.body();
-
                     if(msgestado.equals("Disponible")){
                         btncambiodeestado.setBackgroundResource(R.drawable.btn_homeactivo);
                         btncambiodeestado.setText("Disponible");
@@ -260,38 +254,51 @@ public class homeFragment extends Fragment {
                         btncambiodeestado.setBackgroundResource(R.drawable.btn_homeinactivo);
                         btncambiodeestado.setText("No Disponible");
                     }
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     LayoutInflater inflater = getLayoutInflater();
                     View viewsync = inflater.inflate(R.layout.alertdialoghomebtncambioestado,null);
                     builder.setView(viewsync);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    AlertDialog dialog2 = builder.create();
+                    dialog2.show();
+                    dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     Button btnaceptar = viewsync.findViewById(R.id.btnhomecambioestadoexito);
 
                     btnaceptar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            dialog.dismiss();
+                            dialog2.dismiss();
                         }
                     });
-
 
                 }
             }
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(getContext(), "error/homedatosESTADO/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                builder.setView(viewsync);
+                AlertDialog dialog3 = builder.create();
+                dialog3.setCancelable(false);
+                dialog3.show();
+                dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
 
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog3.dismiss();
+                    }
+                });
+
+
+                Toast.makeText(getContext(), "error/homedatosESTADO/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
     }
-
-
-
-
 
     private void cargardatostrabajador() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -304,6 +311,25 @@ public class homeFragment extends Fragment {
             @Override
             public void onResponse(Call<UsuarioTrabajadorhome> call, Response<UsuarioTrabajadorhome> response) {
                 if (!response.isSuccessful()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog4 = builder.create();
+                    dialog4.setCancelable(false);
+                    dialog4.show();
+                    dialog4.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                    texto.setText("Ha ocurrido un error con la respuesta al tratar de cambiar el estado de su perfil. intente en un momento nuevamente.");
+                    Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog4.dismiss();
+                        }
+                    });
+
                     Toast.makeText(getContext(), "error/homedatos/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     UsuarioTrabajadorhome usuarioTrabajador = response.body();
@@ -328,13 +354,33 @@ public class homeFragment extends Fragment {
             }
             @Override
             public void onFailure(Call<UsuarioTrabajadorhome> call, Throwable t) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                builder.setView(viewsync);
+                AlertDialog dialog5 = builder.create();
+                dialog5.setCancelable(false);
+                dialog5.show();
+                dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog5.dismiss();
+                    }
+                });
+
+
+
                 Toast.makeText(getContext(), "error/homedatos/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
 
             }
         });
 
     }
-
 
     private void reiniciarfragmentterminadas(String rut) {
         Retrofit retrofit = new Retrofit.Builder()
@@ -347,6 +393,25 @@ public class homeFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
                 if (!response.isSuccessful()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog6 = builder.create();
+                    dialog6.setCancelable(false);
+                    dialog6.show();
+                    dialog6.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                    texto.setText("Ha ocurrido un error con la respuesta al tratar de cambiar el estado de su perfil. intente en un momento nuevamente.");
+                    Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog6.dismiss();
+                        }
+                    });
+
                     Toast.makeText(getContext(), "error/soli/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     List<Solicitud> solicituds = response.body();
@@ -393,6 +458,25 @@ public class homeFragment extends Fragment {
             }
             @Override
             public void onFailure(Call<List<Solicitud>> call, Throwable t) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                builder.setView(viewsync);
+                AlertDialog dialog7 = builder.create();
+                dialog7.setCancelable(false);
+                dialog7.show();
+                dialog7.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog7.dismiss();
+                    }
+                });
+
                 Toast.makeText(getContext(), "error/soli/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
                 loadinglista.setVisibility(View.INVISIBLE);
                 loadinglista.pauseAnimation();
@@ -442,7 +526,6 @@ public class homeFragment extends Fragment {
         pieChart.setData(pieData);
         pieChart.invalidate();
     }
-
     //metodo para traer el rut del usuario hacia la variable local
     private void setcredentiasexist() {
         String rutq = getuserrutprefs();
@@ -461,7 +544,6 @@ public class homeFragment extends Fragment {
         return prefs.getString("ContraseNa", "");
     }
 
-
     private void settiempoasyncexist() {
         int tiempoasync = gettiempoasync();
         if (tiempoasync!=0) {
@@ -472,8 +554,5 @@ public class homeFragment extends Fragment {
     private int gettiempoasync() {
         return asycprefs.getInt("tiempo", 0);
     }
-
-
-
 
 }

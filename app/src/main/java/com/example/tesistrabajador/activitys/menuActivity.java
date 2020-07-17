@@ -92,7 +92,7 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
+        solicitudesFragment solicitudeFragment = new solicitudesFragment();
         listanotificacionesFragment listanotificacionesFragment = new listanotificacionesFragment();
         notificationManager = NotificationManagerCompat.from(this);
         setContentView(R.layout.activity_menu);
@@ -138,7 +138,14 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
                 }
                 //se muestra el fragment de la lista de solicitudes
                 if(menuItem.getItemId()==R.id.menu_solicitud){
-                       showSelectedFragment(new solicitudesFragment());
+
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, solicitudeFragment, "solicitudtag")
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            //permite regresar hacia atras entre los fragments
+                            .addToBackStack(null)
+                            .commit();
+
+
                 }
                 //se muestra el fragment de configuracion y setting
                 if(menuItem.getItemId()== R.id.menu_settings){
@@ -146,26 +153,12 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
                 }
                 if(menuItem.getItemId()== R.id.menu_notificaciones){
 
-                /*
-                    Bundle bundle2 = new Bundle();
-                    bundle2.putSerializable("arraynotificaciones", listanotificaciones);
-                    listanotificacionesFragment.setArguments(bundle2);
-                    if(listanotificacionesFragment.isVisible()){
-                        //metodo para recargar el fragment que se esta mostrando
-                        Fragment fragmentnotificacion = getSupportFragmentManager().findFragmentByTag("solicitudtag");
-                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                        ft.detach(fragmentnotificacion);
-                        ft.attach(fragmentnotificacion);
-                        ft.commit();
-                    }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, listanotificacionesFragment, "solicitudtag")
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, listanotificacionesFragment, "notificacionestag")
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             //permite regresar hacia atras entre los fragments
                             .addToBackStack(null)
                             .commit();
-                    */
 
-                    showSelectedFragment(new listanotificacionesFragment());
                 }
 
                 return true;

@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/round_async_dialog"
+    android:layout_margin="10dp"
     android:orientation="vertical">
 
 
@@ -46,7 +47,6 @@
 
         <Button
             android:layout_margin="8dp"
-
             android:layout_marginLeft="80dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="14dp"
@@ -54,7 +54,7 @@
             android:layout_width="175dp"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_ripple"
-            android:text="cerrar este cuadro">
+            android:text="entiendo">
         </Button>
     </LinearLayout>
 

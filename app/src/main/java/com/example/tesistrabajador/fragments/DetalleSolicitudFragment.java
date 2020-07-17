@@ -136,14 +136,21 @@ public class DetalleSolicitudFragment extends Fragment {
                         btncomollegar.setVisibility(View.GONE);
                         btnfinalizar.setVisibility(View.GONE);
                         btnconfirmarpago.setVisibility(View.VISIBLE);
-                    }if(solicituds.getEstado().equals("COMPLETADA Y PAGADA") || solicituds.getEstado().equals("COMPLETADA Y NO PAGADA")){
+                    }
+                    if(solicituds.getEstado().equals("FINALIZANDO")){
+                        btncomollegar.setVisibility(View.GONE);
+                        btnfinalizar.setVisibility(View.GONE);
+                        btnconfirmarpago.setVisibility(View.GONE);
+                    }
+
+                    if(solicituds.getEstado().equals("COMPLETADA Y PAGADA") || solicituds.getEstado().equals("COMPLETADA Y NO PAGADA")){
                         btncomollegar.setVisibility(View.GONE);
                         btnfinalizar.setVisibility(View.GONE);
                         btnconfirmarpago.setVisibility(View.GONE);
                         //invisible por mientras
                         carddiagnostico.setVisibility(View.GONE);
                        // diagnosticodetallesolicitud.setText(solicituds.getDiagnostico());
-                    }else if (!solicituds.getEstado().equals("FINALIZADO") && !solicituds.getEstado().equals("COMPLETADA Y PAGADA")){
+                    }if (solicituds.getEstado().equals("PENDIENTE") || solicituds.getEstado().equals("ATENDIENDO") ){
                         btncomollegar.setVisibility(View.VISIBLE);
                         btnfinalizar.setVisibility(View.VISIBLE);
                     }
@@ -152,7 +159,7 @@ public class DetalleSolicitudFragment extends Fragment {
                     fechadetallesolicitud.setText("Atendida: "+solicituds.getFechaA());
                     trabajador.setText("Rut Cliente: "+solicituds.getRUT());
                     rubro.setText("Rubro: "+solicituds.getRubro());
-                    if(solicituds.getEstado().equals("COMPLETADA Y PAGADA") || solicituds.getEstado().equals("COMPLETADA Y NO PAGADA")){
+                    if(solicituds.getEstado().equals("COMPLETADA Y PAGADA") || solicituds.getEstado().equals("COMPLETADA Y NO PAGADA") || solicituds.getEstado().equals("FINALIZADO")  ){
                         precio.setText("Precio final: "+solicituds.getPrecio());
                     }else {
                         precio.setText("Precio aprox: " + solicituds.getPrecio());
@@ -210,6 +217,7 @@ public class DetalleSolicitudFragment extends Fragment {
                     comollegarFragment.setArguments(bundle);
                     getFragmentManager().beginTransaction().replace(R.id.container,comollegarFragment)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            .addToBackStack(null)
                             .commit();
                 }
             });
@@ -278,6 +286,8 @@ public class DetalleSolicitudFragment extends Fragment {
                                             public void onClick(View v) {
                                                 dialog3.dismiss();
                                                 dialog4.dismiss();
+                                                //enviar a la lista de solicitudes
+                                                showSelectedFragment(new solicitudesFragment());
                                             }
                                         });
 
@@ -288,12 +298,13 @@ public class DetalleSolicitudFragment extends Fragment {
                                         //respuesta del request
 
                                         String respusta = response.body();
-                                        if(respusta.equals("Finalizada")){
+
                                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                             View viewsync2 = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
                                             builder.setView(viewsync2);
                                             AlertDialog dialog5 = builder.create();
                                             dialog5.show();
+                                            dialog5.setCancelable(false);
                                             dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                                             Button btncerraralert = viewsync2.findViewById(R.id.btnalertperfilexito);
                                             TextView texto2  = (TextView) viewsync2.findViewById(R.id.txtalertnotificacion);
@@ -301,11 +312,14 @@ public class DetalleSolicitudFragment extends Fragment {
                                             btncerraralert.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
+                                                    //enviar a la lista de solicitudes
+                                                    showSelectedFragment(new homeFragment());
                                                     dialog5.dismiss();
                                                     dialog3.dismiss();
+
                                                 }
                                             });
-                                        }
+
 
                                     }
                                 }
@@ -330,6 +344,13 @@ public class DetalleSolicitudFragment extends Fragment {
                                         public void onClick(View v) {
                                             dialog3.dismiss();
                                             dialog6.dismiss();
+                                            //enviar a la lista de solicitudes
+                                            solicitudesFragment solicitudesFragment = new solicitudesFragment();
+                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, solicitudesFragment, "solicitudtag")
+                                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                                    //permite regresar hacia atras entre los fragments
+                                                    //.addToBackStack(null)
+                                                    .commit();
                                         }
                                     });
                                     Toast.makeText(getContext(), "error/detalle/finalizar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
@@ -420,6 +441,8 @@ public class DetalleSolicitudFragment extends Fragment {
                                             public void onClick(View v) {
                                                 dialog7.dismiss();
                                                 dialog8.dismiss();
+                                                //enviar a la lista de solicitudes
+
                                             }
                                         });
 
@@ -436,6 +459,7 @@ public class DetalleSolicitudFragment extends Fragment {
                                         builder.setView(viewsync2);
                                         AlertDialog dialog9 = builder.create();
                                         dialog9.show();
+                                        dialog9.setCancelable(false);
                                         dialog9.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                                         Button btncerraralert = viewsync2.findViewById(R.id.btnalertperfilexito);
                                         TextView texto = (TextView) viewsync2.findViewById(R.id.txtalertnotificacion);
@@ -445,7 +469,13 @@ public class DetalleSolicitudFragment extends Fragment {
                                             public void onClick(View view) {
                                                 dialog9.dismiss();
                                                 dialog7.dismiss();
-                                                }
+                                                solicitudesFragment solicitudesFragment = new solicitudesFragment();
+                                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, solicitudesFragment, "solicitudtag")
+                                                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                                        //permite regresar hacia atras entre los fragments
+                                                        //.addToBackStack(null)
+                                                        .commit();
+                                              }
                                         });
 
                                     }
@@ -483,6 +513,16 @@ public class DetalleSolicitudFragment extends Fragment {
 
 
         return v;
+    }
+
+
+    //metodo que permite elejir un fragment
+    private void showSelectedFragment(Fragment fragment){
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                //permite regresar hacia atras entre los fragments
+                //.addToBackStack(null)
+                .commit();
     }
 
     private void setcredentiasexist() {

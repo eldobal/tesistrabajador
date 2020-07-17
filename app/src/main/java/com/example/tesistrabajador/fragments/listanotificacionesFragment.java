@@ -143,6 +143,9 @@ public class listanotificacionesFragment extends Fragment {
                             listanotificaciones.setAdapter(adsnoti);
                         }
 
+                listanotificacionesFragment test = (listanotificacionesFragment) getActivity().getSupportFragmentManager().findFragmentByTag("notificacionestag");
+
+
                 final Handler handler = new Handler();
                 Timer timer = new Timer();
                 TimerTask task = new TimerTask() {
@@ -150,14 +153,15 @@ public class listanotificacionesFragment extends Fragment {
                     public void run() {
                         handler.post(new Runnable() {
                             public void run() {
-                                       // adsnoti.refresh(arraylistanotificaciones);
-                                        reiniciarfragmentnotificacionesASYNC(rutusuario);
+                                if(test != null && test.isVisible() && NetworkInfo.isConnected() && NetworkInfo !=null) {
+                                     // adsnoti.refresh(arraylistanotificaciones);
+                                     reiniciarfragmentnotificacionesASYNC(rutusuario);
+                                }
                             }
                         });
                     }
                 };
                 timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
-
 
         }
 

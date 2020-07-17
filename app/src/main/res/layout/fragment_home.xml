@@ -184,16 +184,26 @@
                             android:layout_height="wrap_content">
                         </ListView>
 
-                        <TextView
-                            android:id="@+id/txtnotfoundhome"
-                            android:padding="8dp"
-                            android:textSize="18dp"
-                            android:textColor="@color/colordark"
-                            android:gravity="center_horizontal"
+
+                        <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text=""
-                            ></TextView>
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:layout_centerInParent="true"
+                                android:id="@+id/txtnotfoundhome"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                android:textSize="18dp"
+                                android:textColor="@color/colordark"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                ></TextView>
+
+                        </RelativeLayout>
+
+
 
                     </androidx.cardview.widget.CardView>
                 </RelativeLayout>

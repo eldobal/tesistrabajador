@@ -89,7 +89,7 @@ public interface tesisAPI {
     //metodo para cancelar la solicitud del trabajador
     @POST("api/SolicitudAPI")
     Call<String> CancelarSolicitudt(@Query("idcancelarT") int idSolicitud,
-                                    @Query("RUT") String rut,
+                                    @Query("RUTU") String rut,
                                     @Query("Contrasena") String Contrasena
     );
 
@@ -132,6 +132,17 @@ public interface tesisAPI {
                                     @Query("SolicitudConfirmar") int idsolicitud,
                                        @Query("Pago") int pago
     );
+
+
+    //metodo para cancelar la solicitud del cliente
+    @POST("api/SolicitudAPI")
+    Call<String> borrarNotificacion(@Query("RUT") String rutusuario,
+                                    @Query("Contrasena") String contrasena,
+                                    @Query("Notificacion") int idnotificacion
+
+    );
+
+
 
 
 }

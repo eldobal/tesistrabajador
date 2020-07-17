@@ -79,7 +79,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-
         prefs = contexto.getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         setcredentiasexist();
         final View vista = inflater.inflate(R.layout.elementonotificacion, null);
@@ -87,9 +86,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
         //  TextView cliente = (TextView) vista.findViewById(R.id.txtclientesolicituddetalle);
         CardView card = (CardView) vista.findViewById(R.id.cardnotificacion);
         TextView mensaje = (TextView) vista.findViewById(R.id.mensajenotificacion);
-
         mensaje.setText(listanotificaciones.get(i).getMensaje());
-
         notificacion.setId(listanotificaciones.get(i).getId());
         notificacion.setMensaje(listanotificaciones.get(i).getMensaje());
         notificacion.setRUT(listanotificaciones.get(i).getRUT());
@@ -97,39 +94,24 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
         final int posicion = i;
         card.setTag(i);
 
-
-
-
-
             card.setOnClickListener(new View.OnClickListener() {
-
-
                 @Override
                 public void onClick(View v) {
-
                     String textocomparar = "Solicitud "+listanotificaciones.get(i).getIdSolicitud()+" fue cancelada";
-
-
-
-                    String textocompararconfirmada = "Solicitud "+listanotificaciones.get(i).getIdSolicitud()+" fue confirmada";
-
-
-
+                    String textocompararconfirmada = "Solicitud "+listanotificaciones.get(i).getIdSolicitud()+" fue confirmada.";
 
                     if (listanotificaciones.get(i).getMensaje().equals(textocomparar)) {
-
+                         int idsolicitud = listanotificaciones.get(i).getIdSolicitud();
                         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                         View viewsync = inflater.inflate(R.layout.alernotificacioncancelada, null);
                         builder.setView(viewsync);
                         AlertDialog dialog = builder.create();
                         dialog.show();
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
                         TextView textoalertnotificacion = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
                         Button dismiss2 = viewsync.findViewById(R.id.btnocultaralert2);
                         textoalertnotificacion.setText("La notificacion con el id: " + notificacion.getIdSolicitud() + " ha sido cancelada por el cliente" +
                                 "lo cual significa que la solitud se ha eliminado ");
-
                         dismiss2.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -138,11 +120,30 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-                                Call<String> call = tesisAPI.EliminarSoliPermanente(listanotificaciones.get(i).getIdSolicitud(),rutusuario,contrasena);
+                                Call<String> call = tesisAPI.EliminarSoliPermanente(idsolicitud,rutusuario,contrasena);
                                 call.enqueue(new Callback<String>() {
                                     @Override
                                     public void onResponse(Call<String> call, Response<String> response) {
                                         if (!response.isSuccessful()) {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                                            View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                                            builder.setView(viewsync);
+                                            AlertDialog dialog3 = builder.create();
+                                            dialog3.setCancelable(false);
+                                            dialog3.show();
+                                            dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                            texto.setText("Ha ocurrido un error con la respuesta al tratar de eliminar esta notificacion. intente en un momento nuevamente.");
+                                            Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                            btncerrar.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    dialog.dismiss();
+                                                    dialog3.dismiss();
+                                                }
+                                            });
+
                                             Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                                         } else {
                                             listanotificaciones.remove(i);
@@ -153,6 +154,24 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
 
                                     @Override
                                     public void onFailure(Call<String> call, Throwable t) {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                                        View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                                        builder.setView(viewsync);
+                                        AlertDialog dialog4 = builder.create();
+                                        dialog4.setCancelable(false);
+                                        dialog4.show();
+                                        dialog4.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                                        texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                                        Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                                        btncerrar.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                dialog.dismiss();
+                                                dialog4.dismiss();
+                                            }
+                                        });
                                         Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -169,15 +188,11 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                         AlertDialog dialog2 = builder.create();
                         dialog2.show();
                         dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
                         TextView textoalertnotificacion = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
-
                         Button btnconfirmar = viewsync.findViewById(R.id.btnconfirmarnotificacion);
                         Button btncancelar = viewsync.findViewById(R.id.btncancelarnotificacion);
                         EditText preciotrabajador = viewsync.findViewById(R.id.preciotrabajadornotificacion);
                         Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
-
-
                         textoalertnotificacion.setText("Si Apreta el boton confirmar devera especificar un precio aprox y luego se le notificara al cliente" +
                                 ". Si selecciona cancelar se eliminara esta solicitud y se le notificara de igual manera al cliente.(si no desea realizar ninguna accion seleeccione fuerta de este recuadro)");
 
@@ -191,7 +206,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                         btnconfirmar.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
                                 if (!preciotrabajador.getText().toString().isEmpty()) {
 
                                     int precio = Integer.parseInt(preciotrabajador.getText().toString());
@@ -207,6 +221,25 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                     call.enqueue(new Callback<String>() {
                                         @Override
                                         public void onResponse(Call<String> call, Response<String> response) {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                                            View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                                            builder.setView(viewsync);
+                                            AlertDialog dialog5 = builder.create();
+                                            dialog5.setCancelable(false);
+                                            dialog5.show();
+                                            dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                            texto.setText("Ha ocurrido un error con la respuesta al tratar de eliminar esta notificacion. intente en un momento nuevamente.");
+                                            Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                            btncerrar.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    dialog2.dismiss();
+                                                    dialog5.dismiss();
+                                                }
+                                            });
+
                                             if (!response.isSuccessful()) {
                                                 Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                                             } else {
@@ -218,6 +251,25 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
 
                                         @Override
                                         public void onFailure(Call<String> call, Throwable t) {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                                            View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                                            builder.setView(viewsync);
+                                            AlertDialog dialog6 = builder.create();
+                                            dialog6.setCancelable(false);
+                                            dialog6.show();
+                                            dialog6.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                                            texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                                            Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                                            btncerrar.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    dialog2.dismiss();
+                                                    dialog6.dismiss();
+                                                }
+                                            });
+
                                             Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                         }
                                     });
@@ -242,6 +294,26 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                     @Override
                                     public void onResponse(Call<String> call, Response<String> response) {
                                         if (!response.isSuccessful()) {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                                            View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                                            builder.setView(viewsync);
+                                            AlertDialog dialog7 = builder.create();
+                                            dialog7.setCancelable(false);
+                                            dialog7.show();
+                                            dialog7.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                            texto.setText("Ha ocurrido un error con la respuesta al tratar de cancelar la solicitud. intente en un momento nuevamente.");
+                                            Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                            btncerrar.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    dialog2.dismiss();
+                                                    dialog7.dismiss();
+                                                }
+                                            });
+
+
                                             Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                                         } else {
                                             listanotificaciones.remove(i);
@@ -252,6 +324,24 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
 
                                     @Override
                                     public void onFailure(Call<String> call, Throwable t) {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                                        View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                                        builder.setView(viewsync);
+                                        AlertDialog dialog8 = builder.create();
+                                        dialog8.setCancelable(false);
+                                        dialog8.show();
+                                        dialog8.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                                        texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                                        Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                                        btncerrar.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                dialog2.dismiss();
+                                                dialog8.dismiss();
+                                            }
+                                        });
                                         Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 });

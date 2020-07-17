@@ -432,7 +432,7 @@ public class homeFragment extends Fragment {
                     for (int i = 0; i < Solicitudactual.size(); i++) {
                         Solicitud soli = new Solicitud();
                         soli = Solicitudactual.get(i);
-                        if ( soli.getEstado().equals("ATENDIENDO") || soli.getEstado().equals("FINALIZADO") ) {
+                        if ( soli.getEstado().equals("ATENDIENDO") || soli.getEstado().equals("FINALIZADO") || soli.getEstado().equals("FINALIZANDO")  || soli.getEstado().equals("COMFIRMADA") ) {
                             solicitudinterna.add(soli);
                         }
                     }

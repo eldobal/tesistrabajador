@@ -1,9 +1,12 @@
 package com.example.tesistrabajador.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -21,8 +24,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +69,7 @@ public class solicitudesFragment extends Fragment  {
     private ImageButton btnVolver;
     private SharedPreferences prefs,asycprefs;
     private String rutusuario="",contrasenaperfil="";
-    int azynctiempo =0;
+    int azynctiempo =0,filtro=0,filtroterminada=0;
     ArrayList<Solicitud> listasolicitudesterminadas,listasolicitudactivas,listasolicitudactivasinterna,listasolicitudterminadasinterna,Solicitudescomparar,listasolicitudfinalizando;
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudesterminadas = new ArrayList<Solicitud>();
@@ -71,6 +78,7 @@ public class solicitudesFragment extends Fragment  {
     Adaptador ads,ads2;
     TextView notfound;
     NetworkInfo NetworkInfo;
+    Spinner spinneractivas,spinnerterminadas;
     public solicitudesFragment() {
         // Required empty public constructor
     }
@@ -83,16 +91,7 @@ public class solicitudesFragment extends Fragment  {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Solicitudescomparar = new ArrayList<Solicitud>();
-        listasolicitudesterminadas  = new ArrayList<Solicitud>();
-        listasolicitudactivas  = new ArrayList<Solicitud>();
-        listasolicitudactivasinterna   = new ArrayList<Solicitud>();
-        listasolicitudterminadasinterna   = new ArrayList<Solicitud>();
-        listasolicitudfinalizando = new ArrayList<Solicitud>();
-      //  listasolicitudactivas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistaspendientes");
-       // listasolicitudesterminadas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistasterminadas");
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo = connectivityManager.getActiveNetworkInfo();
+
     }
 
     @Override
@@ -111,6 +110,31 @@ public class solicitudesFragment extends Fragment  {
         settiempoasyncexist();
         setcredentiasexist();
 
+        Solicitudescomparar = new ArrayList<Solicitud>();
+        listasolicitudesterminadas = new ArrayList<Solicitud>();
+        listasolicitudactivas = new ArrayList<Solicitud>();
+        listasolicitudterminadasinterna = new ArrayList<Solicitud>();
+        listasolicitudactivasinterna = new ArrayList<Solicitud>();
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+
+        spinneractivas =(Spinner) v.findViewById(R.id.spinnerordenar);
+        spinnerterminadas =(Spinner) v.findViewById(R.id.spinnerordenarterminadas);
+
+        String[] datos = new String[] {"Por Defecto","Pendiente","Confirmada"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_item, datos);
+
+        String[] datos2 = new String[] {"Por Defecto","Completada y Pagada", "Completada y No Pagada"};
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_item, datos2);
+
+       spinneractivas.setAdapter(adapter);
+        spinnerterminadas.setAdapter(adapter2);
+
+
         if (NetworkInfo != null && NetworkInfo.isConnected()) {
 
         if(rutusuario.equals("")){
@@ -124,17 +148,17 @@ public class solicitudesFragment extends Fragment  {
         }else{
             ads = new Adaptador(getContext(), listasolicitudactivasinterna);
             ads2 = new Adaptador(getContext(), listasolicitudterminadasinterna);
-            reiniciarfragmentterminadas(rutusuario);
+          //  reiniciarfragmentterminadas(rutusuario);
             listaactivas = (ListView) v.findViewById(R.id.solicitudactual);
             lista = (ListView) v.findViewById(R.id.listadosolicitudescliente);
             //declaracion de los swiperefresh para intanciarlos
             refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
 
-            notfound =(TextView) v.findViewById(R.id.txtnotfoundlistasolicitudes);
-            notfound.setText("");
+            //notfound =(TextView) v.findViewById(R.id.txtnotfoundlistasolicitudes);
+            //notfound.setText("");
             final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
 
-            new CountDownTimer(1500,1000){
+      /*      new CountDownTimer(1500,1000){
                 @Override
                 public void onTick(long millisUntilFinished) {
                 }
@@ -149,6 +173,9 @@ public class solicitudesFragment extends Fragment  {
                     }
                 }
             }.start();
+*/
+
+            solicitudesFragment test = (solicitudesFragment) getActivity().getSupportFragmentManager().findFragmentByTag("solicitudtag");
 
             final Handler handler = new Handler();
             Timer timer = new Timer();
@@ -157,7 +184,7 @@ public class solicitudesFragment extends Fragment  {
                 public void run() {
                     handler.post(new Runnable() {
                         public void run() {
-                            if (isAdded() && isVisible() && getUserVisibleHint()) {
+                            if(test != null && test.isVisible() && NetworkInfo.isConnected() && NetworkInfo !=null) {
                                     // reiniciarfragment(rutusuario);
                                     reiniciarfragmentterminadas(rutusuario);
                             }
@@ -165,7 +192,7 @@ public class solicitudesFragment extends Fragment  {
                     });
                 }
             };
-            timer.schedule(task, 15000, azynctiempo);  //ejecutar en intervalo definido por el programador
+            timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
 
 
             refreshLayoutterminadas.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -182,6 +209,67 @@ public class solicitudesFragment extends Fragment  {
                     }.start();
                 }
             });
+
+
+
+            spinneractivas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    switch(position) {
+                        case 0:
+                            filtro=0;
+                            ordenarlista(0);
+                            break;
+                        case 1:
+                            filtro=1;
+                            ordenarlista(1);
+                            break;
+                        case 2:
+                            filtro=2;
+                            ordenarlista(2);
+                            break;
+
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+
+
+            spinnerterminadas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    switch(position) {
+                        case 0:
+                            filtroterminada=0;
+                            ordenarlistaterminadas(0);
+                            break;
+                        case 1:
+                            filtroterminada=1;
+                            ordenarlistaterminadas(1);
+                            break;
+                        case 2:
+                            filtroterminada=2;
+                            ordenarlistaterminadas(2);
+                            break;
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+
+
+
+
+
         }
 
         }else{
@@ -190,6 +278,176 @@ public class solicitudesFragment extends Fragment  {
         }
 
         return v;
+    }
+
+
+
+    private void ordenarlistaterminadas(int orden) {
+
+        ArrayList<Solicitud> listasoliterminadas = new ArrayList<Solicitud>();
+        if(orden ==0){
+            Adaptador ad = new Adaptador(getContext(), listasolicitudterminadasinterna);
+            lista.setAdapter(ad);
+        }
+        if(orden ==1){
+            listasoliterminadas.clear();
+            for (int i = 0; i <listasolicitudterminadasinterna.size() ; i++) {
+
+                if(listasolicitudterminadasinterna.get(i).getEstado().equals("COMPLETADA Y PAGADA")){
+                    listasoliterminadas.add(listasolicitudterminadasinterna.get(i));
+                }
+            }
+            if(listasoliterminadas.size() != 0) {
+                Adaptador ad = new Adaptador(getContext(), listasoliterminadas);
+                ad.refresh(listasoliterminadas);
+                lista.setAdapter(ad);
+            }else{
+                Adaptador ad= new Adaptador(getContext(), listasolicitudterminadasinterna);
+                lista.setAdapter(ad);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alertdialogfiltroestrellas,null);
+                builder.setView(viewsync);
+                AlertDialog dialog7 = builder.create();
+                dialog7.setCancelable(false);
+                dialog7.show();
+                dialog7.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                texto.setText("No se Han encontrado solicitudes con este estado. se mostrarà la lista por defecto");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog7.dismiss();
+                    }
+                });
+            }
+        }
+        if(orden ==2){
+            listasoliterminadas.clear();
+            for (int i = 0; i <listasolicitudterminadasinterna.size() ; i++) {
+
+                if(listasolicitudterminadasinterna.get(i).getEstado().equals("COMPLETADA Y NO PAGADA")){
+                    listasoliterminadas.add(listasolicitudterminadasinterna.get(i));
+                }
+            }
+            if(listasoliterminadas.size() != 0) {
+                Adaptador ad = new Adaptador(getContext(), listasoliterminadas);
+                ad.refresh(listasoliterminadas);
+                lista.setAdapter(ad);
+            }else{
+                Adaptador ad= new Adaptador(getContext(), listasolicitudterminadasinterna);
+                lista.setAdapter(ad);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alertdialogfiltroestrellas,null);
+                builder.setView(viewsync);
+                AlertDialog dialog7 = builder.create();
+                dialog7.setCancelable(false);
+                dialog7.show();
+                dialog7.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                texto.setText("No se Han encontrado solicitudes con este estado. se mostrarà la lista por defecto");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog7.dismiss();
+                    }
+                });
+            }
+        }
+
+
+
+
+
+
+    }
+
+    private void ordenarlista(int orden) {
+        ArrayList<Solicitud> listasoliactivas = new ArrayList<Solicitud>();
+        if(orden ==0){
+            Adaptador ad = new Adaptador(getContext(), listasolicitudactivasinterna);
+            listaactivas.setAdapter(ad);
+        }
+        if(orden ==1){
+            listasoliactivas.clear();
+            for (int i = 0; i <listasolicitudactivasinterna.size() ; i++) {
+
+                if(listasolicitudactivasinterna.get(i).getEstado().equals("PENDIENTE")){
+                    listasoliactivas.add(listasolicitudactivasinterna.get(i));
+                }
+            }
+            if(listasoliactivas.size() != 0) {
+                Adaptador ad = new Adaptador(getContext(), listasoliactivas);
+                ad.refresh(listasoliactivas);
+                listaactivas.setAdapter(ad);
+            }else{
+                Adaptador ad= new Adaptador(getContext(), listasolicitudactivasinterna);
+                listaactivas.setAdapter(ad);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alertdialogfiltroestrellas,null);
+                builder.setView(viewsync);
+                AlertDialog dialog7 = builder.create();
+                dialog7.setCancelable(false);
+                dialog7.show();
+                dialog7.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                texto.setText("No se Han encontrado solicitudes con este estado. se mostrarà la lista por defecto");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog7.dismiss();
+                    }
+                });
+            }
+        }
+        if(orden ==2){
+            listasoliactivas.clear();
+            for (int i = 0; i <listasolicitudactivasinterna.size() ; i++) {
+
+                if(listasolicitudactivasinterna.get(i).getEstado().equals("CONFIRMADA")){
+                    listasoliactivas.add(listasolicitudactivasinterna.get(i));
+                }
+            }
+            if(listasoliactivas.size() != 0) {
+                Adaptador ad = new Adaptador(getContext(), listasoliactivas);
+                ad.refresh(listasoliactivas);
+                listaactivas.setAdapter(ad);
+            }else{
+                Adaptador ad= new Adaptador(getContext(), listasolicitudactivasinterna);
+                listaactivas.setAdapter(ad);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alertdialogfiltroestrellas,null);
+                builder.setView(viewsync);
+                AlertDialog dialog7 = builder.create();
+                dialog7.setCancelable(false);
+                dialog7.show();
+                dialog7.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                texto.setText("No se Han encontrado solicitudes con este estado. se mostrarà la lista por defecto");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog7.dismiss();
+                    }
+                });
+            }
+        }
+
     }
 
 
@@ -204,17 +462,33 @@ public class solicitudesFragment extends Fragment  {
             @Override
             public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
                 if (!response.isSuccessful()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog3 = builder.create();
+                    dialog3.setCancelable(false);
+                    dialog3.show();
+                    dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                    texto.setText("Ha ocurrido un error con la respuesta al tratar de traer las listas de solicitudes. intente en un momento nuevamente.");
+                    Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
 
-
-
+                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog3.dismiss();
+                        }
+                    });
 
                     Toast.makeText(getContext(), "error/soli/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
+
                     List<Solicitud> solicituds = response.body();
                     Solicitudesterminadas.clear();
                     listasolicitudterminadasinterna.clear();
                     listasolicitudactivasinterna.clear();
-                    listasolicitudfinalizando.clear();
+                 //  listasolicitudfinalizando.clear();
                     for (Solicitud solicitud : solicituds) {
                         Solicitud Solicitud1 = new Solicitud();
                         //se setean los valores del trabajador
@@ -230,42 +504,42 @@ public class solicitudesFragment extends Fragment  {
                     for (int i = 0; i < Solicitudesterminadas.size(); i++) {
                         Solicitud soli = new Solicitud();
                         soli = Solicitudesterminadas.get(i);
-                        if ( soli.getEstado().equals("PENDIENTE")  ) {
+                        if ( soli.getEstado().equals("PENDIENTE")  || soli.getEstado().equals("CONFIRMADA") ) {
                             listasolicitudactivasinterna.add(soli);
-                        } if(soli.getEstado().equals("COMPLETADA Y PAGADA") || soli.getEstado().equals("COMPLETADA Y NO PAGADA") || soli.getEstado().equals("FINALIZANDO") ) {
+                        } if(soli.getEstado().equals("COMPLETADA Y PAGADA") || soli.getEstado().equals("COMPLETADA Y NO PAGADA")  ) {
                             listasolicitudterminadasinterna.add(soli);
                         }
                     }
                     //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
                     if (listasolicitudterminadasinterna.size() != 0) {
                         //se instancia la recarga de los items que se encuentan en la lista de aceptadas / finalisadas
-                        ads2.refresh(listasolicitudterminadasinterna);
-                        lista.setAdapter(ads2);
+                        Adaptador adsnoti = new Adaptador(getContext(), listasolicitudterminadasinterna);
+                        lista.setAdapter(adsnoti);
+
                         loadinglista.setVisibility(View.INVISIBLE);
                         loadinglista.pauseAnimation();
 
                         listavacia.setVisibility(View.INVISIBLE);
                         listavacia.pauseAnimation();
-                        notfound.setText("");
+                      //  notfound.setText("");
+
+
 
                     }if (listasolicitudterminadasinterna.size()==0){
-                        ads2.refresh(listasolicitudterminadasinterna);
-                        lista.setAdapter(ads2);
+
+                        ordenarlista(0);
                         loadinglista.setVisibility(View.INVISIBLE);
                         loadinglista.pauseAnimation();
 
                         listavacia.setVisibility(View.VISIBLE);
                         listavacia.playAnimation();
 
-                        notfound.setText("No Posee Solicitudes");
-
-
+                      //  notfound.setText("No Posee Solicitudes");
 
                     }
 
                     if(listasolicitudactivasinterna.size()!=0){
-                        ads.refresh(listasolicitudactivasinterna);
-                        listaactivas.setAdapter(ads);
+                        ordenarlistaterminadas(filtroterminada);
                         loadinglistaactiva.setVisibility(View.INVISIBLE);
                         loadinglistaactiva.pauseAnimation();
 
@@ -274,17 +548,18 @@ public class solicitudesFragment extends Fragment  {
 
                     }
                     if(listasolicitudactivasinterna.size()==0){
-                        ads.refresh(listasolicitudactivasinterna);
-                        listaactivas.setAdapter(ads);
+                        ordenarlistaterminadas(0);
                         loadinglistaactiva.setVisibility(View.INVISIBLE);
                         loadinglistaactiva.pauseAnimation();
 
                         listaactivavacia.setVisibility(View.VISIBLE);
                         listaactivavacia.playAnimation();
 
-
                     }
 
+
+                    spinneractivas.setVisibility(View.VISIBLE);
+                    spinnerterminadas.setVisibility(View.VISIBLE);
 
                     refreshLayoutterminadas.setRefreshing(false);
                 }
@@ -292,20 +567,24 @@ public class solicitudesFragment extends Fragment  {
             @Override
             public void onFailure(Call<List<Solicitud>> call, Throwable t) {
                 Toast.makeText(getContext(), "error/soli/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
-                loadinglista.setVisibility(View.INVISIBLE);
-                loadinglista.pauseAnimation();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                builder.setView(viewsync);
+                AlertDialog dialog4 = builder.create();
+                dialog4.setCancelable(false);
+                dialog4.show();
+                dialog4.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
 
-                listavacia.setVisibility(View.VISIBLE);
-                listavacia.playAnimation();
-
-
-                loadinglistaactiva.setVisibility(View.INVISIBLE);
-                loadinglistaactiva.pauseAnimation();
-
-                listaactivavacia.setVisibility(View.VISIBLE);
-                listaactivavacia.playAnimation();
-
-                notfound.setText("No Posee Solicitudes");
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog4.dismiss();
+                    }
+                });
             }
         });
 

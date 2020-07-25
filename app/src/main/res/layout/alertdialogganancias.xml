@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/round_async_dialog"
+    android:orientation="vertical">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <TextView
+                        android:id="@+id/txt001"
+                        android:layout_width="match_parent"
+                        android:gravity="center"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:textSize="20dp"
+                        android:textColor="@color/colordark"
+                        android:text="Seleccione el rango de tiempo en el que desea saber sus ganancias"
+                        android:layout_height="wrap_content"
+                        ></TextView>
+
+
+
+                    <LinearLayout
+                        android:id="@+id/linear"
+                        android:layout_below="@+id/txt001"
+                        android:layout_marginTop="25dp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent">
+
+
+
+                        <Button
+                            android:textColor="@color/colordark"
+                            android:layout_margin="8dp"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="40dp"
+                            android:layout_marginRight="40dp"
+                            android:layout_marginTop="14dp"
+                            android:id="@+id/btnfechainicio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_btngananciasalert"
+                            android:text="Fecha inicio">
+                        </Button>
+
+
+                        <Button
+                            android:textColor="@color/colordark"
+                            android:layout_margin="8dp"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="40dp"
+                            android:layout_marginRight="40dp"
+                            android:layout_marginTop="14dp"
+                            android:id="@+id/btnfechafin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_btngananciasalert"
+                            android:text="Fecha fin">
+                        </Button>
+
+
+                    </LinearLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/relative"
+                        android:gravity="center"
+                        android:layout_below="@id/linear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:visibility="gone"
+                                android:layout_centerHorizontal="true"
+                                android:id="@+id/animacionfechaseleccionada"
+                                android:layout_width="100dp"
+                                android:layout_height="50dp"
+                                app:lottie_rawRes="@raw/perfilexito"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="false"
+                                ></com.airbnb.lottie.LottieAnimationView>
+
+                        <TextView
+                            android:visibility="gone"
+                            android:layout_below="@id/animacionfechaseleccionada"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textSize="20dp"
+                            android:fontFamily="sans-serif-condensed-medium"
+                            android:textColor="@color/colordark"
+                            android:id="@+id/txtdatosseleccionados"
+                            ></TextView>
+
+                    </RelativeLayout>
+
+
+                    <LinearLayout
+                        android:layout_below="@id/relative"
+                        android:layout_marginTop="10dp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_alignParentBottom="true">
+
+                        <Button
+                            android:layout_margin="8dp"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="40dp"
+                            android:layout_marginRight="40dp"
+                            android:layout_marginTop="14dp"
+                            android:id="@+id/btncerraralert"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_ripple"
+                            android:text="cerrar cuadro">
+                        </Button>
+
+
+                        <Button
+                            android:layout_margin="8dp"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="40dp"
+                            android:layout_marginRight="40dp"
+                            android:layout_marginTop="14dp"
+                            android:id="@+id/btnconsultarganancias"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_btnsync"
+                            android:text="finalizar">
+                        </Button>
+
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+            </ScrollView>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

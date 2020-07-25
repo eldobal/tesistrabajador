@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <RelativeLayout
             android:id="@+id/homerelative01"
             android:layout_marginTop="20dp"
@@ -211,24 +210,128 @@
 
 
             </LinearLayout>
+
         </RelativeLayout>
+
+
 
 
         <RelativeLayout
             android:layout_below="@+id/homerelative02"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/piechart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+         <RelativeLayout
+             android:id="@+id/relative1"
+             android:layout_width="match_parent"
+             android:layout_marginTop="10dp"
+             android:layout_height="wrap_content">
 
-            ></com.github.mikephil.charting.charts.PieChart>
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
 
+                 <RelativeLayout
+
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content">
+
+                     <TextView
+                         android:layout_centerVertical="true"
+                         android:gravity="center"
+                         android:textSize="26dp"
+                         android:layout_marginTop="10dp"
+                         android:fontFamily="sans-serif-condensed-medium"
+                         android:textColor="@color/colordark"
+                         android:layout_width="160dp"
+                         android:layout_height="wrap_content"
+                         android:text="Ganancias:"
+                         ></TextView>
+
+
+                     <RelativeLayout
+                         android:layout_marginLeft="130dp"
+
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content">
+
+                         <Button
+                             android:elevation="20dp"
+                             android:background="@drawable/bg_btnganancias"
+                             android:layout_margin="6dp"
+                             android:id="@+id/btncalcularganancias"
+                             android:layout_centerInParent="true"
+                             android:text="Calcular"
+                             android:gravity="center"
+                             android:layout_width="170dp"
+                             android:layout_height="wrap_content"></Button>
+
+                     </RelativeLayout>
+
+
+                 </RelativeLayout>
+
+
+             </LinearLayout>
+
+         </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_below="@id/relative1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/idcardinfoganancia"
+                    android:layout_width="match_parent"
+                    android:layout_margintop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentTop="true"
+                    android:padding="8dp"
+                    android:backgroundTint="@color/colorAccent"
+                    app:cardCornerRadius="30dp"
+                    app:cardElevation="6dp">
+
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/idanimacionlistasolicitud2"
+                        app:lottie_rawRes="@raw/loadinglistasolicitudes"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                    </com.airbnb.lottie.LottieAnimationView>
+
+
+
+
+
+                        <TextView
+                            android:layout_gravity="center"
+                            android:id="@+id/txtnotfoundhome2"
+                            android:padding="8dp"
+                            android:textSize="18dp"
+                            android:textColor="@color/colordark"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            ></TextView>
+
+
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
 
 
         </RelativeLayout>
+
+
+
     </RelativeLayout>
 
 

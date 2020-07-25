@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/round_async_dialog"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colordark"
+        android:textSize="22dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:id="@+id/txtdatepicker"
+        ></TextView>
+
+
+    <DatePicker
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></DatePicker>
+
+    <LinearLayout
+        android:layout_below="@+id/txt001"
+        android:layout_marginTop="25dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <Button
+            android:textColor="@color/colordark"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="14dp"
+            android:id="@+id/btnfechainicio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_btngananciasalert"
+            android:text="cerrar cuadro">
+        </Button>
+
+
+        <Button
+            android:textColor="@color/colordark"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="14dp"
+            android:id="@+id/btnfechafin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_btngananciasalert"
+            android:text="Seleccionar">
+        </Button>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

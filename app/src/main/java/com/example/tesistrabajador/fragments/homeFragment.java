@@ -127,7 +127,7 @@ public class homeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_home, container, false);
-        pieChart = (PieChart) v.findViewById(R.id.piechart);
+       // pieChart = (PieChart) v.findViewById(R.id.piechart);
         notfound = (TextView) v.findViewById(R.id.txtnotfoundhome);
         nombretrabajdor =(TextView) v.findViewById(R.id.txthomenombre);
         btncambiodeestado =(Button) v.findViewById(R.id.btncambiodeestadotrabajador);
@@ -203,12 +203,12 @@ public class homeFragment extends Fragment {
             Toast.makeText(getContext(), "Error en la conecctacion del dispocitivo, asegurese de que tenga coneccion", Toast.LENGTH_LONG).show();
         }
 
-        pieChart.setRotationEnabled(true);
-        pieChart.setHoleRadius(25f);
-        pieChart.setTransparentCircleAlpha(0);
-        pieChart.setCenterText("$");
-        pieChart.setCenterTextSize(10);
-        pieChart.setDrawEntryLabels(true);
+       // pieChart.setRotationEnabled(true);
+       // pieChart.setHoleRadius(25f);
+       // pieChart.setTransparentCircleAlpha(0);
+       // pieChart.setCenterText("$");
+       // pieChart.setCenterTextSize(10);
+       // pieChart.setDrawEntryLabels(true);
         addDataSet();
 
 

@@ -192,13 +192,65 @@
                         android:visibility="gone" />
 
 
+                    <RelativeLayout
+                        android:id="@+id/layoutfinalizar"
+                        android:layout_below="@id/btncomollegar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <Button
+
+                            android:visibility="gone"
+                            android:layout_margin="20dp"
+                            android:id="@+id/btnfinalizarsolicitud"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:background="@drawable/bg_btnsync"
+                            android:text="Finalizar la solicitud"
+                            android:textSize="16dp"
+                            android:textColor="@color/colordark"
+                            ></Button>
+
+
+
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/layoutmetodopago"
+                        android:layout_below="@id/layoutfinalizar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <Button
+                            android:visibility="gone"
+                            android:id="@+id/confirmarpagoefectivo"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_btnsync"
+                            android:text="confirmar pago efectivo"
+                            android:textSize="16dp"
+                            android:textColor="@color/colordark"
+                            ></Button>
+
+
+
+
+                    </RelativeLayout>
+
+
+
+
                     <androidx.cardview.widget.CardView
                         android:id="@+id/carddescripcionproblema"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_rowWeight="1"
                         android:layout_columnWeight="1"
-                        android:layout_below="@id/btncomollegar"
+                        android:layout_below="@id/layoutmetodopago"
                         android:layout_margin="12dp"
                         android:backgroundTint="@color/colorAccent"
                         android:clickable="true"
@@ -445,50 +497,6 @@
 
             </GridLayout>
 
-
-           <RelativeLayout
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content">
-
-               <Button
-                   android:visibility="gone"
-                   android:layout_margin="20dp"
-                   android:id="@+id/btnfinalizarsolicitud"
-                   android:layout_width="match_parent"
-                   android:layout_height="50dp"
-                   android:background="@drawable/bg_btnsync"
-                   android:text="Finalizar la solicitud"
-                   android:textSize="16dp"
-                   android:textColor="@color/colordark"
-                   ></Button>
-
-
-
-
-           </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:visibility="gone"
-                    android:id="@+id/confirmarpagoefectivo"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_btnsync"
-                    android:text="confirmar pago efectivo"
-                    android:textSize="16dp"
-                    android:textColor="@color/colordark"
-                    ></Button>
-
-
-
-
-            </RelativeLayout>
 
 
 

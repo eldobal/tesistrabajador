@@ -9,8 +9,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.text.TextUtils;
@@ -39,10 +41,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Query;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class DetalleSolicitudFragment extends Fragment {
     SweetAlertDialog dp;
     Solicitud solicitud = new Solicitud();
@@ -84,7 +82,6 @@ public class DetalleSolicitudFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_detalle_solicitud, container, false);
-
         btnfinalizar = (Button) v.findViewById(R.id.btnfinalizarsolicitud);
         btnconfirmarpago = (Button) v.findViewById(R.id.confirmarpagoefectivo);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
@@ -93,7 +90,6 @@ public class DetalleSolicitudFragment extends Fragment {
         if (datosRecuperados != null) {
             idsolicitud = datosRecuperados.getInt("idsolicitud");
         }
-
 
         btncomollegar = (Button) v.findViewById(R.id.btncomollegar);
         Retrofit retrofit = new Retrofit.Builder()
@@ -106,7 +102,6 @@ public class DetalleSolicitudFragment extends Fragment {
             @Override
             public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
                 if(!response.isSuccessful()){
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     LayoutInflater inflater = getLayoutInflater();
                     View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
@@ -142,7 +137,6 @@ public class DetalleSolicitudFragment extends Fragment {
                         btnfinalizar.setVisibility(View.GONE);
                         btnconfirmarpago.setVisibility(View.GONE);
                     }
-
                     if(solicituds.getEstado().equals("COMPLETADA Y PAGADA") || solicituds.getEstado().equals("COMPLETADA Y NO PAGADA")){
                         btncomollegar.setVisibility(View.GONE);
                         btnfinalizar.setVisibility(View.GONE);
@@ -166,8 +160,6 @@ public class DetalleSolicitudFragment extends Fragment {
                     }
                     estadosolicitud.setText("Estado : "+solicituds.getEstado());
                     descripciondetallesolicitud.setText(solicituds.getDescripcionP());
-
-
                     soluciondetallesolicitud.setText(solicituds.getSolucion());
                     latitud=(solicituds.getLatitud());
                     longitud=solicituds.getLongitud();
@@ -175,7 +167,6 @@ public class DetalleSolicitudFragment extends Fragment {
                     Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getFotoT())).into(imgperfiltrabajador);
                     //carga de foto cargada por el usuario
                     Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getIdFoto())).into(imgclientesacada);
-
                 }
             }
             @Override
@@ -198,12 +189,9 @@ public class DetalleSolicitudFragment extends Fragment {
                         dialog2.dismiss();
                     }
                 });
-
-
                 Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-
 
 
             btncomollegar.setOnClickListener(new View.OnClickListener() {
@@ -242,7 +230,6 @@ public class DetalleSolicitudFragment extends Fragment {
                 Button btndismiss = viewsync.findViewById(R.id.btncerraralert);
                 Button btnfinalizar = viewsync.findViewById(R.id.btnfinalizarsolicitud);
 
-
                 btndismiss.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -256,7 +243,6 @@ public class DetalleSolicitudFragment extends Fragment {
                     public void onClick(View view) {
                         int precio = Integer.parseInt(preciofinal.getText().toString());
                         String solucionopcional = solucion.getText().toString();
-
                         if(precio != 0){
                             Retrofit retrofit = new Retrofit.Builder()
                                     .baseUrl("http://proyectotesis.ddns.net/")
@@ -287,18 +273,19 @@ public class DetalleSolicitudFragment extends Fragment {
                                                 dialog3.dismiss();
                                                 dialog4.dismiss();
                                                 //enviar a la lista de solicitudes
-                                                showSelectedFragment(new solicitudesFragment());
+                                                homeFragment homeFragment = new homeFragment();
+                                                FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+                                                FragmentTransaction ft = fm.beginTransaction();
+                                                ft.replace(R.id.container, homeFragment);
+                                                ft.commit();
                                             }
                                         });
-
                                         Toast.makeText(getContext(), "error/detalle/finalizar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
                                     }
                                     //de lo contrario se ejecuta esta parte
                                     else {
                                         //respuesta del request
-
                                         String respusta = response.body();
-
                                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                             View viewsync2 = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
                                             builder.setView(viewsync2);
@@ -313,10 +300,13 @@ public class DetalleSolicitudFragment extends Fragment {
                                                 @Override
                                                 public void onClick(View view) {
                                                     //enviar a la lista de solicitudes
-                                                    showSelectedFragment(new homeFragment());
+                                                    homeFragment home = new homeFragment();
+                                                    FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+                                                    FragmentTransaction ft = fm.beginTransaction();
+                                                    ft.replace(R.id.container, home,"hometag");
+                                                    ft.commit();
                                                     dialog5.dismiss();
                                                     dialog3.dismiss();
-
                                                 }
                                             });
 

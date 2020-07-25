@@ -60,7 +60,6 @@ public class homeFragment extends Fragment {
 
     private float[] ydata = {33.00f ,23.0f ,30.22f,33.44f,12.33f};
     private String[] xdata ={"sebastian ","daniel","cristobal","pablo","ricardo"};
-
     TextView notfound;
     LottieAnimationView loadinglista,loadingperfil;
     private ListView listaactivas;
@@ -95,6 +94,32 @@ public class homeFragment extends Fragment {
         // listasolicitudesterminadas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistasterminadas");
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo = connectivityManager.getActiveNetworkInfo();
+        asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
+        prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        settiempoasyncexist();
+        setcredentiasexist();
+
+        homeFragment test = (homeFragment) getActivity().getSupportFragmentManager().findFragmentByTag("hometag");
+
+
+        final Handler handler = new Handler();
+        Timer timer = new Timer();
+
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() {
+                        if(test != null && test.isVisible() && NetworkInfo.isConnected() && NetworkInfo !=null) {
+                            // reiniciarfragment(rutusuario);
+                            reiniciarfragmentterminadas(rutusuario);
+                        }
+                    }
+                });
+            }
+        };
+        timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
+
     }
 
     @Override
@@ -107,13 +132,10 @@ public class homeFragment extends Fragment {
         nombretrabajdor =(TextView) v.findViewById(R.id.txthomenombre);
         btncambiodeestado =(Button) v.findViewById(R.id.btncambiodeestadotrabajador);
         fotoperfil = (ImageView) v.findViewById(R.id.idimagenperfiltrabajador);
-        asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
-        prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         loadinglista = (LottieAnimationView) v.findViewById(R.id.idanimacionlistasolicitud);
         loadingperfil = (LottieAnimationView) v.findViewById(R.id.loadinglistaimgperfilhome);
         //se buscan el usuario y el tiempo de sync de la app
-        settiempoasyncexist();
-        setcredentiasexist();
+
 
         if (NetworkInfo != null && NetworkInfo.isConnected()) {
 
@@ -156,25 +178,6 @@ public class homeFragment extends Fragment {
                         }
                     }
                 }.start();
-
-
-                final Handler handler = new Handler();
-                Timer timer = new Timer();
-
-                TimerTask task = new TimerTask() {
-                    @Override
-                    public void run() {
-                        handler.post(new Runnable() {
-                            public void run() {
-                                if (isAdded() && isVisible() && getUserVisibleHint()) {
-                                        // reiniciarfragment(rutusuario);
-                                        reiniciarfragmentterminadas(rutusuario);
-                                }
-                            }
-                        });
-                    }
-                };
-                timer.schedule(task, 15000, azynctiempo);  //ejecutar en intervalo definido por el programador
 
               /*  refreshLayoutterminadas.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                     @Override

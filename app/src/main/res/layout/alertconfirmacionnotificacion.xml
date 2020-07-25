@@ -67,6 +67,18 @@
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true">
 
+        <Button
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="14dp"
+            android:id="@+id/btncancelarnotificacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_ripple"
+            android:text="eliminar">
+        </Button>
 
 
         <Button
@@ -78,23 +90,11 @@
             android:id="@+id/btnconfirmarnotificacion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_ripple"
+            android:background="@drawable/bg_btnsync"
             android:text="Confirmar">
         </Button>
 
 
-        <Button
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="14dp"
-            android:id="@+id/btncancelarnotificacion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_btnsync"
-            android:text="eliminar">
-        </Button>
 
 
     </LinearLayout>

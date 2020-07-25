@@ -96,10 +96,40 @@ public class listanotificacionesFragment extends Fragment {
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
       //
+
+        //prefs que contienen datos del usuario
+        setcredentiasexist();
+        //prefs del tiempo de sync de la app
+        settiempoasyncexist();
+
         notificationManager = NotificationManagerCompat.from(getActivity());
         //refreshnotificaciones =(SwipeRefreshLayout) getActivity().findViewById(R.id.refreshnotificaciones);
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+
+        listanotificacionesFragment test = (listanotificacionesFragment) getActivity().getSupportFragmentManager().findFragmentByTag("notificacionestag");
+
+
+        final Handler handler = new Handler();
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() {
+                        if(test != null && test.isVisible() && NetworkInfo.isConnected() && NetworkInfo !=null) {
+                            // adsnoti.refresh(arraylistanotificaciones);
+                            reiniciarfragmentnotificacionesASYNC(rutusuario);
+                        }
+                    }
+                });
+            }
+        };
+        timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
+
+
+
     }
 
     @Override
@@ -115,10 +145,7 @@ public class listanotificacionesFragment extends Fragment {
           animationnotificationloadign = (LottieAnimationView) v.findViewById(R.id.animationotificationloading);
           animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
           animationnotification.setVisibility(View.INVISIBLE);
-            //prefs que contienen datos del usuario
-            setcredentiasexist();
-            //prefs del tiempo de sync de la app
-            settiempoasyncexist();
+
 
             reiniciarfragmentnotificacionesASYNC(rutusuario);
 
@@ -142,26 +169,6 @@ public class listanotificacionesFragment extends Fragment {
                             //se setea el adaptador a la lista del fragments
                             listanotificaciones.setAdapter(adsnoti);
                         }
-
-                listanotificacionesFragment test = (listanotificacionesFragment) getActivity().getSupportFragmentManager().findFragmentByTag("notificacionestag");
-
-
-                final Handler handler = new Handler();
-                Timer timer = new Timer();
-                TimerTask task = new TimerTask() {
-                    @Override
-                    public void run() {
-                        handler.post(new Runnable() {
-                            public void run() {
-                                if(test != null && test.isVisible() && NetworkInfo.isConnected() && NetworkInfo !=null) {
-                                     // adsnoti.refresh(arraylistanotificaciones);
-                                     reiniciarfragmentnotificacionesASYNC(rutusuario);
-                                }
-                            }
-                        });
-                    }
-                };
-                timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
 
         }
 

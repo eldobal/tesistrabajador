@@ -26,6 +26,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.bumptech.glide.Glide;
 import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.fragments.DetalleSolicitudFragment;
+import com.example.tesistrabajador.fragments.solicitudesFragment;
 import com.example.tesistrabajador.interfaces.tesisAPI;
 
 import java.io.Serializable;
@@ -96,6 +97,9 @@ public class Adaptador extends BaseAdapter implements Serializable {
         final Button detalle = (Button) vista.findViewById(R.id.btndetallesolicitud);
 
         int idsolicitud = listasolicitudes.get(i).getIdSolicitud();
+        String descripcion = listasolicitudes.get(i).getDescripcionP();
+
+
         numerosolicitud.setText("N Solicitud: "+String.valueOf(listasolicitudes.get(i).getIdSolicitud()));
         fechasolicitud.setText("Fecha: "+listasolicitudes.get(i).getFechaS());
         estadosolicitud.setText(listasolicitudes.get(i).getEstado());
@@ -191,7 +195,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                     Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
 
                     textoalertnotificacion.setText("Si Apreta el boton confirmar devera especificar un precio aprox y luego se le notificara al cliente" +
-                            ". Si selecciona cancelar se eliminara esta solicitud y se le notificara de igual manera al cliente.(si no desea realizar ninguna accion seleeccione fuerta de este recuadro)");
+                            ". Si selecciona cancelar se eliminara esta solicitud y se le notificara de igual manera al cliente.(Descripcion "+descripcion+")");
 
                     dismiss.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -240,6 +244,11 @@ public class Adaptador extends BaseAdapter implements Serializable {
 
                                             Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                                         } else {
+                                            solicitudesFragment soli = new solicitudesFragment();
+                                            FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
+                                            FragmentTransaction ft = fm.beginTransaction();
+                                            ft.replace(R.id.container, soli,"solicitudtag");
+                                            ft.commit();
                                             listasolicitudes.remove(i);
                                             refresh(listasolicitudes);
                                             dialog.dismiss();
@@ -294,7 +303,6 @@ public class Adaptador extends BaseAdapter implements Serializable {
                         }
                     });
 
-
                     btncancelar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -330,6 +338,11 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                         Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                                     }
                                     else {
+                                        solicitudesFragment soli = new solicitudesFragment();
+                                        FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
+                                        FragmentTransaction ft = fm.beginTransaction();
+                                        ft.replace(R.id.container, soli,"solicitudtag");
+                                        ft.commit();
                                         dialog.dismiss();
                                         listasolicitudes.remove(i);
                                         refresh(listasolicitudes);

@@ -2,13 +2,13 @@ package com.example.tesistrabajador.activitys;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.app.FragmentManager;
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -17,22 +17,18 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.clases.Adaptadornotificaciones;
 import com.example.tesistrabajador.clases.Notificacion;
@@ -41,27 +37,16 @@ import com.example.tesistrabajador.fragments.homeFragment;
 import com.example.tesistrabajador.fragments.listanotificacionesFragment;
 import com.example.tesistrabajador.fragments.perfilFragment;
 import com.example.tesistrabajador.fragments.settingsFragment;
-import com.example.tesistrabajador.fragments.sobrenosotrosFragment;
 import com.example.tesistrabajador.fragments.solicitudesFragment;
-import com.example.tesistrabajador.interfaces.tesisAPI;
 import com.example.tesistrabajador.mapclasses.TaskLoadedCallback;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class menuActivity extends AppCompatActivity implements TaskLoadedCallback {
     private GoogleSignInClient googleSignInClient;
@@ -94,11 +79,47 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
         setContentView(R.layout.activity_menu);
         solicitudesFragment solicitudeFragment = new solicitudesFragment();
         listanotificacionesFragment listanotificacionesFragment = new listanotificacionesFragment();
+        homeFragment homeFragment  = new homeFragment();
         notificationManager = NotificationManagerCompat.from(this);
         setContentView(R.layout.activity_menu);
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         prefsnotificacion = getSharedPreferences("PreferencesNotificacion", Context.MODE_PRIVATE);
         setcredentiasexist();
+
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        1);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        1);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+
+        }
 
         //al momento de crear el home en el onCreate cargar con el metodo sin backtostack
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -119,8 +140,6 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
             Toast.makeText(menuActivity.this, "Nombre"+personName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
         }
 
-
-
         mbottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomnavigation);
         //se carga como primer fragment la lista de Notificaciones
         getSupportFragmentManager().beginTransaction().replace(R.id.container,new listanotificacionesFragment()).commit();
@@ -129,12 +148,18 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 //se muestra el fragment de peril
                 if(menuItem.getItemId()== R.id.menu_profile){
-                    showSelectedFragment(new perfilFragment());
-
+                   // showSelectedFragment(new perfilFragment());
+                        showSelectedFragment(new perfilFragment());
                 }
                 //se muestra el fragment de rubros
                 if(menuItem.getItemId()== R.id.menu_home){
-                    showSelectedFragment(new homeFragment());
+                    //showSelectedFragment(new homeFragment());
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment, "hometag")
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            //permite regresar hacia atras entre los fragments
+                            .addToBackStack(null)
+                            .commit();
+
                 }
                 //se muestra el fragment de la lista de solicitudes
                 if(menuItem.getItemId()==R.id.menu_solicitud){
@@ -296,7 +321,7 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
         getSupportFragmentManager().beginTransaction().add(R.id.container,fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 //permite regresar hacia atras entre los fragments
-                .addToBackStack(null)
+                //.addToBackStack(null)
                 .commit();
     }
 

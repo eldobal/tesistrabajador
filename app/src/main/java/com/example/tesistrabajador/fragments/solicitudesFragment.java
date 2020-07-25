@@ -79,6 +79,8 @@ public class solicitudesFragment extends Fragment  {
     TextView notfound;
     NetworkInfo NetworkInfo;
     Spinner spinneractivas,spinnerterminadas;
+    Boolean timeractivado = false;
+
     public solicitudesFragment() {
         // Required empty public constructor
     }
@@ -92,14 +94,51 @@ public class solicitudesFragment extends Fragment  {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        Solicitudescomparar = new ArrayList<Solicitud>();
+        listasolicitudesterminadas = new ArrayList<Solicitud>();
+        listasolicitudactivas = new ArrayList<Solicitud>();
+        listasolicitudterminadasinterna = new ArrayList<Solicitud>();
+        listasolicitudactivasinterna = new ArrayList<Solicitud>();
+
+        asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
+        prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+
+
+        settiempoasyncexist();
+        setcredentiasexist();
+
+
+        solicitudesFragment test = (solicitudesFragment) getActivity().getSupportFragmentManager().findFragmentByTag("solicitudtag");
+
+
+        final Handler handler = new Handler();
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() {
+                        if(test != null && test.isVisible() && NetworkInfo.isConnected() && NetworkInfo !=null ) {
+                            // reiniciarfragment(rutusuario);
+                            reiniciarfragmentterminadas(rutusuario);
+                            timeractivado = true;
+                        }
+                    }
+                });
+            }
+        };
+        timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
+
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_solicitudes, container, false);
-        asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
-        prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+
         loadinglista = (LottieAnimationView) v.findViewById(R.id.idanimacionlistasolicitud);
         listavacia = (LottieAnimationView) v.findViewById(R.id.idanimacionlistavacia);
         loadinglistaactiva = (LottieAnimationView) v.findViewById(R.id.idanimacionlistasolicitud2);
@@ -107,14 +146,8 @@ public class solicitudesFragment extends Fragment  {
         listavacia.setVisibility(View.INVISIBLE);
         listaactivavacia.setVisibility(View.INVISIBLE);
         //se buscan el usuario y el tiempo de sync de la app
-        settiempoasyncexist();
-        setcredentiasexist();
 
-        Solicitudescomparar = new ArrayList<Solicitud>();
-        listasolicitudesterminadas = new ArrayList<Solicitud>();
-        listasolicitudactivas = new ArrayList<Solicitud>();
-        listasolicitudterminadasinterna = new ArrayList<Solicitud>();
-        listasolicitudactivasinterna = new ArrayList<Solicitud>();
+
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -146,9 +179,13 @@ public class solicitudesFragment extends Fragment  {
             getActivity().finish();
             Toast.makeText(getContext(), "el Usuario no es valido ", Toast.LENGTH_LONG).show();
         }else{
+           // listasolicitudactivasinterna.clear();
+           // listasolicitudterminadasinterna.clear();
+
+
             ads = new Adaptador(getContext(), listasolicitudactivasinterna);
             ads2 = new Adaptador(getContext(), listasolicitudterminadasinterna);
-          //  reiniciarfragmentterminadas(rutusuario);
+            reiniciarfragmentterminadas(rutusuario);
             listaactivas = (ListView) v.findViewById(R.id.solicitudactual);
             lista = (ListView) v.findViewById(R.id.listadosolicitudescliente);
             //declaracion de los swiperefresh para intanciarlos
@@ -158,41 +195,21 @@ public class solicitudesFragment extends Fragment  {
             //notfound.setText("");
             final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
 
-      /*      new CountDownTimer(1500,1000){
+
+            /*
+           new CountDownTimer(1500,1000){
                 @Override
                 public void onTick(long millisUntilFinished) {
                 }
                 @Override
                 public void onFinish() {
-                    if (listasolicitudterminadasinterna.size() != 0) {
-                        //se setea el adaptador a la lista del fragments
-                        lista.setAdapter(ads2);
-                    }
-                    if(listasolicitudactivasinterna.size()!=0){
-                        listaactivas.setAdapter(ads);
-                    }
+
                 }
             }.start();
 */
 
-            solicitudesFragment test = (solicitudesFragment) getActivity().getSupportFragmentManager().findFragmentByTag("solicitudtag");
 
-            final Handler handler = new Handler();
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() {
-                @Override
-                public void run() {
-                    handler.post(new Runnable() {
-                        public void run() {
-                            if(test != null && test.isVisible() && NetworkInfo.isConnected() && NetworkInfo !=null) {
-                                    // reiniciarfragment(rutusuario);
-                                    reiniciarfragmentterminadas(rutusuario);
-                            }
-                        }
-                    });
-                }
-            };
-            timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
+
 
 
             refreshLayoutterminadas.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -264,10 +281,6 @@ public class solicitudesFragment extends Fragment  {
 
                 }
             });
-
-
-
-
 
 
         }
@@ -361,10 +374,6 @@ public class solicitudesFragment extends Fragment  {
                 });
             }
         }
-
-
-
-
 
 
     }
@@ -497,6 +506,7 @@ public class solicitudesFragment extends Fragment  {
                         Solicitud1.setNombre(solicitud.getNombre());
                         Solicitud1.setApellido(solicitud.getApellido());
                         Solicitud1.setEstado(solicitud.getEstado());
+                        Solicitud1.setDescripcionP(solicitud.getDescripcionP());
                         Solicitud1.setFotoT(rutaservidor+solicitud.getFotoT());
                         Solicitudesterminadas.add(Solicitud1);
                     }
@@ -513,9 +523,10 @@ public class solicitudesFragment extends Fragment  {
                     //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
                     if (listasolicitudterminadasinterna.size() != 0) {
                         //se instancia la recarga de los items que se encuentan en la lista de aceptadas / finalisadas
-                        Adaptador adsnoti = new Adaptador(getContext(), listasolicitudterminadasinterna);
-                        lista.setAdapter(adsnoti);
+                       // Adaptador adsnoti = new Adaptador(getContext(), listasolicitudterminadasinterna);
+                        //lista.setAdapter(adsnoti);
 
+                        ordenarlistaterminadas(filtroterminada);
                         loadinglista.setVisibility(View.INVISIBLE);
                         loadinglista.pauseAnimation();
 
@@ -527,7 +538,7 @@ public class solicitudesFragment extends Fragment  {
 
                     }if (listasolicitudterminadasinterna.size()==0){
 
-                        ordenarlista(0);
+                        ordenarlistaterminadas(0);
                         loadinglista.setVisibility(View.INVISIBLE);
                         loadinglista.pauseAnimation();
 
@@ -539,7 +550,7 @@ public class solicitudesFragment extends Fragment  {
                     }
 
                     if(listasolicitudactivasinterna.size()!=0){
-                        ordenarlistaterminadas(filtroterminada);
+                        ordenarlista(filtro);
                         loadinglistaactiva.setVisibility(View.INVISIBLE);
                         loadinglistaactiva.pauseAnimation();
 
@@ -548,7 +559,7 @@ public class solicitudesFragment extends Fragment  {
 
                     }
                     if(listasolicitudactivasinterna.size()==0){
-                        ordenarlistaterminadas(0);
+                        ordenarlista(0);
                         loadinglistaactiva.setVisibility(View.INVISIBLE);
                         loadinglistaactiva.pauseAnimation();
 

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -54,6 +56,9 @@ public class DetalleSolicitudFragment extends Fragment {
     double latitud=0.0,longitud=0.0;
     int pago = 0;
     CardView carddiagnostico;
+    NetworkInfo activeNetwork;
+    ConnectivityManager cm ;
+
 
     public DetalleSolicitudFragment() {
         // Required empty public constructor
@@ -90,109 +95,19 @@ public class DetalleSolicitudFragment extends Fragment {
         if (datosRecuperados != null) {
             idsolicitud = datosRecuperados.getInt("idsolicitud");
         }
-
         btncomollegar = (Button) v.findViewById(R.id.btncomollegar);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-        Call<Solicitud> call = tesisAPI.getSolicitudTrabajador(idsolicitud,rutperfil,contrasenaperfil);
-        call.enqueue(new Callback<Solicitud>() {
-            @Override
-            public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
-                if(!response.isSuccessful()){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    LayoutInflater inflater = getLayoutInflater();
-                    View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
-                    builder.setView(viewsync);
-                    AlertDialog dialog = builder.create();
-                    dialog.setCancelable(false);
-                    dialog.show();
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
-                    texto.setText("Ha ocurrido un error con la respuesta al tratar de traer la solicitud. intente en un momento nuevamente.");
-                    Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
-
-                    btncerrar.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-                    });
 
 
-                    //falta alert dialog para avisar del error
-                    Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
-                }
-                else {
-                    Solicitud solicituds = response.body();
-                    if(solicituds.getEstado().equals("FINALIZADO")){
-                        btncomollegar.setVisibility(View.GONE);
-                        btnfinalizar.setVisibility(View.GONE);
-                        btnconfirmarpago.setVisibility(View.VISIBLE);
-                    }
-                    if(solicituds.getEstado().equals("FINALIZANDO")){
-                        btncomollegar.setVisibility(View.GONE);
-                        btnfinalizar.setVisibility(View.GONE);
-                        btnconfirmarpago.setVisibility(View.GONE);
-                    }
-                    if(solicituds.getEstado().equals("COMPLETADA Y PAGADA") || solicituds.getEstado().equals("COMPLETADA Y NO PAGADA")){
-                        btncomollegar.setVisibility(View.GONE);
-                        btnfinalizar.setVisibility(View.GONE);
-                        btnconfirmarpago.setVisibility(View.GONE);
-                        //invisible por mientras
-                        carddiagnostico.setVisibility(View.GONE);
-                       // diagnosticodetallesolicitud.setText(solicituds.getDiagnostico());
-                    }if (solicituds.getEstado().equals("PENDIENTE") || solicituds.getEstado().equals("ATENDIENDO") ){
-                        btncomollegar.setVisibility(View.VISIBLE);
-                        btnfinalizar.setVisibility(View.VISIBLE);
-                    }
-                    numerosolicitud.setText("N Solicitud: "+solicituds.getIdSolicitud());
-                    fechasolicitud.setText("Creada: "+solicituds.getFechaS());
-                    fechadetallesolicitud.setText("Atendida: "+solicituds.getFechaA());
-                    trabajador.setText("Rut Cliente: "+solicituds.getRUT());
-                    rubro.setText("Rubro: "+solicituds.getRubro());
-                    if(solicituds.getEstado().equals("COMPLETADA Y PAGADA") || solicituds.getEstado().equals("COMPLETADA Y NO PAGADA") || solicituds.getEstado().equals("FINALIZADO")  ){
-                        precio.setText("Precio final: "+solicituds.getPrecio());
-                    }else {
-                        precio.setText("Precio aprox: " + solicituds.getPrecio());
-                    }
-                    estadosolicitud.setText("Estado : "+solicituds.getEstado());
-                    descripciondetallesolicitud.setText(solicituds.getDescripcionP());
-                    soluciondetallesolicitud.setText(solicituds.getSolucion());
-                    latitud=(solicituds.getLatitud());
-                    longitud=solicituds.getLongitud();
-                    //carga de la foto del trabajor
-                    Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getFotoT())).into(imgperfiltrabajador);
-                    //carga de foto cargada por el usuario
-                    Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getIdFoto())).into(imgclientesacada);
-                }
-            }
-            @Override
-            public void onFailure(Call<Solicitud> call, Throwable t) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                LayoutInflater inflater = getLayoutInflater();
-                View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
-                builder.setView(viewsync);
-                AlertDialog dialog2 = builder.create();
-                dialog2.setCancelable(false);
-                dialog2.show();
-                dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
-                texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
-                Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
 
-                btncerrar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog2.dismiss();
-                    }
-                });
-                Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE ){
+            //se carga la solicitud
+            cargardetallesolicitud();
 
+        }else{
+
+        }
 
             btncomollegar.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -241,51 +156,56 @@ public class DetalleSolicitudFragment extends Fragment {
                 btnfinalizar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int precio = Integer.parseInt(preciofinal.getText().toString());
-                        String solucionopcional = solucion.getText().toString();
-                        if(precio != 0){
-                            Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl("http://proyectotesis.ddns.net/")
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
-                            tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-                            Call<String> call = tesisAPI.finalizarSolicitud(rutperfil,contrasenaperfil,idsolicitud,precio,solucionopcional);
-                            call.enqueue(new Callback<String>() {
-                                @Override
-                                public void onResponse( Call<String>call, Response<String> response) {
-                                    //si esta malo se ejecuta este trozo
-                                    if(!response.isSuccessful()){
-                                        AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
-                                        LayoutInflater inflater = getLayoutInflater();
-                                        View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
-                                        builder2.setView(viewsync);
-                                        AlertDialog dialog4 = builder2.create();
-                                        dialog4.setCancelable(false);
-                                        dialog4.show();
-                                        dialog4.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                        TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
-                                        texto.setText("Ha ocurrido un error con la respuesta al tratar de finalizar la solicitud. intente en un momento nuevamente.");
-                                        Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
 
-                                        btncerrar.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                dialog3.dismiss();
-                                                dialog4.dismiss();
-                                                //enviar a la lista de solicitudes
-                                                homeFragment homeFragment = new homeFragment();
-                                                FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-                                                FragmentTransaction ft = fm.beginTransaction();
-                                                ft.replace(R.id.container, homeFragment);
-                                                ft.commit();
-                                            }
-                                        });
-                                        Toast.makeText(getContext(), "error/detalle/finalizar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
-                                    }
-                                    //de lo contrario se ejecuta esta parte
-                                    else {
-                                        //respuesta del request
-                                        String respusta = response.body();
+                        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                        activeNetwork = cm.getActiveNetworkInfo();
+                        if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE ){
+
+                            int precio = Integer.parseInt(preciofinal.getText().toString());
+                            String solucionopcional = solucion.getText().toString();
+                            if(precio != 0){
+                                Retrofit retrofit = new Retrofit.Builder()
+                                        .baseUrl("http://proyectotesis.ddns.net/")
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build();
+                                tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
+                                Call<String> call = tesisAPI.finalizarSolicitud(rutperfil,contrasenaperfil,idsolicitud,precio,solucionopcional);
+                                call.enqueue(new Callback<String>() {
+                                    @Override
+                                    public void onResponse( Call<String>call, Response<String> response) {
+                                        //si esta malo se ejecuta este trozo
+                                        if(!response.isSuccessful()){
+                                            AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
+                                            LayoutInflater inflater = getLayoutInflater();
+                                            View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                                            builder2.setView(viewsync);
+                                            AlertDialog dialog4 = builder2.create();
+                                            dialog4.setCancelable(false);
+                                            dialog4.show();
+                                            dialog4.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                            texto.setText("Ha ocurrido un error con la respuesta al tratar de finalizar la solicitud. intente en un momento nuevamente.");
+                                            Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                            btncerrar.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    dialog3.dismiss();
+                                                    dialog4.dismiss();
+                                                    //enviar a la lista de solicitudes
+                                                    homeFragment homeFragment = new homeFragment();
+                                                    FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+                                                    FragmentTransaction ft = fm.beginTransaction();
+                                                    ft.replace(R.id.container, homeFragment);
+                                                    ft.commit();
+                                                }
+                                            });
+                                            Toast.makeText(getContext(), "error/detalle/finalizar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
+                                        }
+                                        //de lo contrario se ejecuta esta parte
+                                        else {
+                                            //respuesta del request
+                                            String respusta = response.body();
                                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                             View viewsync2 = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
                                             builder.setView(viewsync2);
@@ -311,46 +231,51 @@ public class DetalleSolicitudFragment extends Fragment {
                                             });
 
 
-                                    }
-                                }
-
-                                //si falla el request a la pagina mostrara este error
-                                @Override
-                                public void onFailure(Call<String> call, Throwable t) {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                    LayoutInflater inflater = getLayoutInflater();
-                                    View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
-                                    builder.setView(viewsync);
-                                    AlertDialog dialog6 = builder.create();
-                                    dialog6.setCancelable(false);
-                                    dialog6.show();
-                                    dialog6.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                    TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
-                                    texto.setText("Ha ocurrido un error con la coneccion del servidor. Estamos trabajando para solucionarlo.");
-                                    Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
-
-                                    btncerrar.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            dialog3.dismiss();
-                                            dialog6.dismiss();
-                                            //enviar a la lista de solicitudes
-                                            solicitudesFragment solicitudesFragment = new solicitudesFragment();
-                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, solicitudesFragment, "solicitudtag")
-                                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                                                    //permite regresar hacia atras entre los fragments
-                                                    //.addToBackStack(null)
-                                                    .commit();
                                         }
-                                    });
-                                    Toast.makeText(getContext(), "error/detalle/finalizar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            });
+                                    }
 
+                                    //si falla el request a la pagina mostrara este error
+                                    @Override
+                                    public void onFailure(Call<String> call, Throwable t) {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                        LayoutInflater inflater = getLayoutInflater();
+                                        View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                                        builder.setView(viewsync);
+                                        AlertDialog dialog6 = builder.create();
+                                        dialog6.setCancelable(false);
+                                        dialog6.show();
+                                        dialog6.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                                        texto.setText("Ha ocurrido un error con la coneccion del servidor. Estamos trabajando para solucionarlo.");
+                                        Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                                        btncerrar.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                dialog3.dismiss();
+                                                dialog6.dismiss();
+                                                //enviar a la lista de solicitudes
+                                                solicitudesFragment solicitudesFragment = new solicitudesFragment();
+                                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, solicitudesFragment, "solicitudtag")
+                                                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                                        //permite regresar hacia atras entre los fragments
+                                                        //.addToBackStack(null)
+                                                        .commit();
+                                            }
+                                        });
+                                        Toast.makeText(getContext(), "error/detalle/finalizar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+
+                            }else{
+                                Toast.makeText(v.getContext(), "Ingrese un numero valido", Toast.LENGTH_LONG).show();
+                            }
 
                         }else{
-                            Toast.makeText(v.getContext(), "Ingrese un numero valido", Toast.LENGTH_LONG).show();
+
                         }
+
                     }
                 });
 
@@ -401,100 +326,114 @@ public class DetalleSolicitudFragment extends Fragment {
                         if(r1.isChecked()==false && r2.isChecked()==false){
                             Toast.makeText(v.getContext(), "seleccione una opcion por favor.", Toast.LENGTH_LONG).show();
                         }else{
-                            Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl("http://proyectotesis.ddns.net/")
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
-                            tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-                            //metodo para llamar a la funcion que queramos
-                            //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )
-                            Call<String> call = tesisAPI.ConfirmarPago(rutperfil,contrasenaperfil,idsolicitud,pago);
-                            call.enqueue(new Callback<String>() {
-                                @Override
-                                public void onResponse( Call<String>call, Response<String> response) {
-                                    //si esta malo se ejecuta este trozo
-                                    if(!response.isSuccessful()){
-                                        AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
+
+
+                            cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                            activeNetwork = cm.getActiveNetworkInfo();
+                            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE ){
+
+                                Retrofit retrofit = new Retrofit.Builder()
+                                        .baseUrl("http://proyectotesis.ddns.net/")
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build();
+                                tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
+                                //metodo para llamar a la funcion que queramos
+                                //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )
+                                Call<String> call = tesisAPI.ConfirmarPago(rutperfil,contrasenaperfil,idsolicitud,pago);
+                                call.enqueue(new Callback<String>() {
+                                    @Override
+                                    public void onResponse( Call<String>call, Response<String> response) {
+                                        //si esta malo se ejecuta este trozo
+                                        if(!response.isSuccessful()){
+                                            AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
+                                            LayoutInflater inflater = getLayoutInflater();
+                                            View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                                            builder2.setView(viewsync);
+                                            AlertDialog dialog8 = builder2.create();
+                                            dialog8.setCancelable(false);
+                                            dialog8.show();
+                                            dialog8.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                            texto.setText("Ha ocurrido un error con la respuesta al tratar de confirmar el pago. intente en un momento nuevamente.");
+                                            Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                            btncerrar.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    dialog7.dismiss();
+                                                    dialog8.dismiss();
+                                                    //enviar a la lista de solicitudes
+
+                                                }
+                                            });
+
+                                            Toast.makeText(getContext(), "error/detalle/finalizar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
+                                        }
+                                        //de lo contrario se ejecuta esta parte
+                                        else {
+                                            //respuesta del request
+
+                                            String respusta = response.body();
+                                            btnfinalizar.setVisibility(View.GONE);
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                            View viewsync2 = inflater.inflate(R.layout.alertdialogperfilactualizado, null);
+                                            builder.setView(viewsync2);
+                                            AlertDialog dialog9 = builder.create();
+                                            dialog9.show();
+                                            dialog9.setCancelable(false);
+                                            dialog9.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            Button btncerraralert = viewsync2.findViewById(R.id.btnalertperfilexito);
+                                            TextView texto = (TextView) viewsync2.findViewById(R.id.txtalertnotificacion);
+                                            texto.setText("Ha enviado su respuesta Satisfactoriamente.");
+                                            btncerraralert.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    dialog9.dismiss();
+                                                    dialog7.dismiss();
+                                                    solicitudesFragment solicitudesFragment = new solicitudesFragment();
+                                                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, solicitudesFragment, "solicitudtag")
+                                                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                                            //permite regresar hacia atras entre los fragments
+                                                            //.addToBackStack(null)
+                                                            .commit();
+                                                }
+                                            });
+
+                                        }
+                                    }
+                                    //si falla el request a la pagina mostrara este error
+                                    @Override
+                                    public void onFailure(Call<String> call, Throwable t) {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                         LayoutInflater inflater = getLayoutInflater();
-                                        View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
-                                        builder2.setView(viewsync);
-                                        AlertDialog dialog8 = builder2.create();
-                                        dialog8.setCancelable(false);
-                                        dialog8.show();
-                                        dialog8.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                        TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
-                                        texto.setText("Ha ocurrido un error con la respuesta al tratar de confirmar el pago. intente en un momento nuevamente.");
-                                        Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+                                        View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                                        builder.setView(viewsync);
+                                        AlertDialog dialog10 = builder.create();
+                                        dialog10.setCancelable(false);
+                                        dialog10.show();
+                                        dialog10.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                                        texto.setText("Ha ocurrido un error con la coneccion del servidor. Estamos trabajando para solucionarlo.");
+                                        Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
 
                                         btncerrar.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
                                                 dialog7.dismiss();
-                                                dialog8.dismiss();
-                                                //enviar a la lista de solicitudes
-
-                                            }
+                                                dialog10.dismiss(); }
                                         });
 
-                                        Toast.makeText(getContext(), "error/detalle/finalizar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getContext(), "error/detalle/finalizar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
                                     }
-                                    //de lo contrario se ejecuta esta parte
-                                    else {
-                                        //respuesta del request
+                                });
 
-                                        String respusta = response.body();
-                                        btnfinalizar.setVisibility(View.GONE);
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                        View viewsync2 = inflater.inflate(R.layout.alertdialogperfilactualizado, null);
-                                        builder.setView(viewsync2);
-                                        AlertDialog dialog9 = builder.create();
-                                        dialog9.show();
-                                        dialog9.setCancelable(false);
-                                        dialog9.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                        Button btncerraralert = viewsync2.findViewById(R.id.btnalertperfilexito);
-                                        TextView texto = (TextView) viewsync2.findViewById(R.id.txtalertnotificacion);
-                                        texto.setText("Ha enviado su respuesta Satisfactoriamente.");
-                                        btncerraralert.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                dialog9.dismiss();
-                                                dialog7.dismiss();
-                                                solicitudesFragment solicitudesFragment = new solicitudesFragment();
-                                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, solicitudesFragment, "solicitudtag")
-                                                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                                                        //permite regresar hacia atras entre los fragments
-                                                        //.addToBackStack(null)
-                                                        .commit();
-                                              }
-                                        });
 
-                                    }
-                                }
-                                //si falla el request a la pagina mostrara este error
-                                @Override
-                                public void onFailure(Call<String> call, Throwable t) {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                    LayoutInflater inflater = getLayoutInflater();
-                                    View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
-                                    builder.setView(viewsync);
-                                    AlertDialog dialog10 = builder.create();
-                                    dialog10.setCancelable(false);
-                                    dialog10.show();
-                                    dialog10.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                    TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
-                                    texto.setText("Ha ocurrido un error con la coneccion del servidor. Estamos trabajando para solucionarlo.");
-                                    Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+                            }else{
 
-                                    btncerrar.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            dialog7.dismiss();
-                                            dialog10.dismiss(); }
-                                    });
+                            }
 
-                                    Toast.makeText(getContext(), "error/detalle/finalizar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            });
+
+
                         }
                     }
                 });
@@ -503,6 +442,113 @@ public class DetalleSolicitudFragment extends Fragment {
 
 
         return v;
+    }
+
+    private void cargardetallesolicitud() {
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://proyectotesis.ddns.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
+        Call<Solicitud> call = tesisAPI.getSolicitudTrabajador(idsolicitud,rutperfil,contrasenaperfil);
+        call.enqueue(new Callback<Solicitud>() {
+            @Override
+            public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
+                if(!response.isSuccessful()){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog = builder.create();
+                    dialog.setCancelable(false);
+                    dialog.show();
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                    texto.setText("Ha ocurrido un error con la respuesta al tratar de traer la solicitud. intente en un momento nuevamente.");
+                    Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+
+
+                    //falta alert dialog para avisar del error
+                    Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Solicitud solicituds = response.body();
+                    if(solicituds.getEstado().equals("FINALIZADO")){
+                        btncomollegar.setVisibility(View.GONE);
+                        btnfinalizar.setVisibility(View.GONE);
+                        btnconfirmarpago.setVisibility(View.VISIBLE);
+                    }
+                    if(solicituds.getEstado().equals("FINALIZANDO")){
+                        btncomollegar.setVisibility(View.GONE);
+                        btnfinalizar.setVisibility(View.GONE);
+                        btnconfirmarpago.setVisibility(View.GONE);
+                    }
+                    if(solicituds.getEstado().equals("COMPLETADA Y PAGADA") || solicituds.getEstado().equals("COMPLETADA Y NO PAGADA")){
+                        btncomollegar.setVisibility(View.GONE);
+                        btnfinalizar.setVisibility(View.GONE);
+                        btnconfirmarpago.setVisibility(View.GONE);
+                        //invisible por mientras
+                        carddiagnostico.setVisibility(View.GONE);
+                        // diagnosticodetallesolicitud.setText(solicituds.getDiagnostico());
+                    }if (solicituds.getEstado().equals("PENDIENTE") || solicituds.getEstado().equals("ATENDIENDO") ){
+                        btncomollegar.setVisibility(View.VISIBLE);
+                        btnfinalizar.setVisibility(View.VISIBLE);
+                    }
+                    numerosolicitud.setText("N Solicitud: "+solicituds.getIdSolicitud());
+                    fechasolicitud.setText("Creada: "+solicituds.getFechaS());
+                    fechadetallesolicitud.setText("Atendida: "+solicituds.getFechaA());
+                    trabajador.setText("Rut Cliente: "+solicituds.getRUT());
+                    rubro.setText("Rubro: "+solicituds.getRubro());
+                    if(solicituds.getEstado().equals("COMPLETADA Y PAGADA") || solicituds.getEstado().equals("COMPLETADA Y NO PAGADA") || solicituds.getEstado().equals("FINALIZADO")  ){
+                        precio.setText("Precio final: "+solicituds.getPrecio());
+                    }else {
+                        precio.setText("Precio aprox: " + solicituds.getPrecio());
+                    }
+                    estadosolicitud.setText("Estado : "+solicituds.getEstado());
+                    descripciondetallesolicitud.setText(solicituds.getDescripcionP());
+                    soluciondetallesolicitud.setText(solicituds.getSolucion());
+                    latitud=(solicituds.getLatitud());
+                    longitud=solicituds.getLongitud();
+                    //carga de la foto del trabajor
+                    Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getFotoT())).into(imgperfiltrabajador);
+                    //carga de foto cargada por el usuario
+                    Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getIdFoto())).into(imgclientesacada);
+                }
+            }
+            @Override
+            public void onFailure(Call<Solicitud> call, Throwable t) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                builder.setView(viewsync);
+                AlertDialog dialog2 = builder.create();
+                dialog2.setCancelable(false);
+                dialog2.show();
+                dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog2.dismiss();
+                    }
+                });
+                Toast.makeText(getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+
     }
 
 

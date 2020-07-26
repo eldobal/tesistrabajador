@@ -7,21 +7,21 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
-import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,17 +32,17 @@ import com.bumptech.glide.Glide;
 import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.activitys.loginActivity;
 import com.example.tesistrabajador.clases.Adaptador;
+import com.example.tesistrabajador.clases.GananciasAPI;
 import com.example.tesistrabajador.clases.Solicitud;
-import com.example.tesistrabajador.clases.UsuarioTrabajador;
 import com.example.tesistrabajador.clases.UsuarioTrabajadorhome;
 import com.example.tesistrabajador.interfaces.tesisAPI;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -63,20 +63,24 @@ public class homeFragment extends Fragment {
     TextView notfound;
     LottieAnimationView loadinglista,loadingperfil;
     private ListView listaactivas;
-    private SharedPreferences prefs,asycprefs;
+    private SharedPreferences prefs,asycprefs,prefsganancias;
     private String rutusuario="";
-    int azynctiempo =0;
+    int azynctiempo =0,dia1=0,mes1=0,año1=0,dia2=0,mes2=0,año2=0,Gananciaperiodo=0,Porpagar=0;
     ArrayList<Solicitud> listasolicitudesterminadas,listasolicitudactivas,listasolicitudactivasinterna,solicitudinterna,Solicitudescomparar;
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudactual = new ArrayList<Solicitud>();
     Adaptador ads,ads2;
     final static String rutaservidor= "http://proyectotesis.ddns.net";
-    String estadotrabajador = "",contrasena="";
-    NetworkInfo NetworkInfo;
+    String estadotrabajador = "",contrasena="",fechainicio="",fechafin="",    Fechainicio="",Fechafin="",Fechaactual="";
     ImageView fotoperfil;
-    TextView nombretrabajdor;
-    Button btncambiodeestado;
+    TextView nombretrabajdor,txtperiodoganancias,txtganancasobtenidasel;
+    EditText edittextgananciasperiodo,edittextprecioporpagar;
+    Button btncambiodeestado,btncalcularganancias;
     PieChart pieChart;
+    NetworkInfo activeNetwork;
+    ConnectivityManager cm ;
+    CardView carganancias;
+    AlertDialog dialog6;
 
     public homeFragment() {
 
@@ -92,10 +96,16 @@ public class homeFragment extends Fragment {
         solicitudinterna   = new ArrayList<Solicitud>();
         //  listasolicitudactivas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistaspendientes");
         // listasolicitudesterminadas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistasterminadas");
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo = connectivityManager.getActiveNetworkInfo();
+        //ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        //NetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+
+
+
+
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+
         settiempoasyncexist();
         setcredentiasexist();
 
@@ -110,10 +120,19 @@ public class homeFragment extends Fragment {
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        if(test != null && test.isVisible() && NetworkInfo.isConnected() && NetworkInfo !=null) {
-                            // reiniciarfragment(rutusuario);
-                            reiniciarfragmentterminadas(rutusuario);
+                        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                        activeNetwork = cm.getActiveNetworkInfo();
+                        if (activeNetwork != null) {
+                            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE )  {
+                                if(test != null && test.isVisible() ) {
+                                    // reiniciarfragment(rutusuario);
+                                    reiniciarfragmentterminadas(rutusuario);
+                                }
+                            }else{
+                                //manejar dialog
+                            }
                         }
+
                     }
                 });
             }
@@ -134,10 +153,28 @@ public class homeFragment extends Fragment {
         fotoperfil = (ImageView) v.findViewById(R.id.idimagenperfiltrabajador);
         loadinglista = (LottieAnimationView) v.findViewById(R.id.idanimacionlistasolicitud);
         loadingperfil = (LottieAnimationView) v.findViewById(R.id.loadinglistaimgperfilhome);
+        btncalcularganancias =(Button) v.findViewById(R.id.btncalcularganancias);
+        txtperiodoganancias = (TextView) v.findViewById(R.id.txtperiodoganancias);
+        txtganancasobtenidasel = (TextView) v.findViewById(R.id.txtganancasobtenidasel);
+        edittextgananciasperiodo = (EditText) v.findViewById(R.id.edittextgananciasperiodo);
+        edittextprecioporpagar =(EditText) v.findViewById(R.id.edittextprecioporpagar);
+        carganancias = (CardView) v.findViewById(R.id.cardganancias);
         //se buscan el usuario y el tiempo de sync de la app
+        prefsganancias = this.getActivity().getSharedPreferences("Preferencesganancias", Context.MODE_PRIVATE);
 
+        //se comprueba si esque existe datos guardados
+        setgananciasexist();
 
-        if (NetworkInfo != null && NetworkInfo.isConnected()) {
+        if(!Fechainicio.equals("") &&!Fechafin.equals("")  && !Fechaactual.equals("")  && Gananciaperiodo!=0 ){
+            carganancias.setVisibility(View.VISIBLE);
+            txtperiodoganancias.setText("Ganancias desde: "+Fechainicio+" hasta: "+Fechafin+"");
+            edittextgananciasperiodo.setText(""+Gananciaperiodo);
+            edittextprecioporpagar.setText(""+Porpagar);
+            txtganancasobtenidasel.setText("Ganancias obtenidas:"+Fechaactual+"");
+        }else{
+            carganancias.setVisibility(View.GONE);
+        }
+
 
             if(rutusuario.equals("")){
                 //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
@@ -148,22 +185,226 @@ public class homeFragment extends Fragment {
                 getActivity().finish();
                 Toast.makeText(getContext(), "el Usuario no es valido ", Toast.LENGTH_LONG).show();
             }else{
-                //se cargan los datos del trabajador
-                cargardatostrabajador();
-                ads2 = new Adaptador(getContext(), solicitudinterna);
-                reiniciarfragmentterminadas(rutusuario);
-                listaactivas = (ListView) v.findViewById(R.id.solicitudactual);
-                //declaracion de los swiperefresh para intanciarlos
-               // refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
-                notfound.setText("");
+
+                cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                activeNetwork = cm.getActiveNetworkInfo();
+                if (activeNetwork != null) {
+                    if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                        //se cargan los datos del trabajador
+                        cargardatostrabajador();
+                        ads2 = new Adaptador(getContext(), solicitudinterna);
+                        reiniciarfragmentterminadas(rutusuario);
+                        listaactivas = (ListView) v.findViewById(R.id.solicitudactual);
+                        //declaracion de los swiperefresh para intanciarlos
+                        // refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
+                        notfound.setText("");
+                    } else {
+
+                    }
+                }
 
 
                 btncambiodeestado.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        cambiarestadotrabajador();
+                        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                        activeNetwork = cm.getActiveNetworkInfo();
+                        if (activeNetwork != null) {
+                            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                                //se carga la solicitud
+                                cambiarestadotrabajador();
+                            } else {
+
+                            }
+                        }
+
                     }
                 });
+
+
+
+                btncalcularganancias.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        LayoutInflater inflater = getLayoutInflater();
+                        View viewsync = inflater.inflate(R.layout.alertdialogganancias,null);
+                        builder.setView(viewsync);
+                        dialog6 = builder.create();
+                        dialog6.setCancelable(false);
+                        dialog6.show();
+                        dialog6.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        Button btnfechainicio =(Button) viewsync.findViewById(R.id.btnfechainicio);
+                        Button btnfechafin =(Button) viewsync.findViewById(R.id.btnfechafin);
+                        Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+                        Button btncalcularganancias =(Button) viewsync.findViewById(R.id.btnconsultarganancias);
+
+
+                        btnfechainicio.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                LayoutInflater inflater = getLayoutInflater();
+                                View viewsync = inflater.inflate(R.layout.alerdialogganannciascalendar ,null);
+                                builder.setView(viewsync);
+                                AlertDialog dialog5 = builder.create();
+                                dialog5.setCancelable(false);
+                                dialog5.show();
+                                dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                TextView textoinformativo =(TextView) viewsync.findViewById(R.id.txtdatepicker);
+                                DatePicker datePicker =(DatePicker) viewsync.findViewById(R.id.datepickerGanancias);
+                                Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+                                Button btncalcularganancias =(Button) viewsync.findViewById(R.id.btnseleccionar);
+                                textoinformativo.setText("Seleccione la fecha de INICIO del rango de tiempo del cual usted desea obtener las ganancias.");
+
+                                btncerrar.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        dialog5.dismiss();
+                                    }
+                                });
+
+                                btncalcularganancias.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                        dialog5.dismiss();
+
+                                        dia1= datePicker.getDayOfMonth();
+                                        mes1 = datePicker.getMonth()+1;
+                                        año1 = datePicker.getYear();
+
+                                        fechainicio = dia1+"-"+mes1+"-"+año1;
+
+                                    }
+                                });
+
+                            }
+                        });
+
+
+                        btnfechafin.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                LayoutInflater inflater = getLayoutInflater();
+                                View viewsync = inflater.inflate(R.layout.alerdialogganannciascalendar ,null);
+                                builder.setView(viewsync);
+                                AlertDialog dialog6 = builder.create();
+                                dialog6.setCancelable(false);
+                                dialog6.show();
+                                dialog6.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                TextView textoinformativo =(TextView) viewsync.findViewById(R.id.txtdatepicker);
+                                DatePicker datePicker =(DatePicker) viewsync.findViewById(R.id.datepickerGanancias);
+                                Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+                                Button btncalcularganancias =(Button) viewsync.findViewById(R.id.btnseleccionar);
+
+                                textoinformativo.setText("Seleccione la fecha de FIN del rango de tiempo del cual usted desea obtener las ganancias.");
+
+                                btncerrar.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        dialog6.dismiss();
+                                    }
+                                });
+
+                                btncalcularganancias.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                        dialog6.dismiss();
+
+                                        dia2= datePicker.getDayOfMonth();
+                                        mes2 = datePicker.getMonth()+1;
+                                        año2 = datePicker.getYear();
+
+                                        fechafin = dia2+"-"+mes2+"-"+año2;
+
+
+                                    }
+                                });
+
+
+
+                            }
+                        });
+
+                        btncerrar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog6.dismiss();
+                            }
+                        });
+
+                        btncalcularganancias.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //se verifica que las fechas esten seleccionadas de forma correcta
+
+                                //formato del calendario el cual toma la fecha actual.
+                                Calendar calendar = Calendar.getInstance();
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
+                                String fechaactual = sdf.format(calendar.getTime());
+
+
+                                /*
+                                if(fechafin.compareTo(fechaactual) == 0 ){
+                                    Toast.makeText(getContext(), "las fechas son iguales", Toast.LENGTH_LONG).show();
+                                }
+                                if(fechafin.compareTo(fechaactual) > 0 ){
+                                    Toast.makeText(getContext(), "la fechafin es despues la fecha actual ", Toast.LENGTH_LONG).show();
+                                }
+                                if(fechafin.compareTo(fechaactual) < 0 ){
+                                    Toast.makeText(getContext(), "la fechafin es es anterioir a la fecha actual", Toast.LENGTH_LONG).show();
+                                }
+                                */
+
+                                if(año1<=año2){
+                                  if(mes1<=mes2){
+                                      if(dia1<=dia2){
+                                          if(fechafin.compareTo(fechaactual) ==0 || fechafin.compareTo(fechaactual) <0 ){
+                                              if(!fechainicio.equals("") || !fechafin.equals("")){
+                                                  cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                                                  activeNetwork = cm.getActiveNetworkInfo();
+                                                  if (activeNetwork != null) {
+                                                      if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                                                          //se carga la solicitud
+                                                          calcularganancias(fechainicio,fechafin,fechaactual);
+                                                      } else {
+
+                                                      }
+                                                  }
+                                              }else{
+                                                  //mensaje de que selccione ambas fechas
+                                                  Toast.makeText(getContext(), "Seleccione ambas fechas para poder continuar.", Toast.LENGTH_LONG).show();
+                                              }
+                                          }else{
+                                              Toast.makeText(getContext(), "Seleccione una fecha de fin de periodo que no sea mayor al dia de hoy.", Toast.LENGTH_LONG).show();
+                                          }
+
+                                      }else{
+                                          //mensaje que avise que el dia debe de inicio debe ser menor a dia de fechafin
+                                          Toast.makeText(getContext(), "el dia de inicio debe ser menor o igual al dia fin.", Toast.LENGTH_LONG).show();
+                                      }
+
+                                  }else{
+                                      Toast.makeText(getContext(), "el mes de inicio debe ser menor o igual al mes fin.", Toast.LENGTH_LONG).show();
+                                  }
+
+                              }else{
+                                  Toast.makeText(getContext(), "el año de inicio debe ser menor o igual al año fin.", Toast.LENGTH_LONG).show();
+                              }
+
+
+
+
+
+                            }
+                        });
+                    }
+                });
+
+
 
 
                 new CountDownTimer(1500,1000){
@@ -198,21 +439,87 @@ public class homeFragment extends Fragment {
             }
 
 
-        }else{
-            getActivity().finish();
-            Toast.makeText(getContext(), "Error en la conecctacion del dispocitivo, asegurese de que tenga coneccion", Toast.LENGTH_LONG).show();
-        }
-
-       // pieChart.setRotationEnabled(true);
-       // pieChart.setHoleRadius(25f);
-       // pieChart.setTransparentCircleAlpha(0);
-       // pieChart.setCenterText("$");
-       // pieChart.setCenterTextSize(10);
-       // pieChart.setDrawEntryLabels(true);
-        addDataSet();
-
-
         return v;
+    }
+
+    private void calcularganancias(String fechainicio,String fechafin,String fechaactual) {
+        //metodo el cual rescatara el intervalo de tiempo que el trabajador seleccionara para calcular ganancias
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://proyectotesis.ddns.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
+        Call<GananciasAPI> call = tesisAPI.DatosTrabajador(rutusuario,contrasena,fechainicio,fechafin);
+        call.enqueue(new Callback<GananciasAPI>() {
+            @Override
+            public void onResponse(Call<GananciasAPI> call, Response<GananciasAPI> response) {
+                if (!response.isSuccessful()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog4 = builder.create();
+                    dialog4.setCancelable(false);
+                    dialog4.show();
+                    dialog4.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                    texto.setText("Ha ocurrido un error con la respuesta al tratar de traer el resultados de las ganancias. intente en un momento nuevamente.");
+                    Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog4.dismiss();
+
+                        }
+                    });
+
+                    Toast.makeText(getContext(), "error/homedatos/ganancias/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
+                } else {
+                    GananciasAPI ganancias = response.body();
+                    carganancias.setVisibility(View.VISIBLE);
+
+                    txtperiodoganancias.setText("Ganancias desde: "+fechainicio+" hasta: "+fechafin+"");
+                    edittextgananciasperiodo.setText(""+ganancias.getGananciasTrabajador());
+                    edittextprecioporpagar.setText(""+ganancias.getGananciasPorPagar());
+                    txtganancasobtenidasel.setText("Ganancias obtenidas:"+fechaactual+"");
+                    int gananciastrabajadaor=ganancias.getGananciasTrabajador();
+                    int gananaciasporpagar = ganancias.getGananciasPorPagar();
+                    //se guarda los valores para poder mostrarlos sin estar rcargando esta llamada
+                    saveOnPreferencesganancias(fechainicio,fechafin,fechaactual,gananciastrabajadaor,gananaciasporpagar);
+
+                    dialog6.dismiss();
+
+                    Toast.makeText(getContext(), ""+ganancias.getGananciasPorPagar() +" / "+ganancias.getGananciasTrabajador(), Toast.LENGTH_LONG).show();
+
+
+                }
+            }
+            @Override
+            public void onFailure(Call<GananciasAPI> call, Throwable t) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                builder.setView(viewsync);
+                AlertDialog dialog5 = builder.create();
+                dialog5.setCancelable(false);
+                dialog5.show();
+                dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog5.dismiss();
+                    }
+                });
+
+                Toast.makeText(getContext(), "error/homedatos/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 
 
@@ -431,7 +738,6 @@ public class homeFragment extends Fragment {
                         Solicitud1.setFotoT(rutaservidor+solicitud.getFotoT());
                         Solicitudactual.add(Solicitud1);
                     }
-
                     for (int i = 0; i < Solicitudactual.size(); i++) {
                         Solicitud soli = new Solicitud();
                         soli = Solicitudactual.get(i);
@@ -489,7 +795,7 @@ public class homeFragment extends Fragment {
 
     }
 
-    private void addDataSet() {
+   /* private void addDataSet() {
 
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
         ArrayList<String> xEntrys = new ArrayList<>();
@@ -528,7 +834,62 @@ public class homeFragment extends Fragment {
         PieData pieData = new PieData(pieDataSet);
         pieChart.setData(pieData);
         pieChart.invalidate();
+    } */
+
+    private void setgananciasexist() {
+
+        String fechai = getFechainicio();
+        String fechaf = getFechafin();
+        String fechaa = getfechaactual();
+        int gananciap = getgananciaperiodo();
+        int porp = getporpagar();
+
+
+        if (!TextUtils.isEmpty(fechai)&& (!TextUtils.isEmpty(fechaf)) &&(!TextUtils.isEmpty(fechaa)) && (gananciap !=0) ) {
+            Fechainicio=fechai.toString();
+            Fechafin=fechaf.toString();
+            Fechaactual =fechaa.toString();
+            Gananciaperiodo=gananciap;
+            Porpagar = porp;
+        }
+
+
     }
+    //metodo para guardar los datos que se rescaten de la llamada
+    private void saveOnPreferencesganancias(String fechainicio, String fechafin,String fechaactual,int gananciaperiodo,int porpagar) {
+        SharedPreferences.Editor editor = prefsganancias.edit();
+        editor.putString("fechainicio", fechainicio);
+        editor.putString("fechafin", fechafin);
+        editor.putString("fechaactual", fechaactual);
+        editor.putInt("gananciaperiodo", gananciaperiodo);
+        editor.putInt("porpagar", porpagar);
+        //linea la cual guarda todos los valores en la pref antes de continuar
+        editor.commit();
+        editor.apply();
+    }
+
+
+
+    private String getFechainicio() {
+        return prefsganancias.getString("fechainicio", "");
+    }
+    private String getFechafin() {
+        return prefsganancias.getString("fechafin", "");
+    }
+    private String getfechaactual() {
+        return prefsganancias.getString("fechaactual", "");
+    }
+    private int getgananciaperiodo() {
+        return prefsganancias.getInt("gananciaperiodo", 0);
+    }
+    private int getporpagar() {
+        return prefsganancias.getInt("porpagar", 0);
+    }
+
+
+
+
+
     //metodo para traer el rut del usuario hacia la variable local
     private void setcredentiasexist() {
         String rutq = getuserrutprefs();
@@ -557,5 +918,10 @@ public class homeFragment extends Fragment {
     private int gettiempoasync() {
         return asycprefs.getInt("tiempo", 0);
     }
+
+
+
+
+
 
 }

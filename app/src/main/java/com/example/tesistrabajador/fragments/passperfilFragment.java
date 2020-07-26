@@ -48,8 +48,10 @@ public class passperfilFragment extends Fragment {
     private Button btncambiopass;
     private boolean validado = false;
     Usuario usuario = new Usuario();
-    NetworkInfo networkInfo;
     AwesomeValidation mAwesomeValidation = new AwesomeValidation(BASIC);
+    NetworkInfo activeNetwork;
+    ConnectivityManager cm ;
+
     public passperfilFragment() {
         // Required empty public constructor
     }
@@ -57,13 +59,12 @@ public class passperfilFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         //validacion contraseñas con alto nivel de dificultad
         String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}";
         mAwesomeValidation.addValidation(getActivity(), R.id.cambiocontraseñaperfil, regexPassword, R.string.err_contraseña);
         mAwesomeValidation.addValidation(getActivity(), R.id.cambiocontraseña2perfil, regexPassword, R.string.err_contraseña2);
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        networkInfo = connectivityManager.getActiveNetworkInfo();
+       // ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        //networkInfo = connectivityManager.getActiveNetworkInfo();
 
         btncambiopass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,39 +86,44 @@ public class passperfilFragment extends Fragment {
         contraseña1 = (EditText) v.findViewById(R.id.cambiocontraseñaperfil);
         contraseña2 = (EditText) v.findViewById(R.id.cambiocontraseña2perfil);
         btncambiopass = (Button) v.findViewById(R.id.btncambiocontrasena);
-        Usuario usuario = new Usuario();
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         //se comprueba que exita el rut y la contraseña
         setcredentiasexist();
 
-        if (networkInfo != null && networkInfo.isConnected()) {
-            //metodo el cual traera los datos del usuario y se comparara la contraseña acutal y la que se trae
+        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null || !rutperfil.isEmpty()) {
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE){
             cargardatosperfil();
-        }else{
-            //no hay coneccion manejar excepcion
+            }else{
 
+            }
         }
+
 
 
         btncambiopass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (networkInfo != null && networkInfo.isConnected()) {
-                    if (mAwesomeValidation.validate()) {
-                        String contraseñaactual1 = contraseñaactual.getText().toString();
-                        //String  usuariocontraseña = usuario.getContrasena().toString();
-                        String contraseñanueva = contraseña1.getText().toString();
-                        String contraseñanueva2 = contraseña2.getText().toString();
-                        if (contraseñaactual1.equals(contraseñaactualcomparar) && (contraseñanueva.equals(contraseñanueva2))) {
-                            actualizarperfil();
 
+                cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                activeNetwork = cm.getActiveNetworkInfo();
+                if (activeNetwork != null) {
+                    if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                        if (mAwesomeValidation.validate()) {
+                            String contraseñaactual1 = contraseñaactual.getText().toString();
+                            //String  usuariocontraseña = usuario.getContrasena().toString();
+                            String contraseñanueva = contraseña1.getText().toString();
+                            String contraseñanueva2 = contraseña2.getText().toString();
+                            if (contraseñaactual1.equals(contraseñaactualcomparar) && (contraseñanueva.equals(contraseñanueva2))) {
+                                actualizarperfil();
+                            }
+                        }else{
+                            Toast.makeText(getContext(), "error al validar la contraseña", Toast.LENGTH_LONG).show();
                         }
-                    }else{
-                        Toast.makeText(getContext(), "error al validar la contraseña", Toast.LENGTH_LONG).show();
-                    }
-                }else{
-                    //no hay coneccion manejar excepcion
+                    } else {
 
+                    }
                 }
 
             }
@@ -126,7 +132,6 @@ public class passperfilFragment extends Fragment {
         return v;
     }
 
-
     private void saveOnPreferences(String contrasena) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("ContraseNa", contrasena);
@@ -134,7 +139,6 @@ public class passperfilFragment extends Fragment {
         editor.commit();
         editor.apply();
     }
-
 
     private void cargardatosperfil() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -203,7 +207,6 @@ public class passperfilFragment extends Fragment {
             }
         });
     }
-
 
     private void actualizarperfil() {
         String RUT = rutperfil;

@@ -18,6 +18,7 @@
 
 
     <DatePicker
+        android:id="@+id/datepickerGanancias"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
@@ -36,7 +37,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="14dp"
-            android:id="@+id/btnfechainicio"
+            android:id="@+id/btncerraralert"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_btngananciasalert"
@@ -51,7 +52,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="14dp"
-            android:id="@+id/btnfechafin"
+            android:id="@+id/btnseleccionar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_btngananciasalert"

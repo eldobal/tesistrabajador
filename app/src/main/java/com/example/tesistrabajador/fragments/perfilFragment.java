@@ -69,7 +69,10 @@ public class perfilFragment extends Fragment {
     private ArrayList<Ciudad> listaciudades = new ArrayList<Ciudad>();
     private Button editardatos,editarpass;
     AwesomeValidation mAwesomeValidation = new AwesomeValidation(BASIC);
-    NetworkInfo NetworkInfo;
+    NetworkInfo activeNetwork;
+    ConnectivityManager cm ;
+
+
     public perfilFragment() {
         // Required empty public constructor
     }
@@ -80,17 +83,14 @@ public class perfilFragment extends Fragment {
         mAwesomeValidation.addValidation(getActivity(), R.id.email, android.util.Patterns.EMAIL_ADDRESS, R.string.err_correo);
         mAwesomeValidation.addValidation(getActivity(), R.id.nombre, "[a-zA-Z\\s]+", R.string.err_name);
         mAwesomeValidation.addValidation(getActivity(), R.id.apellido, "[a-zA-Z\\s]+", R.string.err_apellido);
-        //realizar validacion
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
         View v= inflater.inflate(R.layout.fragment_perfil, container, false);
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo = connectivityManager.getActiveNetworkInfo();
+       // ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+       // NetworkInfo = connectivityManager.getActiveNetworkInfo();
         rut= (EditText) v.findViewById(R.id.rut);
         nombre = (EditText) v.findViewById(R.id.nombre);
         apellido = (EditText) v.findViewById(R.id.apellido);
@@ -103,7 +103,6 @@ public class perfilFragment extends Fragment {
         loadingdots2 =(LottieAnimationView) v.findViewById(R.id.loadindots2);
         prefs = this.getActivity().getSharedPreferences("Preferences",Context.MODE_PRIVATE);
 
-        if (NetworkInfo != null && NetworkInfo.isConnected()) {
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail()
                     .build();
@@ -128,8 +127,6 @@ public class perfilFragment extends Fragment {
             }
 
 
-
-
         ciudad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -140,6 +137,7 @@ public class perfilFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
         //se comprueban que exista el rut y la contraseña
         setcredentiasexist();
 
@@ -147,12 +145,22 @@ public class perfilFragment extends Fragment {
         if(rutperfil.equals("")){
 
         }else{
-            //se carga el spiner con las ciudades que hay en la base de datos
-            cargarspiner();
-            //se carga los datos del perfil para setearlos en los campos
-            cargardatosperfil();
-            //seccion de codigo en el cual se debera traer el json con los datos del usuario
-            //donde se setearan los datos a los edittext
+            cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            activeNetwork = cm.getActiveNetworkInfo();
+            if (activeNetwork != null) {
+                if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                    //se carga el spiner con las ciudades que hay en la base de datos
+                    cargarspiner();
+                    //se carga los datos del perfil para setearlos en los campos
+                    cargardatosperfil();
+                    //seccion de codigo en el cual se debera traer el json con los datos del usuario
+                    //donde se setearan los datos a los edittext
+                } else {
+                    //manejar alert
+                }
+            }
+
+
             ciudad.setEnabled(false);
             ciudad.setClickable(false);
             //cuando se apriete el boton se preguntara si desea editar
@@ -161,7 +169,6 @@ public class perfilFragment extends Fragment {
             editardatos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                     View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizar, null);
@@ -182,37 +189,42 @@ public class perfilFragment extends Fragment {
                                     //metodo para hacer request de cambio de datos por parte del usuario
                                     if (mAwesomeValidation.validate()) {
 
-                                        if (NetworkInfo != null && NetworkInfo.isConnected()) {
-                                            actualizarperfil();
+                                        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                                        activeNetwork = cm.getActiveNetworkInfo();
+                                        if (activeNetwork != null) {
+                                            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                                                actualizarperfil();
+                                                {
+                                                    rut.setEnabled(false);
+                                                    rut.setFocusable(false);
+                                                    rut.setFocusableInTouchMode(false);
 
-                                            {
-                                                rut.setEnabled(false);
-                                                rut.setFocusable(false);
-                                                rut.setFocusableInTouchMode(false);
+                                                    correo.setEnabled(false);
+                                                    correo.setFocusable(false);
+                                                    correo.setFocusableInTouchMode(false);
 
-                                                correo.setEnabled(false);
-                                                correo.setFocusable(false);
-                                                correo.setFocusableInTouchMode(false);
+                                                    nombre.setEnabled(false);
+                                                    nombre.setFocusable(false);
+                                                    nombre.setFocusableInTouchMode(false);
 
-                                                nombre.setEnabled(false);
-                                                nombre.setFocusable(false);
-                                                nombre.setFocusableInTouchMode(false);
+                                                    apellido.setEnabled(false);
+                                                    apellido.setFocusable(false);
+                                                    apellido.setFocusableInTouchMode(false);
 
-                                                apellido.setEnabled(false);
-                                                apellido.setFocusable(false);
-                                                apellido.setFocusableInTouchMode(false);
+                                                    telefono.setEnabled(false);
+                                                    telefono.setFocusable(false);
+                                                    telefono.setFocusableInTouchMode(false);
 
-                                                telefono.setEnabled(false);
-                                                telefono.setFocusable(false);
-                                                telefono.setFocusableInTouchMode(false);
+                                                    ciudad.setEnabled(false);
+                                                    ciudad.setFocusable(false);
+                                                    ciudad.setFocusableInTouchMode(false);
+                                                }
 
-                                                ciudad.setEnabled(false);
-                                                ciudad.setFocusable(false);
-                                                ciudad.setFocusableInTouchMode(false);
+
+                                            } else {
+                                                //manejar alert
+
                                             }
-                                        }else{
-                                            //no hay coneccion manejar excepcion
-
                                         }
 
 
@@ -299,11 +311,6 @@ public class perfilFragment extends Fragment {
         }
 
 
-        }else{
-            //no hay coneccion manejar excepcion
-            getActivity().finish();
-            Toast.makeText(getContext(), "Error en la conecctacion del dispocitivo, asegurese de que tenga coneccion", Toast.LENGTH_LONG).show();
-        }
 
         return v;
     }

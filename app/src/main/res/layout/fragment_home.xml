@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -277,55 +277,179 @@
          </RelativeLayout>
 
 
-            <RelativeLayout
-                android:layout_below="@id/relative1"
+            <GridLayout
+
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_below="@id/relative1"
+                android:layout_marginTop="2dp">
+
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/idcardinfoganancia"
+                    android:visibility="visible"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/cardganancias"
                     android:layout_width="match_parent"
-                    android:layout_margintop="12dp"
-                    android:layout_marginBottom="12dp"
-                    android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentTop="true"
-                    android:padding="8dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
                     android:backgroundTint="@color/colorAccent"
                     app:cardCornerRadius="30dp"
                     app:cardElevation="6dp">
 
+                    <ScrollView
 
-                    <com.airbnb.lottie.LottieAnimationView
-                        android:id="@+id/idanimacionlistasolicitud2"
-                        app:lottie_rawRes="@raw/loadinglistasolicitudes"
-                        app:lottie_autoPlay="true"
-                        app:lottie_loop="true"
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                    </com.airbnb.lottie.LottieAnimationView>
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
+                        <RelativeLayout
 
-
-
-
-                        <TextView
-                            android:layout_gravity="center"
-                            android:id="@+id/txtnotfoundhome2"
-                            android:padding="8dp"
-                            android:textSize="18dp"
-                            android:textColor="@color/colordark"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text=""
-                            ></TextView>
+                            android:layout_height="340dp">
+
+                            <TextView
+                                android:gravity="center"
+                                android:id="@+id/txtperiodoganancias"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="4dp"
+                                android:fontFamily="sans-serif-condensed-medium"
+                                android:text=""
+                                android:textColor="@color/colordark"
+                                android:textSize="24dp"></TextView>
+
+
+                            <TextView
+                                android:id="@+id/txtgananciasperiodo"
+                                android:gravity="center"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/txtperiodoganancias"
+                                android:layout_margin="4dp"
+                                android:fontFamily="sans-serif-condensed-medium"
+                                android:text=" Ganancias periodo Seleccionado:"
+                                android:textColor="@color/colordark"
+                                android:textSize="20dp"></TextView>
+
+
+                            <RelativeLayout
+                                android:layout_marginRight="50dp"
+                                android:layout_marginLeft="50dp"
+                                android:id="@+id/relativeid"
+                                android:layout_below="@id/txtgananciasperiodo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_marginTop="10dp"
+                                    android:layout_width="18dp"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:textColor="@color/colordark"
+                                    android:gravity="center"
+                                    android:textSize="20dp"
+                                    android:text="$"
+                                    >
+
+                                </TextView>
+                                <EditText
+                                    android:gravity="center"
+                                    android:focusable="false"
+                                    android:clickable="false"
+                                    android:id="@+id/edittextgananciasperiodo"
+                                    android:layout_marginLeft="18dp"
+                                    android:layout_width="match_parent"
+
+                                    android:layout_height="wrap_content"></EditText>
+
+                            </RelativeLayout>
+
+
+                            <TextView
+                                android:gravity="center"
+                                android:id="@+id/txrgananciasporpagar"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/relativeid"
+                                android:layout_margin="4dp"
+                                android:fontFamily="sans-serif-condensed-medium"
+                                android:text=" Por Pagar A la Compañia:"
+                                android:textColor="@color/colordark"
+                                android:textSize="20dp"></TextView>
+
+                            <RelativeLayout
+                                android:layout_marginRight="50dp"
+                                android:layout_marginLeft="50dp"
+                                android:id="@+id/relativeid2"
+                                android:layout_below="@id/txrgananciasporpagar"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_marginTop="10dp"
+                                    android:layout_width="18dp"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:textColor="@color/colordark"
+                                    android:gravity="center"
+                                    android:textSize="20dp"
+                                    android:text="$"
+                                    >
+
+                                </TextView>
+                                <EditText
+                                    android:gravity="center"
+                                    android:focusable="false"
+                                    android:clickable="false"
+                                    android:id="@+id/edittextprecioporpagar"
+                                    android:layout_marginLeft="18dp"
+                                    android:layout_width="match_parent"
+
+                                    android:layout_height="wrap_content"></EditText>
+
+                            </RelativeLayout>
+
+
+
+                            <TextView
+                                android:layout_marginBottom="15dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginRight="15dp"
+                                android:layout_alignParentBottom="true"
+                                android:id="@+id/txtganancasobtenidasel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/relativeid2"
+                                android:layout_alignParentRight="true"
+
+                                android:fontFamily="sans-serif-condensed-medium"
+                                android:text=""
+                                android:textColor="@color/colordark"
+                                android:textSize="14dp"></TextView>
+
+
+
+                            <TextView
+                                android:fontFamily="sans-serif-condensed-medium"
+                                android:textColor="@color/colordark"
+                                android:textSize="16dp"
+                                android:layout_below="@id/txtganancasobtenidasel"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Recuerde que cualquier duda con consultas o problemas debe contactarse con el equipo de apoyo para llegar a una resolucion inmediata. Muchas Gracias."></TextView>
+
+                        </RelativeLayout>
+
+
+
+
+                    </ScrollView>
+
+
 
 
 
                 </androidx.cardview.widget.CardView>
 
-            </RelativeLayout>
+
+            </GridLayout>
 
 
         </RelativeLayout>
@@ -336,4 +460,4 @@
 
 
 
-</FrameLayout>
+</RelativeLayout>

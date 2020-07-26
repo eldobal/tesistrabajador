@@ -1,17 +1,15 @@
 package com.example.tesistrabajador.interfaces;
 
 import com.example.tesistrabajador.clases.Ciudad;
+import com.example.tesistrabajador.clases.GananciasAPI;
 import com.example.tesistrabajador.clases.Notificacion;
 import com.example.tesistrabajador.clases.Solicitud;
-import com.example.tesistrabajador.clases.SolicitudDb;
 import com.example.tesistrabajador.clases.Usuario;
-import com.example.tesistrabajador.clases.UsuarioTrabajador;
 import com.example.tesistrabajador.clases.UsuarioTrabajadorhome;
 
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -142,6 +140,14 @@ public interface tesisAPI {
 
     );
 
+
+    //metodo para calcular las ganancias
+    @POST("api/SolicitudAPI")
+    Call<GananciasAPI> DatosTrabajador(@Query("RUTU") String rutusuario,
+                                       @Query("Contrasena") String contrasena,
+                                       @Query("FirstDate") String fechainicio,
+                                       @Query("SecondDate") String fechafin
+    );
 
 
 

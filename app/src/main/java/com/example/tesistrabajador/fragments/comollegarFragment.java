@@ -29,22 +29,20 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.snackbar.Snackbar;
 
 
-
-public class comollegarFragment extends Fragment implements OnMapReadyCallback , TaskLoadedCallback {
+public class comollegarFragment extends Fragment implements OnMapReadyCallback, TaskLoadedCallback {
 
 
     GoogleMap map;
     SupportMapFragment mapFragment;
     private Polyline currentPolyline;
-    MarkerOptions ubicaciontrabajador, ubicacioncliente,place1,place2;
+    MarkerOptions ubicaciontrabajador, ubicacioncliente, place1, place2;
     Button btncomollegarcliente;
-    boolean actualposition= true;
-    Double latitud=0.0,longitud=0.0,latitudorigen,longitudorigen;
-
+    boolean actualposition = true;
+    Double latitud = 0.0, longitud = 0.0, latitudorigen, longitudorigen;
+    int REQUESTCODE = 111;
     public comollegarFragment() {
         // Required empty public constructor
     }
-
 
 
     @Override
@@ -62,14 +60,14 @@ public class comollegarFragment extends Fragment implements OnMapReadyCallback ,
         Bundle args = getArguments();
         if (args == null) {
             // No hay datos, manejar excepción
-        }else{
+        } else {
             //se cargan los datos enviados del trabajador
-            latitud= args.getDouble("latitudcliente");
-            longitud= args.getDouble("longitudcliente");
+            latitud = args.getDouble("latitudcliente");
+            longitud = args.getDouble("longitudcliente");
         }
         btncomollegarcliente = (Button) v.findViewById(R.id.btncomollegarcliente);
 
-        mapFragment= (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
 /*
@@ -94,8 +92,19 @@ public class comollegarFragment extends Fragment implements OnMapReadyCallback ,
         map = googleMap;
 
 
-
         map.getUiSettings().setZoomControlsEnabled(true);
+
+
+        int permisolocation = ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+
+        if(permisolocation != PackageManager.PERMISSION_GRANTED){
+
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUESTCODE);
+
+        }
+
+
+
         map.setMyLocationEnabled(true);
 
         //map.addMarker(place1);

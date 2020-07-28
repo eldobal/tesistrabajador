@@ -12,6 +12,7 @@ import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -24,6 +25,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,7 +67,7 @@ public class homeFragment extends Fragment {
     private ListView listaactivas;
     private SharedPreferences prefs,asycprefs,prefsganancias;
     private String rutusuario="";
-    int azynctiempo =0,dia1=0,mes1=0,año1=0,dia2=0,mes2=0,año2=0,Gananciaperiodo=0,Porpagar=0;
+    int azynctiempo =0,dia1=0,mes1=0,año1=0,dia2=0,mes2=0,año2=0,Gananciaperiodo=0,Porpagar=0,porpagarselccionado=0,porpagarpref=0;
     ArrayList<Solicitud> listasolicitudesterminadas,listasolicitudactivas,listasolicitudactivasinterna,solicitudinterna,Solicitudescomparar;
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudactual = new ArrayList<Solicitud>();
@@ -75,7 +77,7 @@ public class homeFragment extends Fragment {
     ImageView fotoperfil;
     TextView nombretrabajdor,txtperiodoganancias,txtganancasobtenidasel;
     EditText edittextgananciasperiodo,edittextprecioporpagar;
-    Button btncambiodeestado,btncalcularganancias;
+    Button btncambiodeestado,btncalcularganancias,btnpagarporpagar;
     PieChart pieChart;
     NetworkInfo activeNetwork;
     ConnectivityManager cm ;
@@ -159,6 +161,10 @@ public class homeFragment extends Fragment {
         edittextgananciasperiodo = (EditText) v.findViewById(R.id.edittextgananciasperiodo);
         edittextprecioporpagar =(EditText) v.findViewById(R.id.edittextprecioporpagar);
         carganancias = (CardView) v.findViewById(R.id.cardganancias);
+        btnpagarporpagar =(Button) v.findViewById(R.id.btnpagarporpagar);
+        btnpagarporpagar.setVisibility(View.GONE);
+
+
         //se buscan el usuario y el tiempo de sync de la app
         prefsganancias = this.getActivity().getSharedPreferences("Preferencesganancias", Context.MODE_PRIVATE);
 
@@ -167,14 +173,17 @@ public class homeFragment extends Fragment {
 
         if(!Fechainicio.equals("") &&!Fechafin.equals("")  && !Fechaactual.equals("")  && Gananciaperiodo!=0 ){
             carganancias.setVisibility(View.VISIBLE);
-            txtperiodoganancias.setText("Ganancias desde: "+Fechainicio+" hasta: "+Fechafin+"");
+            if(fechainicio.equals("vacio") && fechafin.equals("vacio")){
+                txtperiodoganancias.setText("Ganancias totales del perfil.");
+            }else{
+                txtperiodoganancias.setText("Ganancias desde: "+fechainicio+" hasta: "+fechafin+"");
+            }
             edittextgananciasperiodo.setText(""+Gananciaperiodo);
             edittextprecioporpagar.setText(""+Porpagar);
             txtganancasobtenidasel.setText("Ganancias obtenidas:"+Fechaactual+"");
         }else{
             carganancias.setVisibility(View.GONE);
         }
-
 
             if(rutusuario.equals("")){
                 //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
@@ -226,6 +235,8 @@ public class homeFragment extends Fragment {
                 btncalcularganancias.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        fechainicio="";
+                        fechafin="";
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         LayoutInflater inflater = getLayoutInflater();
                         View viewsync = inflater.inflate(R.layout.alertdialogganancias,null);
@@ -359,50 +370,151 @@ public class homeFragment extends Fragment {
                                 }
                                 */
 
-                                if(año1<=año2){
-                                  if(mes1<=mes2){
-                                      if(dia1<=dia2){
-                                          if(fechafin.compareTo(fechaactual) ==0 || fechafin.compareTo(fechaactual) <0 ){
-                                              if(!fechainicio.equals("") || !fechafin.equals("")){
-                                                  cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-                                                  activeNetwork = cm.getActiveNetworkInfo();
-                                                  if (activeNetwork != null) {
-                                                      if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-                                                          //se carga la solicitud
-                                                          calcularganancias(fechainicio,fechafin,fechaactual);
-                                                      } else {
 
-                                                      }
-                                                  }
-                                              }else{
-                                                  //mensaje de que selccione ambas fechas
-                                                  Toast.makeText(getContext(), "Seleccione ambas fechas para poder continuar.", Toast.LENGTH_LONG).show();
-                                              }
-                                          }else{
-                                              Toast.makeText(getContext(), "Seleccione una fecha de fin de periodo que no sea mayor al dia de hoy.", Toast.LENGTH_LONG).show();
-                                          }
+                                if(fechainicio.equals("")&& fechafin.equals("")){
+                                    fechainicio ="vacio";
+                                    fechafin="vacio";
+                                    calcularganancias(fechainicio, fechafin, fechaactual);
+                                }else {
+                                    if (año1 <= año2) {
+                                        if (mes1 <= mes2) {
+                                            if (dia1 <= dia2) {
+                                                if (fechafin.compareTo(fechaactual) == 0 || fechafin.compareTo(fechaactual) < 0) {
+                                                    if (!fechainicio.equals("") || !fechafin.equals("")) {
+                                                        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                                                        activeNetwork = cm.getActiveNetworkInfo();
+                                                        if (activeNetwork != null) {
+                                                            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                                                                //se carga la solicitud
+                                                                calcularganancias(fechainicio, fechafin, fechaactual);
+                                                            } else {
 
-                                      }else{
-                                          //mensaje que avise que el dia debe de inicio debe ser menor a dia de fechafin
-                                          Toast.makeText(getContext(), "el dia de inicio debe ser menor o igual al dia fin.", Toast.LENGTH_LONG).show();
-                                      }
-
-                                  }else{
-                                      Toast.makeText(getContext(), "el mes de inicio debe ser menor o igual al mes fin.", Toast.LENGTH_LONG).show();
-                                  }
-
-                              }else{
-                                  Toast.makeText(getContext(), "el año de inicio debe ser menor o igual al año fin.", Toast.LENGTH_LONG).show();
-                              }
-
-
-
-
+                                                            }
+                                                        }
+                                                    } else {
+                                                        //mensaje de que selccione ambas fechas
+                                                        Toast.makeText(getContext(), "Seleccione ambas fechas para poder continuar.", Toast.LENGTH_LONG).show();
+                                                    }
+                                                } else {
+                                                    Toast.makeText(getContext(), "Seleccione una fecha de fin de periodo que no sea mayor al dia de hoy.", Toast.LENGTH_LONG).show();
+                                                }
+                                            } else {
+                                                //mensaje que avise que el dia debe de inicio debe ser menor a dia de fechafin
+                                                Toast.makeText(getContext(), "el dia de inicio debe ser menor o igual al dia fin.", Toast.LENGTH_LONG).show();
+                                            }
+                                        } else {
+                                            Toast.makeText(getContext(), "el mes de inicio debe ser menor o igual al mes fin.", Toast.LENGTH_LONG).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(getContext(), "el año de inicio debe ser menor o igual al año fin.", Toast.LENGTH_LONG).show();
+                                    }
+                                }
 
                             }
                         });
                     }
                 });
+
+
+                if(Porpagar !=0){
+                    btnpagarporpagar.setVisibility(View.VISIBLE);
+
+
+
+                    btnpagarporpagar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            porpagarselccionado=0;
+
+                            //alert para saber si el pago estuvo weno
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            LayoutInflater inflater = getLayoutInflater();
+                            View viewsync = inflater.inflate(R.layout.alertdialogporpagar, null);
+                            builder.setView(viewsync);
+                            AlertDialog dialog8 = builder.create();
+                            dialog8.setCancelable(false);
+                            dialog8.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            Button dismiss = (Button) viewsync.findViewById(R.id.btncerraralert);
+                            Button confirmacionpago = (Button) viewsync.findViewById(R.id.btnfinalizarsolicitud);
+                            RadioButton r1 = (RadioButton) viewsync.findViewById(R.id.radioButton);
+                            RadioButton r2 = (RadioButton) viewsync.findViewById(R.id.radioButton2);
+                            if(Porpagar<=10000){
+                                //SE OCULTA EL RADIOBUTTON CUANDO EL LA DEUDA ES INFERIOR A 10.000
+                                r1.setVisibility(View.GONE);
+                            }else{
+                                int resto=Porpagar-10000;
+                                r1.setText("Pagar la cantidad minima.("+resto+")");
+                            }
+                            r2.setText("Pagar la deuda en su totalidad.("+Porpagar+")");
+                            dialog8.show();
+
+
+                            dismiss.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog8.dismiss();
+                                }
+                            });
+
+                            confirmacionpago.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    if(r1.isChecked()==true){
+                                        //PAGO MINIMO EL CUAL DEJARA EL MARGEN
+                                      porpagarselccionado= Porpagar-10000;
+                                        porpagarpref = Porpagar-porpagarselccionado;
+                                        Toast.makeText(v.getContext(), "1", Toast.LENGTH_LONG).show();
+                                    }
+                                    if(r2.isChecked()==true){
+                                        //PAGO COMPLETO CON EL POR PAGAR ENTERO
+                                        porpagarselccionado=Porpagar;
+                                        porpagarpref=0;
+                                        Toast.makeText(v.getContext(), "0", Toast.LENGTH_LONG).show();
+                                    }
+                                    if(r1.isChecked()==false && r2.isChecked()==false){
+                                        Toast.makeText(v.getContext(), "seleccione una opcion por favor.", Toast.LENGTH_LONG).show();
+                                    }else{
+                                        //SE ENVIA AL TRABAJADOR AL WEBVIEW
+
+                                        Toast.makeText(v.getContext(), "valor que se pagara"+porpagarselccionado, Toast.LENGTH_LONG).show();
+
+                                        if(r1.isChecked()==true){
+                                            //todo el codigo que se ejecuta cuando se pagara con webpay
+                                                Bundle bundle = new Bundle();
+                                                //id de la solicitud para que se pueda buscar en el detalle
+                                                bundle.putString("rutusuario",rutusuario);
+                                                bundle.putInt("monto",porpagarselccionado);
+                                                bundle.putInt("montopref",porpagarpref);
+                                                onepayFragment onepayFragment = new onepayFragment();
+                                                onepayFragment.setArguments(bundle);
+                                                getFragmentManager().beginTransaction().replace(R.id.container,onepayFragment)
+                                                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                                        .commit();
+                                                dialog8.dismiss();
+                                        }
+                                        if(r2.isChecked()==true){
+                                            Bundle bundle = new Bundle();
+                                            //id de la solicitud para que se pueda buscar en el detalle
+                                            bundle.putString("rutusuario",rutusuario);
+                                            bundle.putInt("monto",porpagarselccionado);
+                                            bundle.putInt("montopref",porpagarpref);
+                                            onepayFragment onepayFragment = new onepayFragment();
+                                            onepayFragment.setArguments(bundle);
+                                            getFragmentManager().beginTransaction().replace(R.id.container,onepayFragment)
+                                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                                    .commit();
+                                            dialog8.dismiss();
+                                        }
+
+                                    }
+                                }
+                            });
+
+
+                        }
+                    });
+
+                }
 
 
 
@@ -479,15 +591,21 @@ public class homeFragment extends Fragment {
                     GananciasAPI ganancias = response.body();
                     carganancias.setVisibility(View.VISIBLE);
 
-                    txtperiodoganancias.setText("Ganancias desde: "+fechainicio+" hasta: "+fechafin+"");
+                    if(fechainicio.equals("vacio") && fechafin.equals("vacio")){
+                        txtperiodoganancias.setText("Ganancias totales del perfil.");
+                    }else{
+                        txtperiodoganancias.setText("Ganancias desde: "+fechainicio+" hasta: "+fechafin+"");
+                    }
+
                     edittextgananciasperiodo.setText(""+ganancias.getGananciasTrabajador());
                     edittextprecioporpagar.setText(""+ganancias.getGananciasPorPagar());
                     txtganancasobtenidasel.setText("Ganancias obtenidas:"+fechaactual+"");
                     int gananciastrabajadaor=ganancias.getGananciasTrabajador();
                     int gananaciasporpagar = ganancias.getGananciasPorPagar();
+
                     //se guarda los valores para poder mostrarlos sin estar rcargando esta llamada
                     saveOnPreferencesganancias(fechainicio,fechafin,fechaactual,gananciastrabajadaor,gananaciasporpagar);
-
+                    setgananciasexist();
                     dialog6.dismiss();
 
                     Toast.makeText(getContext(), ""+ganancias.getGananciasPorPagar() +" / "+ganancias.getGananciasTrabajador(), Toast.LENGTH_LONG).show();
@@ -521,7 +639,6 @@ public class homeFragment extends Fragment {
             }
         });
     }
-
 
     private void cambiarestadotrabajador() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -794,47 +911,6 @@ public class homeFragment extends Fragment {
         });
 
     }
-
-   /* private void addDataSet() {
-
-        ArrayList<PieEntry> yEntrys = new ArrayList<>();
-        ArrayList<String> xEntrys = new ArrayList<>();
-
-        for(int i = 0; i < ydata.length; i++){
-            yEntrys.add(new PieEntry(ydata[i] , i));
-        }
-
-        for(int i = 1; i < xdata.length; i++){
-            xEntrys.add(xdata[i]);
-        }
-
-        //create the data set
-        PieDataSet pieDataSet = new PieDataSet(yEntrys, "Employee Sales");
-        pieDataSet.setSliceSpace(2);
-        pieDataSet.setValueTextSize(12);
-
-        //add colors to dataset
-        ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(Color.GRAY);
-        colors.add(Color.BLUE);
-        colors.add(Color.RED);
-        colors.add(Color.GREEN);
-        colors.add(Color.CYAN);
-        colors.add(Color.YELLOW);
-        colors.add(Color.MAGENTA);
-
-        pieDataSet.setColors(colors);
-
-        //add legend to chart
-        Legend legend = pieChart.getLegend();
-        legend.setForm(Legend.LegendForm.CIRCLE);
-       // legend.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
-
-        //create pie data object
-        PieData pieData = new PieData(pieDataSet);
-        pieChart.setData(pieData);
-        pieChart.invalidate();
-    } */
 
     private void setgananciasexist() {
 

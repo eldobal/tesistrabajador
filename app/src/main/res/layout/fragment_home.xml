@@ -297,12 +297,10 @@
                     app:cardElevation="6dp">
 
                     <ScrollView
-
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <RelativeLayout
-
                             android:layout_width="match_parent"
                             android:layout_height="340dp">
 
@@ -404,6 +402,19 @@
 
                                     android:layout_height="wrap_content"></EditText>
 
+
+
+                                <Button
+                                    android:visibility="gone"
+                                    android:id="@+id/btnpagarporpagar"
+                                    android:layout_below="@id/edittextprecioporpagar"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Pagar Deuda"
+                                    android:background="@drawable/btn_comollegar"
+                                    ></Button>
+
+
                             </RelativeLayout>
 
 
@@ -427,12 +438,13 @@
 
 
                             <TextView
+                                android:layout_marginTop="7dp"
                                 android:fontFamily="sans-serif-condensed-medium"
                                 android:textColor="@color/colordark"
                                 android:textSize="16dp"
-                                android:layout_below="@id/txtganancasobtenidasel"
+                                android:layout_below="@id/relativeid2"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
                                 android:text="Recuerde que cualquier duda con consultas o problemas debe contactarse con el equipo de apoyo para llegar a una resolucion inmediata. Muchas Gracias."></TextView>
 
                         </RelativeLayout>

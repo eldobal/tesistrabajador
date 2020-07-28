@@ -4,19 +4,16 @@ import java.util.ArrayList;
 
 public class GananciasAPI {
 
-
-
     private int GananciasTrabajador;
-    private int GananciasPorPagar;
+    private int GananciaPorPagar;
 
 
     private ArrayList<GananciasAPI> lista = new ArrayList<GananciasAPI>();
 
 
     public GananciasAPI(){
-
         this.GananciasTrabajador= GananciasTrabajador;
-        this.GananciasPorPagar=GananciasPorPagar;
+        this.GananciaPorPagar=GananciaPorPagar;
     }
 
 
@@ -30,11 +27,11 @@ public class GananciasAPI {
     }
 
     public int getGananciasPorPagar() {
-        return GananciasPorPagar;
+        return GananciaPorPagar;
     }
 
     public void setGananciasPorPagar(int gananciasPorPagar) {
-        GananciasPorPagar = gananciasPorPagar;
+        GananciaPorPagar = gananciasPorPagar;
     }
 
     public ArrayList<GananciasAPI> getLista() {

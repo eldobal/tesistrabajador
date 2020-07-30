@@ -79,10 +79,6 @@
                     app:cardCornerRadius="30dp"
                     app:cardElevation="6dp">
 
-                    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                        android:id="@+id/refresh"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -123,8 +119,6 @@
 
 
 
-
-                    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 
@@ -213,10 +207,6 @@
                     app:cardElevation="6dp"
                   >
 
-                    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                        android:id="@+id/refreshterminadas"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
 
 
                         <RelativeLayout
@@ -251,7 +241,7 @@
 
                             <ListView
                                 android:layout_marginTop="25dp"
-                                android:layout_marginBottom="-20dp"
+                                android:layout_marginBottom="-25dp"
                                 android:id="@+id/listadosolicitudescliente"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent">
@@ -261,7 +251,6 @@
 
 
 
-                    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
                 </androidx.cardview.widget.CardView>

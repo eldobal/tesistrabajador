@@ -194,8 +194,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                     EditText preciotrabajador = viewsync.findViewById(R.id.preciotrabajadornotificacion);
                     Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
 
-                    textoalertnotificacion.setText("Si Apreta el boton confirmar devera especificar un precio aprox y luego se le notificara al cliente" +
-                            ". Si selecciona cancelar se eliminara esta solicitud y se le notificara de igual manera al cliente.(Descripcion "+descripcion+")");
+                    textoalertnotificacion.setText("Descripcion:"+descripcion+")");
 
                     dismiss.setOnClickListener(new View.OnClickListener() {
                         @Override

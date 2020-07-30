@@ -114,6 +114,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
 
                     String textonuevasolicitud = "Solicitud "+idsolicitud+ " ha sido finalizada." ;
 
+                    String textosolicitudpagada = "Solicitud "+idsolicitud+" ha sido pagada mediante WebPay.";
 
 
                     //se ocupa la llamada de eliminarsolipermanente
@@ -161,7 +162,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                 }
                                             });
 
-                                            Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                                        //    Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                                         } else {
                                             listanotificaciones.remove(i);
                                             refresh(listanotificaciones);
@@ -189,7 +190,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                 dialog4.dismiss();
                                             }
                                         });
-                                        Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                                     //   Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 });
                                 dialog.dismiss();
@@ -255,11 +256,11 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                             public void onClick(View view) {
                                 if(r1.isChecked()==true){
                                     pago=1;
-                                    Toast.makeText(v.getContext(), "1", Toast.LENGTH_LONG).show();
+                                //    Toast.makeText(v.getContext(), "1", Toast.LENGTH_LONG).show();
                                 }
                                 if(r2.isChecked()==true){
                                     pago=0;
-                                    Toast.makeText(v.getContext(), "0", Toast.LENGTH_LONG).show();
+                                  //  Toast.makeText(v.getContext(), "0", Toast.LENGTH_LONG).show();
                                 }
                                 if(r1.isChecked()==false && r2.isChecked()==false){
                                     Toast.makeText(v.getContext(), "seleccione una opcion por favor.", Toast.LENGTH_LONG).show();
@@ -298,7 +299,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                     }
                                                 });
 
-                                                Toast.makeText(contexto, "error/detalle/finalizar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
+                                             //   Toast.makeText(contexto, "error/detalle/finalizar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
                                             }
                                             //de lo contrario se ejecuta esta parte
                                             else {
@@ -355,7 +356,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                     dialog10.dismiss(); }
                                             });
 
-                                            Toast.makeText(contexto, "error/detalle/finalizar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
+                                         //   Toast.makeText(contexto, "error/detalle/finalizar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
                                         }
                                     });
                                 }
@@ -371,9 +372,121 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
 
                     }
 
+                    if(listanotificaciones.get(i).getMensaje().equals(textosolicitudpagada)){
+                        //se ocupa el metodo para borrar la notificacion
+                        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                        View viewsync = inflater.inflate(R.layout.alernotificacioncancelada, null);
+                        builder.setView(viewsync);
+                        AlertDialog dialog2 = builder.create();
+                        dialog2.show();
+                        dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        TextView textoalertnotificacion = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                        Button dismiss = viewsync.findViewById(R.id.btnocultaralert2);
+                        textoalertnotificacion.setText("La notificacion con el id: " + notificacion.getId() + " ha sido pagada por el cliente lo cual significa que la solitud ha sido completada en su totalidad");
+
+                        dismiss.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                int idnotificacion = listanotificaciones.get(i).getId();
+                                Retrofit retrofit = new Retrofit.Builder()
+                                        .baseUrl("http://proyectotesis.ddns.net/")
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build();
+                                tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
+                                Call<String> call = tesisAPI.borrarNotificacion(rutusuario,contrasena,idnotificacion);
+                                call.enqueue(new Callback<String>() {
+                                    @Override
+                                    public void onResponse(Call<String> call, Response<String> response) {
+                                        if (!response.isSuccessful()) {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                                            View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                                            builder.setView(viewsync);
+                                            AlertDialog dialog8 = builder.create();
+                                            dialog8.setCancelable(false);
+                                            dialog8.show();
+                                            dialog8.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                            texto.setText("Ha ocurrido un error con la respuesta al tratar de eliminar esta notificacion. intente en un momento nuevamente.");
+                                            Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                            btncerrar.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    dialog2.dismiss();
+                                                    dialog8.dismiss();
+                                                }
+                                            });
+
+                                          //  Toast.makeText(v.getContext(), "error :" + response.code()+" "+idnotificacion, Toast.LENGTH_LONG).show();
+                                        } else {
+
+                                            listanotificaciones.remove(i);
+                                            refresh(listanotificaciones);
+
+                                            //alertdialog personalizado
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
+                                            View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
+                                            builder.setView(viewsync);
+                                            AlertDialog dialog5 = builder.create();
+                                            dialog5.setCancelable(false);
+                                            dialog5.show();
+                                            dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                            texto.setText("La Solicitud ha sigo completada en su totalidad!");
+                                            Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                            btncerraralert.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                   // listanotificaciones.remove(i);
+                                                   // refresh(listanotificaciones);
+                                                   // solicitudesFragment solicitudesFragment = new solicitudesFragment();
+                                                   // FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
+                                                   // FragmentTransaction ft = fm.beginTransaction();
+                                                   // ft.replace(R.id.container, solicitudesFragment,"solicitudtag");
+                                                   // ft.commit();
+                                                    dialog5.dismiss();
+                                                    dialog2.dismiss();
+
+                                                }
+                                            });
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<String> call, Throwable t) {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                                        View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                                        builder.setView(viewsync);
+                                        AlertDialog dialog9 = builder.create();
+                                        dialog9.setCancelable(false);
+                                        dialog9.show();
+                                        dialog9.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                                        texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                                        Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                                        btncerrar.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                dialog2.dismiss();
+                                                dialog9.dismiss();
+                                            }
+                                        });
+
+                                      //  Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+                            }
+                        });
+
+
+
+                    }
 
                     //este metodo es el que se realiza para decidir
-                    if(!listanotificaciones.get(i).getMensaje().equals(textocomparar) && !listanotificaciones.get(i).getMensaje().equals(textocompararconfirmada)  && !listanotificaciones.get(i).getMensaje().equals(textonuevasolicitud) ){
+                    if(!listanotificaciones.get(i).getMensaje().equals(textocomparar) && !listanotificaciones.get(i).getMensaje().equals(textosolicitudpagada) && !listanotificaciones.get(i).getMensaje().equals(textocompararconfirmada)  && !listanotificaciones.get(i).getMensaje().equals(textonuevasolicitud) ){
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
                         View viewsync = inflater.inflate(R.layout.alertconfirmacionnotificacion,null);
@@ -387,8 +500,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                         EditText preciotrabajador = viewsync.findViewById(R.id.preciotrabajadornotificacion);
                         Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
 
-                        textoalertnotificacion.setText("Si Apreta el boton confirmar devera especificar un precio aprox y luego se le notificara al cliente" +
-                                ". Si selecciona cancelar se eliminara esta solicitud y se le notificara de igual manera al cliente.");
+                        textoalertnotificacion.setText("Si Apreta el boton confirmar devera especificar un precio aprox.Si selecciona cancelar se eliminara esta solicitud");
 
                         dismiss.setOnClickListener(new View.OnClickListener() {
                             @Override

@@ -200,7 +200,7 @@ public class listanotificacionesFragment extends Fragment {
                     dialog.show();
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
-                    texto.setText("Ha ocurrido un error con la respuesta al tratar de traer la solicitud. intente en un momento nuevamente.");
+                    texto.setText("Ha ocurrido un error con la respuesta al tratar de traer la lista de trabajadores. intente en un momento nuevamente.");
                     Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
 
                     btncerrar.setOnClickListener(new View.OnClickListener() {
@@ -209,7 +209,7 @@ public class listanotificacionesFragment extends Fragment {
                             dialog.dismiss();
                         }
                     });
-                    Toast.makeText(getActivity(), "error/noti/onresponseaca" + response.code(), Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getActivity(), "error/noti/onresponseaca" + response.code(), Toast.LENGTH_LONG).show();
 
                 } else {
 
@@ -248,6 +248,7 @@ public class listanotificacionesFragment extends Fragment {
             }
             @Override
             public void onFailure(Call<List<Notificacion>> call, Throwable t) {
+                /*
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 LayoutInflater inflater = getLayoutInflater();
                 View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
@@ -268,7 +269,7 @@ public class listanotificacionesFragment extends Fragment {
                 });
 
                 Toast.makeText(getActivity(), "error con el servidor" , Toast.LENGTH_LONG).show();
-
+                */
             }
         });
     }

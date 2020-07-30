@@ -59,7 +59,6 @@ public class DetalleSolicitudFragment extends Fragment {
     NetworkInfo activeNetwork;
     ConnectivityManager cm ;
 
-
     public DetalleSolicitudFragment() {
         // Required empty public constructor
     }
@@ -97,18 +96,15 @@ public class DetalleSolicitudFragment extends Fragment {
         }
         btncomollegar = (Button) v.findViewById(R.id.btncomollegar);
 
-
-
         cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE ){
             //se carga la solicitud
             cargardetallesolicitud();
-
         }else{
-
+            //no tiene coneccion a internet
+            Toast.makeText(v.getContext(), "Asegurese de que tenga una coneccion a internet", Toast.LENGTH_LONG).show();
         }
-
             btncomollegar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -124,8 +120,6 @@ public class DetalleSolicitudFragment extends Fragment {
                             .commit();
                 }
             });
-
-
 
 
         btnfinalizar.setOnClickListener(new View.OnClickListener() {
@@ -263,7 +257,7 @@ public class DetalleSolicitudFragment extends Fragment {
                                                         .commit();
                                             }
                                         });
-                                        Toast.makeText(getContext(), "error/detalle/finalizar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
+                                 //       Toast.makeText(getContext(), "error/detalle/finalizar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 });
 
@@ -317,33 +311,27 @@ public class DetalleSolicitudFragment extends Fragment {
                     public void onClick(View view) {
                         if(r1.isChecked()==true){
                             pago=1;
-                            Toast.makeText(v.getContext(), "1", Toast.LENGTH_LONG).show();
+                           // Toast.makeText(v.getContext(), "1", Toast.LENGTH_LONG).show();
                         }
                         if(r2.isChecked()==true){
                             pago=0;
-                            Toast.makeText(v.getContext(), "0", Toast.LENGTH_LONG).show();
+                          //  Toast.makeText(v.getContext(), "0", Toast.LENGTH_LONG).show();
                         }
                         if(r1.isChecked()==false && r2.isChecked()==false){
                             Toast.makeText(v.getContext(), "seleccione una opcion por favor.", Toast.LENGTH_LONG).show();
                         }else{
-
-
                             cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                             activeNetwork = cm.getActiveNetworkInfo();
                             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE ){
-
                                 Retrofit retrofit = new Retrofit.Builder()
                                         .baseUrl("http://proyectotesis.ddns.net/")
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-                                //metodo para llamar a la funcion que queramos
-                                //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )
                                 Call<String> call = tesisAPI.ConfirmarPago(rutperfil,contrasenaperfil,idsolicitud,pago);
                                 call.enqueue(new Callback<String>() {
                                     @Override
                                     public void onResponse( Call<String>call, Response<String> response) {
-                                        //si esta malo se ejecuta este trozo
                                         if(!response.isSuccessful()){
                                             AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
                                             LayoutInflater inflater = getLayoutInflater();
@@ -363,16 +351,13 @@ public class DetalleSolicitudFragment extends Fragment {
                                                     dialog7.dismiss();
                                                     dialog8.dismiss();
                                                     //enviar a la lista de solicitudes
-
                                                 }
                                             });
 
-                                            Toast.makeText(getContext(), "error/detalle/finalizar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
+                                        //    Toast.makeText(getContext(), "error/detalle/finalizar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
                                         }
                                         //de lo contrario se ejecuta esta parte
                                         else {
-                                            //respuesta del request
-
                                             String respusta = response.body();
                                             btnfinalizar.setVisibility(View.GONE);
                                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -398,7 +383,6 @@ public class DetalleSolicitudFragment extends Fragment {
                                                             .commit();
                                                 }
                                             });
-
                                         }
                                     }
                                     //si falla el request a la pagina mostrara este error
@@ -422,18 +406,12 @@ public class DetalleSolicitudFragment extends Fragment {
                                                 dialog7.dismiss();
                                                 dialog10.dismiss(); }
                                         });
-
-                                        Toast.makeText(getContext(), "error/detalle/finalizar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
+                                   //     Toast.makeText(getContext(), "error/detalle/finalizar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 });
-
-
                             }else{
 
                             }
-
-
-
                         }
                     }
                 });
@@ -445,8 +423,6 @@ public class DetalleSolicitudFragment extends Fragment {
     }
 
     private void cargardetallesolicitud() {
-
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://proyectotesis.ddns.net/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -475,10 +451,7 @@ public class DetalleSolicitudFragment extends Fragment {
                             dialog.dismiss();
                         }
                     });
-
-
-                    //falta alert dialog para avisar del error
-                    Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                 }
                 else {
                     Solicitud solicituds = response.body();
@@ -544,13 +517,12 @@ public class DetalleSolicitudFragment extends Fragment {
                         dialog2.dismiss();
                     }
                 });
-                Toast.makeText(getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+            //    Toast.makeText(getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
 
     }
-
 
     //metodo que permite elejir un fragment
     private void showSelectedFragment(Fragment fragment){

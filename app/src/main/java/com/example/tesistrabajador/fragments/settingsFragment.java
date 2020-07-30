@@ -35,7 +35,7 @@ public class settingsFragment extends Fragment {
     private GoogleSignInClient googleSignInClient;
     SweetAlertDialog dp;
     SharedPreferences asycprefs;
-    private SharedPreferences prefs;
+    private SharedPreferences prefs,prefsganancias;
     int azynctiempo =0;
     String tiempo= "";
 
@@ -54,6 +54,9 @@ public class settingsFragment extends Fragment {
         View v= inflater.inflate(R.layout.fragment_settings, container, false);
         asycprefs = getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         settiempoasyncexist();
+
+        //se buscan el usuario y el tiempo de sync de la app
+        prefsganancias = this.getActivity().getSharedPreferences("Preferencesganancias", Context.MODE_PRIVATE);
 
         //declaracion de botones
         final Button btnsalir = (Button) v.findViewById(R.id.btnsalir);
@@ -264,7 +267,23 @@ public class settingsFragment extends Fragment {
                 .addOnCompleteListener(getActivity(), task -> {
                     Toast.makeText(getContext(), "Salido", Toast.LENGTH_LONG).show();
                     revokeAccess();
+                    //eliminar el pref de ganancias
+                    saveOnPreferencesganancias("" ,"", "",0,0);
                 });
+    }
+
+
+    //metodo para guardar los datos que se rescaten de la llamada
+    private void saveOnPreferencesganancias(String fechainicio, String fechafin,String fechaactual,int gananciaperiodo,int porpagar) {
+        SharedPreferences.Editor editor = prefsganancias.edit();
+        editor.putString("fechainicio", fechainicio);
+        editor.putString("fechafin", fechafin);
+        editor.putString("fechaactual", fechaactual);
+        editor.putInt("gananciaperiodo", gananciaperiodo);
+        editor.putInt("porpagar", porpagar);
+        //linea la cual guarda todos los valores en la pref antes de continuar
+        editor.commit();
+        editor.apply();
     }
 
 

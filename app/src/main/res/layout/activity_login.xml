@@ -25,6 +25,7 @@
             android:layout_marginBottom="30dp">
 
             <com.google.android.gms.common.SignInButton
+                android:visibility="gone"
                 android:layout_marginTop="10dp"
                 android:id="@+id/Signbutton"
                 android:layout_width="wrap_content"

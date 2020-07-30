@@ -121,6 +121,8 @@ public class onepayFragment extends Fragment {
             }
         }
 
+
+
         //url la cual estara alojado el backend con la implementacion de transbank
         String urltrasaccionfinalizada ="http://proyectotesis.ddns.net/Datos/Final";
         String urltransaccionerror  ="http://proyectotesis.ddns.net/Datos/Error";
@@ -139,7 +141,7 @@ public class onepayFragment extends Fragment {
                             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
                                 //se captura la url donde se encuentra el usuario en el webview
                                 String webUrlactual = webView.getUrl();
-                                Toast.makeText(getContext(), webUrlactual, Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(getContext(), webUrlactual, Toast.LENGTH_SHORT).show();
                                 if (urltrasaccionfinalizada.equals(webUrlactual)) {
                                     task.cancel();
                                     //alert dialog con el mensaje de que se ha pagado correctamente

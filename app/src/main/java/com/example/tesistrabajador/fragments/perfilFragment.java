@@ -143,6 +143,7 @@ public class perfilFragment extends Fragment {
 
 
         if(rutperfil.equals("")){
+          //si no encuentra el rut enviar al usuario a la pantalla de inicio
 
         }else{
             cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -169,7 +170,6 @@ public class perfilFragment extends Fragment {
             editardatos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                     View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizar, null);
                     builder.setView(viewsync);
@@ -178,17 +178,14 @@ public class perfilFragment extends Fragment {
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     Button btnconfirmar = viewsync.findViewById(R.id.btnalertactualizar);
                     Button btncancelar = viewsync.findViewById(R.id.btnalertcancelarperfil);
-
                     btnconfirmar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-
                             editardatos.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     //metodo para hacer request de cambio de datos por parte del usuario
                                     if (mAwesomeValidation.validate()) {
-
                                         cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                                         activeNetwork = cm.getActiveNetworkInfo();
                                         if (activeNetwork != null) {
@@ -219,7 +216,6 @@ public class perfilFragment extends Fragment {
                                                     ciudad.setFocusable(false);
                                                     ciudad.setFocusableInTouchMode(false);
                                                 }
-
 
                                             } else {
                                                 //manejar alert
@@ -354,7 +350,7 @@ public class perfilFragment extends Fragment {
                         }
                     });
 
-                    Toast.makeText(getContext(), "error/perfil/cargar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(getContext(), "error/perfil/cargar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
                 }
                 //de lo contrario se ejecuta esta parte
                 else {
@@ -403,7 +399,7 @@ public class perfilFragment extends Fragment {
                     }
                 });
 
-                Toast.makeText(getContext(), "error/perfil/cargar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
+              //  Toast.makeText(getContext(), "error/perfil/cargar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -441,7 +437,7 @@ public class perfilFragment extends Fragment {
                             }
                         });
 
-                        Toast.makeText(getContext(), "error/perfil/cargarspinner/onresponse:"+response.code(), Toast.LENGTH_LONG).show();
+                      //  Toast.makeText(getContext(), "error/perfil/cargarspinner/onresponse:"+response.code(), Toast.LENGTH_LONG).show();
                     }
                     //de lo contrario se ejecuta esta parte
                     else {
@@ -486,7 +482,7 @@ public class perfilFragment extends Fragment {
                         }
                     });
 
-                    Toast.makeText(getContext(), "error/perfil/cargarspinner/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(getContext(), "error/perfil/cargarspinner/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
         }catch (Exception e){
@@ -532,8 +528,7 @@ public class perfilFragment extends Fragment {
                                 dialog7.dismiss();
                             }
                         });
-
-                        Toast.makeText(getContext(), "error/perfil/actualizar perfil/onfailure:"+response.code(), Toast.LENGTH_LONG).show();
+                     //   Toast.makeText(getContext(), "error/perfil/actualizar perfil/onfailure:"+response.code(), Toast.LENGTH_LONG).show();
                     }
                     //de lo contrario se ejecuta esta parte
                     else {
@@ -556,7 +551,6 @@ public class perfilFragment extends Fragment {
                                 //metodo para cambiar de activity
                             }
                         });
-
                     }
                 }
                 //si falla el request a la pagina mostrara este error
@@ -573,15 +567,13 @@ public class perfilFragment extends Fragment {
                     TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
                     texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
                     Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
-
                     btncerrar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             dialog8.dismiss();
                         }
                     });
-
-                    Toast.makeText(getContext(), "error/perfil/actualizar perfil/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
+                 //   Toast.makeText(getContext(), "error/perfil/actualizar perfil/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
         }catch (Exception e){

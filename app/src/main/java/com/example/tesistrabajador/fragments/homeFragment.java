@@ -96,15 +96,6 @@ public class homeFragment extends Fragment {
         listasolicitudactivas  = new ArrayList<Solicitud>();
         listasolicitudactivasinterna   = new ArrayList<Solicitud>();
         solicitudinterna   = new ArrayList<Solicitud>();
-        //  listasolicitudactivas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistaspendientes");
-        // listasolicitudesterminadas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistasterminadas");
-        //ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        //NetworkInfo = connectivityManager.getActiveNetworkInfo();
-
-
-
-
-
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
@@ -113,10 +104,8 @@ public class homeFragment extends Fragment {
 
         homeFragment test = (homeFragment) getActivity().getSupportFragmentManager().findFragmentByTag("hometag");
 
-
         final Handler handler = new Handler();
         Timer timer = new Timer();
-
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
@@ -134,13 +123,11 @@ public class homeFragment extends Fragment {
                                 //manejar dialog
                             }
                         }
-
                     }
                 });
             }
         };
         timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
-
     }
 
     @Override
@@ -163,7 +150,6 @@ public class homeFragment extends Fragment {
         carganancias = (CardView) v.findViewById(R.id.cardganancias);
         btnpagarporpagar =(Button) v.findViewById(R.id.btnpagarporpagar);
         btnpagarporpagar.setVisibility(View.GONE);
-
 
         //se buscan el usuario y el tiempo de sync de la app
         prefsganancias = this.getActivity().getSharedPreferences("Preferencesganancias", Context.MODE_PRIVATE);
@@ -194,7 +180,6 @@ public class homeFragment extends Fragment {
                 getActivity().finish();
                 Toast.makeText(getContext(), "el Usuario no es valido ", Toast.LENGTH_LONG).show();
             }else{
-
                 cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                 activeNetwork = cm.getActiveNetworkInfo();
                 if (activeNetwork != null) {
@@ -212,7 +197,6 @@ public class homeFragment extends Fragment {
                     }
                 }
 
-
                 btncambiodeestado.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -226,11 +210,8 @@ public class homeFragment extends Fragment {
 
                             }
                         }
-
                     }
                 });
-
-
 
                 btncalcularganancias.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -250,7 +231,6 @@ public class homeFragment extends Fragment {
                         Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
                         Button btncalcularganancias =(Button) viewsync.findViewById(R.id.btnconsultarganancias);
 
-
                         btnfechainicio.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -267,7 +247,6 @@ public class homeFragment extends Fragment {
                                 Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
                                 Button btncalcularganancias =(Button) viewsync.findViewById(R.id.btnseleccionar);
                                 textoinformativo.setText("Seleccione la fecha de INICIO del rango de tiempo del cual usted desea obtener las ganancias.");
-
                                 btncerrar.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -278,18 +257,13 @@ public class homeFragment extends Fragment {
                                 btncalcularganancias.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-
                                         dialog5.dismiss();
-
                                         dia1= datePicker.getDayOfMonth();
                                         mes1 = datePicker.getMonth()+1;
                                         año1 = datePicker.getYear();
-
                                         fechainicio = dia1+"-"+mes1+"-"+año1;
-
                                     }
                                 });
-
                             }
                         });
 
@@ -309,9 +283,7 @@ public class homeFragment extends Fragment {
                                 DatePicker datePicker =(DatePicker) viewsync.findViewById(R.id.datepickerGanancias);
                                 Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
                                 Button btncalcularganancias =(Button) viewsync.findViewById(R.id.btnseleccionar);
-
                                 textoinformativo.setText("Seleccione la fecha de FIN del rango de tiempo del cual usted desea obtener las ganancias.");
-
                                 btncerrar.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -322,21 +294,13 @@ public class homeFragment extends Fragment {
                                 btncalcularganancias.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-
                                         dialog6.dismiss();
-
                                         dia2= datePicker.getDayOfMonth();
                                         mes2 = datePicker.getMonth()+1;
                                         año2 = datePicker.getYear();
-
                                         fechafin = dia2+"-"+mes2+"-"+año2;
-
-
                                     }
                                 });
-
-
-
                             }
                         });
 
@@ -351,31 +315,17 @@ public class homeFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 //se verifica que las fechas esten seleccionadas de forma correcta
-
                                 //formato del calendario el cual toma la fecha actual.
                                 Calendar calendar = Calendar.getInstance();
                                 SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
                                 String fechaactual = sdf.format(calendar.getTime());
 
-
-                                /*
-                                if(fechafin.compareTo(fechaactual) == 0 ){
-                                    Toast.makeText(getContext(), "las fechas son iguales", Toast.LENGTH_LONG).show();
-                                }
-                                if(fechafin.compareTo(fechaactual) > 0 ){
-                                    Toast.makeText(getContext(), "la fechafin es despues la fecha actual ", Toast.LENGTH_LONG).show();
-                                }
-                                if(fechafin.compareTo(fechaactual) < 0 ){
-                                    Toast.makeText(getContext(), "la fechafin es es anterioir a la fecha actual", Toast.LENGTH_LONG).show();
-                                }
-                                */
-
-
                                 if(fechainicio.equals("")&& fechafin.equals("")){
                                     fechainicio ="vacio";
                                     fechafin="vacio";
                                     calcularganancias(fechainicio, fechafin, fechaactual);
-                                }else {
+                                }
+                                else {
                                     if (año1 <= año2) {
                                         if (mes1 <= mes2) {
                                             if (dia1 <= dia2) {
@@ -388,7 +338,7 @@ public class homeFragment extends Fragment {
                                                                 //se carga la solicitud
                                                                 calcularganancias(fechainicio, fechafin, fechaactual);
                                                             } else {
-
+                                                                Toast.makeText(getContext(), "No se encuentra una coneccion.", Toast.LENGTH_LONG).show();
                                                             }
                                                         }
                                                     } else {
@@ -409,23 +359,18 @@ public class homeFragment extends Fragment {
                                         Toast.makeText(getContext(), "el año de inicio debe ser menor o igual al año fin.", Toast.LENGTH_LONG).show();
                                     }
                                 }
-
                             }
                         });
                     }
                 });
 
-
                 if(Porpagar !=0){
                     btnpagarporpagar.setVisibility(View.VISIBLE);
-
-
 
                     btnpagarporpagar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             porpagarselccionado=0;
-
                             //alert para saber si el pago estuvo weno
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                             LayoutInflater inflater = getLayoutInflater();
@@ -448,7 +393,6 @@ public class homeFragment extends Fragment {
                             r2.setText("Pagar la deuda en su totalidad.("+Porpagar+")");
                             dialog8.show();
 
-
                             dismiss.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -463,19 +407,18 @@ public class homeFragment extends Fragment {
                                         //PAGO MINIMO EL CUAL DEJARA EL MARGEN
                                       porpagarselccionado= Porpagar-10000;
                                         porpagarpref = Porpagar-porpagarselccionado;
-                                        Toast.makeText(v.getContext(), "1", Toast.LENGTH_LONG).show();
+                                  //      Toast.makeText(v.getContext(), "1", Toast.LENGTH_LONG).show();
                                     }
                                     if(r2.isChecked()==true){
                                         //PAGO COMPLETO CON EL POR PAGAR ENTERO
                                         porpagarselccionado=Porpagar;
                                         porpagarpref=0;
-                                        Toast.makeText(v.getContext(), "0", Toast.LENGTH_LONG).show();
+                                     //   Toast.makeText(v.getContext(), "0", Toast.LENGTH_LONG).show();
                                     }
                                     if(r1.isChecked()==false && r2.isChecked()==false){
                                         Toast.makeText(v.getContext(), "seleccione una opcion por favor.", Toast.LENGTH_LONG).show();
                                     }else{
                                         //SE ENVIA AL TRABAJADOR AL WEBVIEW
-
                                         Toast.makeText(v.getContext(), "valor que se pagara"+porpagarselccionado, Toast.LENGTH_LONG).show();
 
                                         if(r1.isChecked()==true){
@@ -505,17 +448,12 @@ public class homeFragment extends Fragment {
                                                     .commit();
                                             dialog8.dismiss();
                                         }
-
                                     }
                                 }
                             });
-
-
                         }
                     });
-
                 }
-
 
 
 
@@ -531,22 +469,6 @@ public class homeFragment extends Fragment {
                         }
                     }
                 }.start();
-
-              /*  refreshLayoutterminadas.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        new CountDownTimer(1500,1000){
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-                            }
-                            @Override
-                            public void onFinish() {
-                                reiniciarfragmentterminadas(rutusuario);
-                            }
-                        }.start();
-                    }
-                });
-               */
 
             }
 
@@ -582,35 +504,27 @@ public class homeFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             dialog4.dismiss();
-
                         }
                     });
-
-                    Toast.makeText(getContext(), "error/homedatos/ganancias/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
+               //     Toast.makeText(getContext(), "error/homedatos/ganancias/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     GananciasAPI ganancias = response.body();
                     carganancias.setVisibility(View.VISIBLE);
-
                     if(fechainicio.equals("vacio") && fechafin.equals("vacio")){
                         txtperiodoganancias.setText("Ganancias totales del perfil.");
                     }else{
                         txtperiodoganancias.setText("Ganancias desde: "+fechainicio+" hasta: "+fechafin+"");
                     }
-
                     edittextgananciasperiodo.setText(""+ganancias.getGananciasTrabajador());
                     edittextprecioporpagar.setText(""+ganancias.getGananciasPorPagar());
                     txtganancasobtenidasel.setText("Ganancias obtenidas:"+fechaactual+"");
                     int gananciastrabajadaor=ganancias.getGananciasTrabajador();
                     int gananaciasporpagar = ganancias.getGananciasPorPagar();
-
                     //se guarda los valores para poder mostrarlos sin estar rcargando esta llamada
                     saveOnPreferencesganancias(fechainicio,fechafin,fechaactual,gananciastrabajadaor,gananaciasporpagar);
                     setgananciasexist();
                     dialog6.dismiss();
-
-                    Toast.makeText(getContext(), ""+ganancias.getGananciasPorPagar() +" / "+ganancias.getGananciasTrabajador(), Toast.LENGTH_LONG).show();
-
-
+                //    Toast.makeText(getContext(), ""+ganancias.getGananciasPorPagar() +" / "+ganancias.getGananciasTrabajador(), Toast.LENGTH_LONG).show();
                 }
             }
             @Override
@@ -626,15 +540,13 @@ public class homeFragment extends Fragment {
                 TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
                 texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
                 Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
-
                 btncerrar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dialog5.dismiss();
                     }
                 });
-
-                Toast.makeText(getContext(), "error/homedatos/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
+           //     Toast.makeText(getContext(), "error/homedatos/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
 
             }
         });
@@ -662,15 +574,13 @@ public class homeFragment extends Fragment {
                     TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
                     texto.setText("Ha ocurrido un error con la respuesta al tratar de cambiar el estado de su perfil. intente en un momento nuevamente.");
                     Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
-
                     btncerrar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             dialog.dismiss();
                         }
                     });
-
-                    Toast.makeText(getContext(), "error/homedatosESTADO/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getContext(), "error/homedatosESTADO/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     String msgestado = response.body();
                     if(msgestado.equals("Disponible")){
@@ -719,9 +629,7 @@ public class homeFragment extends Fragment {
                         dialog3.dismiss();
                     }
                 });
-
-
-                Toast.makeText(getContext(), "error/homedatosESTADO/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
+             //   Toast.makeText(getContext(), "error/homedatosESTADO/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -757,7 +665,7 @@ public class homeFragment extends Fragment {
                         }
                     });
 
-                    Toast.makeText(getContext(), "error/homedatos/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(getContext(), "error/homedatos/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     UsuarioTrabajadorhome usuarioTrabajador = response.body();
                     String rutaurl=usuarioTrabajador.getFoto();
@@ -799,11 +707,7 @@ public class homeFragment extends Fragment {
                         dialog5.dismiss();
                     }
                 });
-
-
-
-                Toast.makeText(getContext(), "error/homedatos/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
-
+              //  Toast.makeText(getContext(), "error/homedatos/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -839,7 +743,7 @@ public class homeFragment extends Fragment {
                         }
                     });
 
-                    Toast.makeText(getContext(), "error/soli/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
+              //      Toast.makeText(getContext(), "error/soli/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     List<Solicitud> solicituds = response.body();
                     Solicitudactual.clear();
@@ -884,6 +788,7 @@ public class homeFragment extends Fragment {
             }
             @Override
             public void onFailure(Call<List<Solicitud>> call, Throwable t) {
+                /*
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 LayoutInflater inflater = getLayoutInflater();
                 View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
@@ -903,7 +808,9 @@ public class homeFragment extends Fragment {
                     }
                 });
 
-                Toast.makeText(getContext(), "error/soli/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                 */
+
+              //  Toast.makeText(getContext(), "error/soli/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
                 loadinglista.setVisibility(View.INVISIBLE);
                 loadinglista.pauseAnimation();
                 notfound.setText("No Posee Solicitudes");
@@ -913,14 +820,11 @@ public class homeFragment extends Fragment {
     }
 
     private void setgananciasexist() {
-
         String fechai = getFechainicio();
         String fechaf = getFechafin();
         String fechaa = getfechaactual();
         int gananciap = getgananciaperiodo();
         int porp = getporpagar();
-
-
         if (!TextUtils.isEmpty(fechai)&& (!TextUtils.isEmpty(fechaf)) &&(!TextUtils.isEmpty(fechaa)) && (gananciap !=0) ) {
             Fechainicio=fechai.toString();
             Fechafin=fechaf.toString();
@@ -928,8 +832,6 @@ public class homeFragment extends Fragment {
             Gananciaperiodo=gananciap;
             Porpagar = porp;
         }
-
-
     }
     //metodo para guardar los datos que se rescaten de la llamada
     private void saveOnPreferencesganancias(String fechainicio, String fechafin,String fechaactual,int gananciaperiodo,int porpagar) {
@@ -944,27 +846,25 @@ public class homeFragment extends Fragment {
         editor.apply();
     }
 
-
-
     private String getFechainicio() {
         return prefsganancias.getString("fechainicio", "");
     }
+
     private String getFechafin() {
         return prefsganancias.getString("fechafin", "");
     }
+
     private String getfechaactual() {
         return prefsganancias.getString("fechaactual", "");
     }
+
     private int getgananciaperiodo() {
         return prefsganancias.getInt("gananciaperiodo", 0);
     }
+
     private int getporpagar() {
         return prefsganancias.getInt("porpagar", 0);
     }
-
-
-
-
 
     //metodo para traer el rut del usuario hacia la variable local
     private void setcredentiasexist() {
@@ -994,10 +894,5 @@ public class homeFragment extends Fragment {
     private int gettiempoasync() {
         return asycprefs.getInt("tiempo", 0);
     }
-
-
-
-
-
 
 }

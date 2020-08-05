@@ -368,7 +368,7 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-
+                        android:visibility="gone"
                         android:id="@+id/cardsolucionsolicitud"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -430,7 +430,7 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/carfotossolicitud"
+                        android:id="@+id/cardfotossolicitud"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 

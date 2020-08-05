@@ -55,7 +55,7 @@ public class DetalleSolicitudFragment extends Fragment {
     private String rutperfil ="",contrasenaperfil="";
     double latitud=0.0,longitud=0.0;
     int pago = 0;
-    CardView carddiagnostico;
+    CardView carddiagnostico,cardsolucion,cardfoto;
     NetworkInfo activeNetwork;
     ConnectivityManager cm ;
 
@@ -79,6 +79,8 @@ public class DetalleSolicitudFragment extends Fragment {
         imgperfiltrabajador =(ImageView)getActivity().findViewById(R.id.imgperfilfilasolicitud);
         imgclientesacada =(ImageView)getActivity().findViewById(R.id.imgclientesacada);
         carddiagnostico =(CardView) getActivity().findViewById(R.id.carddiagnostico);
+        cardsolucion =(CardView) getActivity().findViewById(R.id.cardsolucionsolicitud);
+        cardfoto =(CardView) getActivity().findViewById(R.id.cardfotossolicitud);
     }
 
     @Override
@@ -486,15 +488,29 @@ public class DetalleSolicitudFragment extends Fragment {
                     }else {
                         precio.setText("Precio aprox: " + solicituds.getPrecio());
                     }
+
                     estadosolicitud.setText("Estado : "+solicituds.getEstado());
                     descripciondetallesolicitud.setText(solicituds.getDescripcionP());
-                    soluciondetallesolicitud.setText(solicituds.getSolucion());
+                    if(solicituds.getSolucion() == null){
+                        cardsolucion.setVisibility(View.GONE);
+                    }else{
+                        cardsolucion.setVisibility(View.VISIBLE);
+                        soluciondetallesolicitud.setText(solicituds.getSolucion());
+                    }
+
                     latitud=(solicituds.getLatitud());
                     longitud=solicituds.getLongitud();
                     //carga de la foto del trabajor
+                    if(solicituds.getIdFoto().equals("") || solicituds.getIdFoto() ==null){
+                        cardfoto.setVisibility(View.GONE);
+                    }else{
+                        cardfoto.setVisibility(View.VISIBLE);
+                        //carga de foto cargada por el usuario
+                        Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getIdFoto())).into(imgclientesacada);
+                    }
+
                     Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getFotoT())).into(imgperfiltrabajador);
-                    //carga de foto cargada por el usuario
-                    Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getIdFoto())).into(imgclientesacada);
+
                 }
             }
             @Override

@@ -363,13 +363,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                             }
                         });
 
-
-
-
-
-
-
-
                     }
 
                     if(listanotificaciones.get(i).getMensaje().equals(textosolicitudpagada)){

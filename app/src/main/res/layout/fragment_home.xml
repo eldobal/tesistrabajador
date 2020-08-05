@@ -445,7 +445,7 @@
                                 android:layout_below="@id/relativeid2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Recuerde que cualquier duda con consultas o problemas debe contactarse con el equipo de apoyo para llegar a una resolucion inmediata. Muchas Gracias."></TextView>
+                                android:text="Recuerde que cualquier duda con consultas o problemas debe contactarse con el equipo de apoyo."></TextView>
 
                         </RelativeLayout>
 

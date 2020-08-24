@@ -44,17 +44,16 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:layout_margin="8dp"
-
-            android:layout_marginLeft="80dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="14dp"
             android:id="@+id/btnalertperfilexito"
+
             android:layout_width="175dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_ripple"
-            android:text="cerrar este cuadro">
-        </Button>
+            android:layout_margin="8dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/bg_btnwebpay"
+            android:text="cerrar este cuadro"></Button>
     </LinearLayout>
 
 

@@ -274,13 +274,13 @@
 
             <Button
                 android:id="@+id/registrarse"
-                android:layout_width="100dp"
+                android:layout_width="200dp"
                 android:layout_height="45dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="5dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/botonripple"
+                android:background="@drawable/bg_btnwebpay"
                 android:text="Registrarse"
                 android:textColor="@drawable/botonpressed" />
         </RelativeLayout>

@@ -53,7 +53,7 @@
             android:id="@+id/btnalertperfilexito"
             android:layout_width="175dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_ripple"
+            android:background="@drawable/bg_btnwebpay"
             android:text="cerrar este cuadro">
         </Button>
     </LinearLayout>

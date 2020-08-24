@@ -43,7 +43,7 @@
             android:id="@+id/btnocultaralert2"
             android:layout_width="175dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_ripple"
+            android:background="@drawable/bg_btnwebpay"
             android:text="Entiendo">
         </Button>
     </LinearLayout>

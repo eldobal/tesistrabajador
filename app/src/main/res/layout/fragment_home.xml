@@ -403,16 +403,14 @@
                                     android:layout_height="wrap_content"></EditText>
 
 
-
                                 <Button
-                                    android:visibility="gone"
                                     android:id="@+id/btnpagarporpagar"
-                                    android:layout_below="@id/edittextprecioporpagar"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:layout_below="@id/edittextprecioporpagar"
+                                    android:background="@drawable/bg_btnwebpay"
                                     android:text="Pagar Deuda"
-                                    android:background="@drawable/btn_comollegar"
-                                    ></Button>
+                                    android:visibility="gone"></Button>
 
 
                             </RelativeLayout>

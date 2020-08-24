@@ -51,7 +51,7 @@
             android:layout_margin="8dp"
             android:layout_marginTop="14dp"
             android:layout_weight="1"
-            android:background="@drawable/bg_ripple"
+            android:background="@drawable/bg_btnwebpay"
             android:text="Entiendo"></Button>
 
 

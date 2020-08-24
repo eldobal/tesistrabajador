@@ -268,37 +268,31 @@
                         android:layout_below="@id/telefonoperfil"
                         app:srcCompat="@android:drawable/ic_dialog_map" />
 
-
                 </RelativeLayout>
             </ScrollView>
 
-
-
             <Button
                 android:id="@+id/actualizarperfil"
-                android:layout_width="120dp"
+                android:layout_width="150dp"
                 android:layout_height="45dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="15dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-                android:background="@drawable/botonripple"
+                android:background="@drawable/bg_btnwebpay"
                 android:text="Actualizar"
                 android:textColor="@drawable/botonpressed" />
 
             <Button
                 android:id="@+id/actualizarcontraseña"
-                android:layout_width="120dp"
+                android:layout_width="150dp"
                 android:layout_height="45dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginRight="15dp"
                 android:layout_marginBottom="10dp"
                 android:textSize="12dp"
-                android:background="@drawable/botonripple"
+                android:background="@drawable/bg_btnwebpay"
                 android:text="Actualizar Contraseña"
                 android:textColor="@color/colorPrimary" />
-
 
         </RelativeLayout>
 

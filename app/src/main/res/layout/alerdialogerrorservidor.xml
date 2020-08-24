@@ -49,17 +49,17 @@
         android:layout_marginTop="18dp"
         android:gravity="center_horizontal"
         android:layout_height="wrap_content">
+
         <Button
-            android:layout_margin="8dp"
-            android:layout_marginLeft="80dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="20dp"
             android:id="@+id/btncerraralert"
             android:layout_width="175dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_ripple"
-            android:text="entiendo">
-        </Button>
+            android:layout_margin="8dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/bg_btnwebpay"
+            android:text="entiendo"></Button>
     </LinearLayout>
 
 

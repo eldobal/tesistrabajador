@@ -25,17 +25,13 @@
             android:layout_marginBottom="30dp">
 
             <com.google.android.gms.common.SignInButton
-                android:visibility="gone"
-                android:layout_marginTop="10dp"
                 android:id="@+id/Signbutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/btnlogin"
-                android:layout_centerHorizontal="true" />
-
-
-
-
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:visibility="gone" />
 
 
             <TextView
@@ -91,8 +87,6 @@
                 android:inputType="textPassword" />
 
 
-
-
             <Button
                 android:id="@+id/btnlogin"
                 android:layout_width="178dp"
@@ -100,19 +94,14 @@
                 android:layout_below="@+id/txtpassword"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="25pt"
-                android:background="@drawable/botonripple"
+                android:background="@drawable/bg_btnwebpay"
                 android:text="Iniciar Sesion "
                 android:textColor="@drawable/botonpressed" />
-
-
-
-
 
 
         </RelativeLayout
 
             >
-
 
 
     </LinearLayout>

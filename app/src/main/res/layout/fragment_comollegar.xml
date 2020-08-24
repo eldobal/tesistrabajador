@@ -30,7 +30,7 @@
             android:layout_height="45dp"
             android:text="como llegar"
             android:textColor="@color/colordark"
-            android:background="@drawable/bg_btncomollegar"
+            android:background="@drawable/bg_btnwebpay"
 
             ></Button>
 

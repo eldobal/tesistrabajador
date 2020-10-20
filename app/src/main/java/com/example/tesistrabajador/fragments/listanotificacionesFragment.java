@@ -1,6 +1,4 @@
 package com.example.tesistrabajador.fragments;
-
-
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -16,49 +14,39 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.activitys.loginActivity;
 import com.example.tesistrabajador.activitys.menuActivity;
 import com.example.tesistrabajador.clases.Adaptadornotificaciones;
+import com.example.tesistrabajador.clases.GlobalInfo;
 import com.example.tesistrabajador.clases.Notificacion;
 import com.example.tesistrabajador.interfaces.tesisAPI;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
 import static android.content.Context.NOTIFICATION_SERVICE;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class listanotificacionesFragment extends Fragment {
     private NotificationManagerCompat notificationManager;
     ListView listanotificaciones;
@@ -68,44 +56,31 @@ public class listanotificacionesFragment extends Fragment {
     SharedPreferences prefs,asycprefs;
     LottieAnimationView animationnotification,animationnotificationloadign ;
     ArrayList<Notificacion> arraylistanotificaciones= new ArrayList<Notificacion>();;
-    ArrayList<Notificacion> listanotificacionescomparar= new ArrayList<Notificacion>();;
-    Adaptadornotificaciones ads ,adsnoti;
+    Adaptadornotificaciones adsnoti;
     private String rutusuario="",contrasena="";
     int azynctiempo =0;
-    TextView notfound;
     private PendingIntent pendingIntent;
     private final static String CHANNEL_ID = "NOTIFICACION";
     private int NOTIFICACION_ID = 0;
     String GROUP_KEY_WORK_EMAIL = "com.android.example.Notifications";
     int SUMMARY_ID = 0;
-    Button btnprueba;
-
 
     public listanotificacionesFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) { super.onCreate(savedInstanceState);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
-        //prefs que contienen datos del usuario
         setcredentiasexist();
-        //prefs del tiempo de sync de la app
         settiempoasyncexist();
         notificationManager = NotificationManagerCompat.from(getActivity());
-        //refreshnotificaciones =(SwipeRefreshLayout) getActivity().findViewById(R.id.refreshnotificaciones);
-       // ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-       // NetworkInfo = connectivityManager.getActiveNetworkInfo();
-
         listanotificacionesFragment test = (listanotificacionesFragment) getActivity().getSupportFragmentManager().findFragmentByTag("notificacionestag");
-
         final Handler handler = new Handler();
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
@@ -121,17 +96,13 @@ public class listanotificacionesFragment extends Fragment {
                                     // adsnoti.refresh(arraylistanotificaciones);
                                     reiniciarfragmentnotificacionesASYNC(rutusuario);
                                 }
-                            } else {
-
-                            }
+                            } else { }
                         }
                     }
                 });
             }
         };
         timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
-
-
     }
 
     @Override
@@ -143,7 +114,6 @@ public class listanotificacionesFragment extends Fragment {
           animationnotificationloadign = (LottieAnimationView) v.findViewById(R.id.animationotificationloading);
           animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
           animationnotification.setVisibility(View.INVISIBLE);
-
             if (rutusuario.equals("")){
                 //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
                 Intent intent = new Intent(getContext(), loginActivity.class);
@@ -157,12 +127,8 @@ public class listanotificacionesFragment extends Fragment {
                 if (activeNetwork != null) {
                     if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
                         reiniciarfragmentnotificacionesASYNC(rutusuario);
-                    } else {
-
-                    }
+                    } else { }
                 }
-
-
                 final View vista = inflater.inflate(R.layout.elementonotificacion, null);
                 adsnoti = new Adaptadornotificaciones(getContext(), arraylistanotificaciones);
                         if (arraylistanotificaciones.size() != 0) {
@@ -174,15 +140,12 @@ public class listanotificacionesFragment extends Fragment {
                             listanotificaciones.setAdapter(adsnoti);
                         }
             }
-
-
-
         return v;
     }
 
     private void reiniciarfragmentnotificacionesASYNC(String rutusuario) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
+                .baseUrl(GlobalInfo.Rutaservidor)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
@@ -210,9 +173,7 @@ public class listanotificacionesFragment extends Fragment {
                         }
                     });
                    // Toast.makeText(getActivity(), "error/noti/onresponseaca" + response.code(), Toast.LENGTH_LONG).show();
-
                 } else {
-
                     arraylistanotificaciones.clear();
                     List<Notificacion> notificaciones = response.body();
                     for (Notificacion notificacion : notificaciones) {
@@ -226,25 +187,19 @@ public class listanotificacionesFragment extends Fragment {
                         arraylistanotificaciones.add(notificacion1);
                     }
                     if (arraylistanotificaciones.size() != 0) {
-
-
                         adsnoti.refresh(arraylistanotificaciones);
                         listanotificaciones.setAdapter(adsnoti);
-
                         animationnotification.setVisibility(View.INVISIBLE);
                         animationnotification.pauseAnimation();
                         animationnotificationloadign.setVisibility(View.INVISIBLE);
                         animationnotificationloadign.pauseAnimation();
-
-                    }else {
+                    } else {
                         animationnotification.setVisibility(View.VISIBLE);
                         animationnotification.playAnimation();
                         animationnotificationloadign.setVisibility(View.INVISIBLE);
                         animationnotificationloadign.pauseAnimation();
-
                     }
                 }
-
             }
             @Override
             public void onFailure(Call<List<Notificacion>> call, Throwable t) {
@@ -301,11 +256,7 @@ public class listanotificacionesFragment extends Fragment {
     private int gettiempoasync() {
         return asycprefs.getInt("tiempo", 0);
     }
-
-    //metodo el cual verifica la version del so para crear el canal
     private void createNotificationChannel(){
-        //se verifica que el SO sea igual o superior a oreo
-        //si es superior crea el notification chanel
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             CharSequence name = "Noticacion";
             NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);

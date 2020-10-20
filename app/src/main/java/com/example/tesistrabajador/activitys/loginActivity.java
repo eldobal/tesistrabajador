@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.clases.Alertdialoglogin;
+import com.example.tesistrabajador.clases.GlobalInfo;
 import com.example.tesistrabajador.clases.Usuario;
 import com.example.tesistrabajador.interfaces.tesisAPI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -110,9 +111,8 @@ public class loginActivity extends AppCompatActivity implements GoogleApiClient.
                     alertdialoglogin.startalertdialog();
                     String rut = txtrut.getText().toString();
                     String contrasena = txtpass.getText().toString();
-
                     Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl("http://proyectotesis.ddns.net/")
+                            .baseUrl(GlobalInfo.Rutaservidor)
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
                     tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);

@@ -1,5 +1,4 @@
 package com.example.tesistrabajador.fragments;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,10 +7,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,24 +17,16 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.tesistrabajador.R;
+import com.example.tesistrabajador.clases.GlobalInfo;
 import com.google.android.material.snackbar.Snackbar;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link onepayFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class onepayFragment extends Fragment {
-
     WebView webView;
     String rutusuario="";
     int montoporpagar=0,montopagarpref=0;
@@ -49,8 +38,6 @@ public class onepayFragment extends Fragment {
     public onepayFragment() {
         // Required empty public constructor
     }
-
-
     public static onepayFragment newInstance(String param1, String param2) {
         onepayFragment fragment = new onepayFragment();
         return fragment;
@@ -59,7 +46,6 @@ public class onepayFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -82,7 +68,6 @@ public class onepayFragment extends Fragment {
                     .commit();
             getActivity().finish();
         }
-
         //configuracion del webview
         webView = (WebView) v.findViewById(R.id.webview);
         //este codigo habilia javascript
@@ -96,10 +81,8 @@ public class onepayFragment extends Fragment {
         webView.getSettings().setPluginState(WebSettings.PluginState.ON);
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
-
-
         //url del backend webpay
-        String url="http://proyectotesis.ddns.net/datos/WebPayPorPagar";
+        String url=GlobalInfo.Rutaservidorwebpayporpapgar;
         String postData= null;
         String montoporpagarurl = Integer.toString(montoporpagar);
 
@@ -120,12 +103,9 @@ public class onepayFragment extends Fragment {
 
             }
         }
-
-
-
         //url la cual estara alojado el backend con la implementacion de transbank
-        String urltrasaccionfinalizada ="http://proyectotesis.ddns.net/Datos/Final";
-        String urltransaccionerror  ="http://proyectotesis.ddns.net/Datos/Error";
+        String urltrasaccionfinalizada =GlobalInfo.Rutaservidorwebpayporpapgar;
+        String urltransaccionerror  =GlobalInfo.Rutaservidorwebpayerror;
 
         //metodo en el cual el timer pregunta frecuentemente si la urlactual es igual a la urffinalizada
         final Handler handler = new Handler();
@@ -144,7 +124,6 @@ public class onepayFragment extends Fragment {
                                // Toast.makeText(getContext(), webUrlactual, Toast.LENGTH_SHORT).show();
                                 if (urltrasaccionfinalizada.equals(webUrlactual)) {
                                     task.cancel();
-                                    //alert dialog con el mensaje de que se ha pagado correctamente
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                     LayoutInflater inflater = getLayoutInflater();
                                     View viewsync = inflater.inflate(R.layout.alertdialogwebpaypago, null);
@@ -205,17 +184,8 @@ public class onepayFragment extends Fragment {
             }
         };
         timer.schedule(task, 0, 500);  //ejecutar en intervalo definido por el programador
-
-
-
-
-
-
         return v;
     }
-
-
-
 
     //metodo para guardar los datos que se rescaten de la llamada
     private void saveOnPreferencesgananciasporpagar(int porpagar) {
@@ -225,8 +195,5 @@ public class onepayFragment extends Fragment {
         editor.commit();
         editor.apply();
     }
-
-
-
 
 }

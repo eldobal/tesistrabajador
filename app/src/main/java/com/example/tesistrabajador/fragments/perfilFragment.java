@@ -1,6 +1,5 @@
 package com.example.tesistrabajador.fragments;
 
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -30,10 +29,9 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.bumptech.glide.Glide;
 import com.example.tesistrabajador.R;
-import com.example.tesistrabajador.activitys.menuActivity;
 import com.example.tesistrabajador.clases.Ciudad;
+import com.example.tesistrabajador.clases.GlobalInfo;
 import com.example.tesistrabajador.clases.Usuario;
-import com.example.tesistrabajador.fragments.passperfilFragment;
 import com.example.tesistrabajador.interfaces.tesisAPI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -50,9 +48,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class perfilFragment extends Fragment {
 
     private ImageView fotoperfil;
@@ -61,7 +56,7 @@ public class perfilFragment extends Fragment {
     LottieAnimationView loadingdots2;
     private GoogleSignInClient googleSignInClient;
     private String rutperfil ="",contrasenaperfil="",rutaurl="";
-    final static String rutaservidor= "http://proyectotesis.ddns.net";
+    final static String rutaservidor= GlobalInfo.Rutaservidor;
     private EditText rut,nombre,apellido,correo,telefono;
     private Spinner ciudad;
     private int idCiudad =0;
@@ -126,7 +121,6 @@ public class perfilFragment extends Fragment {
                 Toast.makeText(getContext(), "Nombre"+personFamilyName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
             }
 
-
         ciudad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -137,25 +131,17 @@ public class perfilFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
         //se comprueban que exista el rut y la contraseña
         setcredentiasexist();
-
-
         if(rutperfil.equals("")){
           //si no encuentra el rut enviar al usuario a la pantalla de inicio
-
         }else{
             cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
             activeNetwork = cm.getActiveNetworkInfo();
             if (activeNetwork != null) {
                 if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-                    //se carga el spiner con las ciudades que hay en la base de datos
                     cargarspiner();
-                    //se carga los datos del perfil para setearlos en los campos
                     cargardatosperfil();
-                    //seccion de codigo en el cual se debera traer el json con los datos del usuario
-                    //donde se setearan los datos a los edittext
                 } else {
                     //manejar alert
                 }
@@ -216,14 +202,10 @@ public class perfilFragment extends Fragment {
                                                     ciudad.setFocusable(false);
                                                     ciudad.setFocusableInTouchMode(false);
                                                 }
-
                                             } else {
                                                 //manejar alert
-
                                             }
                                         }
-
-
                                     }
                                 }
                             });
@@ -256,21 +238,14 @@ public class perfilFragment extends Fragment {
                                 ciudad.setFocusable(true);
                                 ciudad.setFocusableInTouchMode(true);
                             }
-
-
                         }
                     });
-
-
                     btncancelar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                         dialog.dismiss();
                         }
                     });
-
-
-
                 }
             });
 
@@ -294,8 +269,6 @@ public class perfilFragment extends Fragment {
                             dialog2.dismiss();
                         }
                     });
-
-
                     btncancelar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -305,9 +278,6 @@ public class perfilFragment extends Fragment {
                 }
             });
         }
-
-
-
         return v;
     }
 
@@ -319,17 +289,14 @@ public class perfilFragment extends Fragment {
 
     private void cargardatosperfil() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
+                .baseUrl(GlobalInfo.Rutaservidor)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-        //metodo para llamar a la funcion que queramos
-        //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )
         Call<Usuario> call = tesisAPI.getUsuario(rutperfil,contrasenaperfil);
         call.enqueue(new Callback<Usuario>() {
             @Override
             public void onResponse( Call<Usuario>call, Response<Usuario> response) {
-                //si esta malo se ejecuta este trozo
                 if(!response.isSuccessful()){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     LayoutInflater inflater = getLayoutInflater();
@@ -349,12 +316,10 @@ public class perfilFragment extends Fragment {
                             dialog3.dismiss();
                         }
                     });
-
                   //  Toast.makeText(getContext(), "error/perfil/cargar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
                 }
                 //de lo contrario se ejecuta esta parte
                 else {
-                    //respuesta del request
                     Usuario usuarios = response.body();
                     rut.setText(usuarios.getRut().toString());
                     nombre.setText(usuarios.getNombre().toString());
@@ -366,7 +331,6 @@ public class perfilFragment extends Fragment {
                     loadingdots2.setVisibility(View.INVISIBLE);
                     loadingdots2.cancelAnimation();
                     Glide.with(getContext()).load(String.valueOf(rutaservidor+rutaurl)).into(fotoperfil);
-
                     boolean encontrado = false;
                     for(int i=1; i<listaciudades.size()&&encontrado==false;i++){
                         if(listaciudades.get(i).getIdCiudad() ==idCiudad){
@@ -398,7 +362,6 @@ public class perfilFragment extends Fragment {
                         dialog4.dismiss();
                     }
                 });
-
               //  Toast.makeText(getContext(), "error/perfil/cargar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -406,9 +369,8 @@ public class perfilFragment extends Fragment {
 
     private void cargarspiner(){
         try {
-            ArrayList<String> listanombres = new ArrayList<String>();
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://proyectotesis.ddns.net/")
+                    .baseUrl(GlobalInfo.Rutaservidor)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
@@ -416,7 +378,6 @@ public class perfilFragment extends Fragment {
             call.enqueue(new Callback<List<Ciudad>>() {
                 @Override
                 public void onResponse( Call<List<Ciudad>>call, Response<List<Ciudad>>response) {
-                    //si esta malo se ejecuta este trozo
                     if(!response.isSuccessful()){
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         LayoutInflater inflater = getLayoutInflater();
@@ -456,7 +417,6 @@ public class perfilFragment extends Fragment {
                         ArrayAdapter<Ciudad> a = new ArrayAdapter<Ciudad>(getContext(),android.R.layout.simple_spinner_item,listaciudades);
                         a.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         ciudad.setAdapter(a);
-
                     }
                 }
 
@@ -481,14 +441,12 @@ public class perfilFragment extends Fragment {
                             dialog6.dismiss();
                         }
                     });
-
                   //  Toast.makeText(getContext(), "error/perfil/cargarspinner/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
         }catch (Exception e){
             e.printStackTrace();
         }
-
 
     }
 
@@ -500,7 +458,7 @@ public class perfilFragment extends Fragment {
             String Apellido = apellido.getText().toString();
             String Fono = telefono.getText().toString();
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://proyectotesis.ddns.net/")
+                    .baseUrl(GlobalInfo.Rutaservidor)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);

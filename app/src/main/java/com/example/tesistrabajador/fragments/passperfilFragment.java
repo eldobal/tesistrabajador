@@ -8,10 +8,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,26 +18,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.activitys.menuActivity;
+import com.example.tesistrabajador.clases.GlobalInfo;
 import com.example.tesistrabajador.clases.Usuario;
 import com.example.tesistrabajador.interfaces.tesisAPI;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class passperfilFragment extends Fragment {
     SharedPreferences prefs;
     SweetAlertDialog dp;
@@ -52,9 +45,7 @@ public class passperfilFragment extends Fragment {
     NetworkInfo activeNetwork;
     ConnectivityManager cm ;
 
-    public passperfilFragment() {
-        // Required empty public constructor
-    }
+    public passperfilFragment() { }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -63,9 +54,6 @@ public class passperfilFragment extends Fragment {
         String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}";
         mAwesomeValidation.addValidation(getActivity(), R.id.cambiocontraseñaperfil, regexPassword, R.string.err_contraseña);
         mAwesomeValidation.addValidation(getActivity(), R.id.cambiocontraseña2perfil, regexPassword, R.string.err_contraseña2);
-       // ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        //networkInfo = connectivityManager.getActiveNetworkInfo();
-
         btncambiopass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,8 +62,6 @@ public class passperfilFragment extends Fragment {
                 }
             }
         });
-
-
     }
 
     @Override
@@ -99,8 +85,6 @@ public class passperfilFragment extends Fragment {
 
             }
         }
-
-
 
         btncambiopass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,7 +126,7 @@ public class passperfilFragment extends Fragment {
 
     private void cargardatosperfil() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
+                .baseUrl(GlobalInfo.Rutaservidor)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
@@ -173,7 +157,6 @@ public class passperfilFragment extends Fragment {
 
                     Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                 }
-                //de lo contrario se ejecuta esta parte
                 else {
                     //respuesta del request
                     Usuario usuarios = response.body();
@@ -212,7 +195,7 @@ public class passperfilFragment extends Fragment {
         String RUT = rutperfil;
         String Contrasena = contraseña2.getText().toString();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
+                .baseUrl(GlobalInfo.Rutaservidor)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
@@ -250,7 +233,7 @@ public class passperfilFragment extends Fragment {
                         saveOnPreferences(Contrasena);
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         LayoutInflater inflater = getLayoutInflater();
-                        View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
+                        View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado, null);
                         builder.setView(viewsync);
                         AlertDialog dialog4 = builder.create();
                         dialog4.setCancelable(false);
@@ -269,7 +252,6 @@ public class passperfilFragment extends Fragment {
                                 dialog4.dismiss();
                             }
                         });
-
                     }
                 }
                 //si falla el request a la pagina mostrara este error
@@ -298,7 +280,6 @@ public class passperfilFragment extends Fragment {
                 }
             });
     }
-
     private void setcredentiasexist() {
         String rutq = getuserrutprefs();
         String contrasena = getusercontraseñaprefs();
@@ -307,7 +288,6 @@ public class passperfilFragment extends Fragment {
             contrasenaperfil=contrasena.toString();
         }
     }
-
     private String getuserrutprefs() {
         return prefs.getString("Rut", "");
     }

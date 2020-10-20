@@ -9,11 +9,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -28,40 +26,29 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.activitys.loginActivity;
 import com.example.tesistrabajador.clases.Adaptador;
 import com.example.tesistrabajador.clases.GananciasAPI;
+import com.example.tesistrabajador.clases.GlobalInfo;
 import com.example.tesistrabajador.clases.Solicitud;
 import com.example.tesistrabajador.clases.UsuarioTrabajadorhome;
 import com.example.tesistrabajador.interfaces.tesisAPI;
-import com.github.mikephil.charting.charts.PieChart;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
 public class homeFragment extends Fragment {
-
-    public static final String tag = "homefragment";
-
-    private float[] ydata = {33.00f ,23.0f ,30.22f,33.44f,12.33f};
-    private String[] xdata ={"sebastian ","daniel","cristobal","pablo","ricardo"};
     TextView notfound;
     LottieAnimationView loadinglista,loadingperfil;
     private ListView listaactivas;
@@ -69,16 +56,14 @@ public class homeFragment extends Fragment {
     private String rutusuario="";
     int azynctiempo =0,dia1=0,mes1=0,año1=0,dia2=0,mes2=0,año2=0,Gananciaperiodo=0,Porpagar=0,porpagarselccionado=0,porpagarpref=0;
     ArrayList<Solicitud> listasolicitudesterminadas,listasolicitudactivas,listasolicitudactivasinterna,solicitudinterna,Solicitudescomparar;
-    ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudactual = new ArrayList<Solicitud>();
-    Adaptador ads,ads2;
-    final static String rutaservidor= "http://proyectotesis.ddns.net";
+    Adaptador ads2;
+    final static String rutaservidor= GlobalInfo.Rutaservidor;
     String estadotrabajador = "",contrasena="",fechainicio="",fechafin="",    Fechainicio="",Fechafin="",Fechaactual="";
     ImageView fotoperfil;
     TextView nombretrabajdor,txtperiodoganancias,txtganancasobtenidasel;
     EditText edittextgananciasperiodo,edittextprecioporpagar;
     Button btncambiodeestado,btncalcularganancias,btnpagarporpagar;
-    PieChart pieChart;
     NetworkInfo activeNetwork;
     ConnectivityManager cm ;
     CardView carganancias;
@@ -230,7 +215,6 @@ public class homeFragment extends Fragment {
                         Button btnfechafin =(Button) viewsync.findViewById(R.id.btnfechafin);
                         Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
                         Button btncalcularganancias =(Button) viewsync.findViewById(R.id.btnconsultarganancias);
-
                         btnfechainicio.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -266,8 +250,6 @@ public class homeFragment extends Fragment {
                                 });
                             }
                         });
-
-
                         btnfechafin.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -337,27 +319,12 @@ public class homeFragment extends Fragment {
                                                             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
                                                                 //se carga la solicitud
                                                                 calcularganancias(fechainicio, fechafin, fechaactual);
-                                                            } else {
-                                                                Toast.makeText(getContext(), "No se encuentra una coneccion.", Toast.LENGTH_LONG).show();
-                                                            }
-                                                        }
-                                                    } else {
-                                                        //mensaje de que selccione ambas fechas
-                                                        Toast.makeText(getContext(), "Seleccione ambas fechas para poder continuar.", Toast.LENGTH_LONG).show();
-                                                    }
-                                                } else {
-                                                    Toast.makeText(getContext(), "Seleccione una fecha de fin de periodo que no sea mayor al dia de hoy.", Toast.LENGTH_LONG).show();
-                                                }
-                                            } else {
-                                                //mensaje que avise que el dia debe de inicio debe ser menor a dia de fechafin
-                                                Toast.makeText(getContext(), "el dia de inicio debe ser menor o igual al dia fin.", Toast.LENGTH_LONG).show();
-                                            }
-                                        } else {
-                                            Toast.makeText(getContext(), "el mes de inicio debe ser menor o igual al mes fin.", Toast.LENGTH_LONG).show();
-                                        }
-                                    } else {
-                                        Toast.makeText(getContext(), "el año de inicio debe ser menor o igual al año fin.", Toast.LENGTH_LONG).show();
-                                    }
+                                                            } else { Toast.makeText(getContext(), "No se encuentra una coneccion.", Toast.LENGTH_LONG).show(); } }
+                                                    } else { Toast.makeText(getContext(), "Seleccione ambas fechas para poder continuar.", Toast.LENGTH_LONG).show(); }
+                                                } else { Toast.makeText(getContext(), "Seleccione una fecha de fin de periodo que no sea mayor al dia de hoy.", Toast.LENGTH_LONG).show(); }
+                                            } else { Toast.makeText(getContext(), "el dia de inicio debe ser menor o igual al dia fin.", Toast.LENGTH_LONG).show(); }
+                                        } else { Toast.makeText(getContext(), "el mes de inicio debe ser menor o igual al mes fin.", Toast.LENGTH_LONG).show(); }
+                                    } else { Toast.makeText(getContext(), "el año de inicio debe ser menor o igual al año fin.", Toast.LENGTH_LONG).show(); }
                                 }
                             }
                         });
@@ -366,7 +333,6 @@ public class homeFragment extends Fragment {
 
                 if(Porpagar !=0){
                     btnpagarporpagar.setVisibility(View.VISIBLE);
-
                     btnpagarporpagar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -413,18 +379,14 @@ public class homeFragment extends Fragment {
                                         //PAGO COMPLETO CON EL POR PAGAR ENTERO
                                         porpagarselccionado=Porpagar;
                                         porpagarpref=0;
-                                     //   Toast.makeText(v.getContext(), "0", Toast.LENGTH_LONG).show();
                                     }
                                     if(r1.isChecked()==false && r2.isChecked()==false){
                                         Toast.makeText(v.getContext(), "seleccione una opcion por favor.", Toast.LENGTH_LONG).show();
                                     }else{
-                                        //SE ENVIA AL TRABAJADOR AL WEBVIEW
                                         Toast.makeText(v.getContext(), "valor que se pagara"+porpagarselccionado, Toast.LENGTH_LONG).show();
-
                                         if(r1.isChecked()==true){
                                             //todo el codigo que se ejecuta cuando se pagara con webpay
                                                 Bundle bundle = new Bundle();
-                                                //id de la solicitud para que se pueda buscar en el detalle
                                                 bundle.putString("rutusuario",rutusuario);
                                                 bundle.putInt("monto",porpagarselccionado);
                                                 bundle.putInt("montopref",porpagarpref);
@@ -454,9 +416,6 @@ public class homeFragment extends Fragment {
                         }
                     });
                 }
-
-
-
                 new CountDownTimer(1500,1000){
                     @Override
                     public void onTick(long millisUntilFinished) {
@@ -469,17 +428,14 @@ public class homeFragment extends Fragment {
                         }
                     }
                 }.start();
-
             }
-
-
         return v;
     }
 
     private void calcularganancias(String fechainicio,String fechafin,String fechaactual) {
-        //metodo el cual rescatara el intervalo de tiempo que el trabajador seleccionara para calcular ganancias
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
+                .baseUrl(GlobalInfo.Rutaservidor)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
@@ -547,14 +503,13 @@ public class homeFragment extends Fragment {
                     }
                 });
            //     Toast.makeText(getContext(), "error/homedatos/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
-
             }
         });
     }
 
     private void cambiarestadotrabajador() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
+                .baseUrl(GlobalInfo.Rutaservidor)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
@@ -606,7 +561,6 @@ public class homeFragment extends Fragment {
                             dialog2.dismiss();
                         }
                     });
-
                 }
             }
             @Override
@@ -637,7 +591,7 @@ public class homeFragment extends Fragment {
 
     private void cargardatostrabajador() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
+                .baseUrl(GlobalInfo.Rutaservidor)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
@@ -672,11 +626,8 @@ public class homeFragment extends Fragment {
                     nombretrabajdor.setText(usuarioTrabajador.getNombre()+" "+usuarioTrabajador.getApellido());
                     Glide.with(getContext()).load(String.valueOf(rutaservidor+rutaurl)).into(fotoperfil);
                     estadotrabajador=usuarioTrabajador.getEstado();
-
                     loadingperfil.setVisibility(View.INVISIBLE);
                     loadingperfil.pauseAnimation();
-
-
                     if(estadotrabajador.equals("Disponible")){
                         btncambiodeestado.setBackgroundResource(R.drawable.btn_homeactivo);
                         btncambiodeestado.setText("Disponible");
@@ -715,7 +666,7 @@ public class homeFragment extends Fragment {
 
     private void reiniciarfragmentterminadas(String rut) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
+                .baseUrl(GlobalInfo.Rutaservidor)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
@@ -742,7 +693,6 @@ public class homeFragment extends Fragment {
                             dialog6.dismiss();
                         }
                     });
-
               //      Toast.makeText(getContext(), "error/soli/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     List<Solicitud> solicituds = response.body();
@@ -766,9 +716,7 @@ public class homeFragment extends Fragment {
                             solicitudinterna.add(soli);
                         }
                     }
-                    //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
                     if (solicitudinterna.size() != 0) {
-                        //se instancia la recarga de los items que se encuentan en la lista de aceptadas / finalisadas
                         ads2.refresh(solicitudinterna);
                         listaactivas.setAdapter(ads2);
                         loadinglista.setVisibility(View.INVISIBLE);
@@ -783,34 +731,11 @@ public class homeFragment extends Fragment {
                         notfound.setText("No Posee Solicitudes");
 
                     }
-                  //  refreshLayoutterminadas.setRefreshing(false);
                 }
             }
             @Override
             public void onFailure(Call<List<Solicitud>> call, Throwable t) {
-                /*
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                LayoutInflater inflater = getLayoutInflater();
-                View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
-                builder.setView(viewsync);
-                AlertDialog dialog7 = builder.create();
-                dialog7.setCancelable(false);
-                dialog7.show();
-                dialog7.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
-                texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
-                Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
 
-                btncerrar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog7.dismiss();
-                    }
-                });
-
-                 */
-
-              //  Toast.makeText(getContext(), "error/soli/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
                 loadinglista.setVisibility(View.INVISIBLE);
                 loadinglista.pauseAnimation();
                 notfound.setText("No Posee Solicitudes");

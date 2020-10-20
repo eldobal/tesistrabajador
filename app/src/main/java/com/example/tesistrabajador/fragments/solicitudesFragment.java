@@ -4,23 +4,16 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.os.CountDownTimer;
 import android.os.Handler;
-import android.text.Layout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,58 +25,40 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.airbnb.lottie.L;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.activitys.loginActivity;
 import com.example.tesistrabajador.clases.Adaptador;
-import com.example.tesistrabajador.clases.Adaptadornotificaciones;
+import com.example.tesistrabajador.clases.GlobalInfo;
 import com.example.tesistrabajador.clases.Solicitud;
 import com.example.tesistrabajador.interfaces.tesisAPI;
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class solicitudesFragment extends Fragment  {
-
-    SweetAlertDialog dp;
     LottieAnimationView loadinglista,listavacia,loadinglistaactiva,listaactivavacia;
-    private static LayoutInflater inflater = null;
     private TextView tvNoRegistros;
     private ListView lista,listaactivas;
     private ImageButton btnVolver;
     private SharedPreferences prefs,asycprefs;
     private String rutusuario="",contrasenaperfil="";
     int azynctiempo =0,filtro=0,filtroterminada=0;
-    ArrayList<Solicitud> listasolicitudesterminadas,listasolicitudactivas,listasolicitudactivasinterna,listasolicitudterminadasinterna,Solicitudescomparar,listasolicitudfinalizando;
-    ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
+    ArrayList<Solicitud> listasolicitudesterminadas,listasolicitudactivas,listasolicitudactivasinterna,listasolicitudterminadasinterna,Solicitudescomparar;
     ArrayList<Solicitud> Solicitudesterminadas = new ArrayList<Solicitud>();
-    SwipeRefreshLayout refreshLayout,refreshLayoutterminadas;
-    final static String rutaservidor= "http://proyectotesis.ddns.net";
+    final static String rutaservidor= GlobalInfo.Rutaservidor;
     Adaptador ads,ads2;
-    TextView notfound;
     ConnectivityManager cm;
     NetworkInfo activeNetwork;
     Spinner spinneractivas,spinnerterminadas;
     Boolean timeractivado = false;
-    int alertassinconexxion = 0;
     public solicitudesFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -99,13 +74,10 @@ public class solicitudesFragment extends Fragment  {
         listasolicitudactivas = new ArrayList<Solicitud>();
         listasolicitudterminadasinterna = new ArrayList<Solicitud>();
         listasolicitudactivasinterna = new ArrayList<Solicitud>();
-
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-
         settiempoasyncexist();
         setcredentiasexist();
-
         solicitudesFragment test = (solicitudesFragment) getActivity().getSupportFragmentManager().findFragmentByTag("solicitudtag");
         final Handler handler = new Handler();
         Timer timer = new Timer();
@@ -125,9 +97,7 @@ public class solicitudesFragment extends Fragment  {
                                     reiniciarfragmentterminadas(rutusuario);
                                     timeractivado = true;
                                 }
-                            }else{
-                            }
-
+                            }else{ }
                         } else {
                             // not connected to the internet manejar dialog
                         }
@@ -159,7 +129,7 @@ public class solicitudesFragment extends Fragment  {
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_spinner_item, datos2);
 
-       spinneractivas.setAdapter(adapter);
+        spinneractivas.setAdapter(adapter);
         spinnerterminadas.setAdapter(adapter2);
 
         if(rutusuario.equals("")){
@@ -183,40 +153,10 @@ public class solicitudesFragment extends Fragment  {
                     listaactivas = (ListView) v.findViewById(R.id.solicitudactual);
                     lista = (ListView) v.findViewById(R.id.listadosolicitudescliente);
                     //declaracion de los swiperefresh para intanciarlos
-                   // refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
-                    //notfound =(TextView) v.findViewById(R.id.txtnotfoundlistasolicitudes);
-                    //notfound.setText("");
-                    final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
                 } else {
 
                 }
             }
-
-            /*
-            refreshLayoutterminadas.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    new CountDownTimer(1500,1000){
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-                        }
-                        @Override
-                        public void onFinish() {
-                            cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-                            activeNetwork = cm.getActiveNetworkInfo();
-                            if (activeNetwork != null) {
-                                if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE)
-                                   if (!rutusuario.isEmpty()&&!contrasenaperfil.isEmpty()){
-                                       reiniciarfragmentterminadas(rutusuario);
-                                   }
-                            } else {
-                                    //manejar alert
-                                }
-                            }
-                    }.start();
-                }
-            });
-            */
 
 
             spinneractivas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -267,8 +207,6 @@ public class solicitudesFragment extends Fragment  {
             });
 
         }
-
-
 
         return v;
     }
@@ -424,12 +362,11 @@ public class solicitudesFragment extends Fragment  {
                 });
             }
         }
-
     }
 
     private void reiniciarfragmentterminadas(String rut) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
+                .baseUrl(GlobalInfo.Rutaservidor)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
@@ -502,9 +439,7 @@ public class solicitudesFragment extends Fragment  {
                         loadinglista.pauseAnimation();
                         listavacia.setVisibility(View.VISIBLE);
                         listavacia.playAnimation();
-
                       //  notfound.setText("No Posee Solicitudes");
-
                     }
 
                     if(listasolicitudactivasinterna.size()!=0){
@@ -525,38 +460,10 @@ public class solicitudesFragment extends Fragment  {
                     }
                     spinneractivas.setVisibility(View.VISIBLE);
                     spinnerterminadas.setVisibility(View.VISIBLE);
-
-                 //   refreshLayoutterminadas.setRefreshing(false);
-                    alertassinconexxion--;
                 }
             }
             @Override
             public void onFailure(Call<List<Solicitud>> call, Throwable t) {
-                /*
-                if(alertassinconexxion > 5){
-                    Toast.makeText(getContext(), "error/soli/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    LayoutInflater inflater = getLayoutInflater();
-                    View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
-                    builder.setView(viewsync);
-                    AlertDialog dialog4 = builder.create();
-                    dialog4.setCancelable(false);
-                    dialog4.show();
-                    dialog4.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
-                    texto.setText("Ha ocurrido un error con la coneccion del servidor al cargar las solicitudes, Estamos trabajando para solucionarlo.");
-                    Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
-
-                    btncerrar.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog4.dismiss();
-                        }
-                    });
-                    alertassinconexxion++;
-                }
-                */
-
             }
         });
 

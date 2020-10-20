@@ -7,57 +7,38 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.activitys.loginActivity;
-import com.example.tesistrabajador.fragments.preguntasFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class settingsFragment extends Fragment {
     private GoogleSignInClient googleSignInClient;
-    SweetAlertDialog dp;
     SharedPreferences asycprefs;
     private SharedPreferences prefs,prefsganancias;
     int azynctiempo =0;
     String tiempo= "";
 
-
-    public settingsFragment() {
-
-        // Required empty public constructor
-    }
+    public settingsFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-        //prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         View v= inflater.inflate(R.layout.fragment_settings, container, false);
         asycprefs = getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         settiempoasyncexist();
-
         //se buscan el usuario y el tiempo de sync de la app
         prefsganancias = this.getActivity().getSharedPreferences("Preferencesganancias", Context.MODE_PRIVATE);
-
         //declaracion de botones
         final Button btnsalir = (Button) v.findViewById(R.id.btnsalir);
         final Button btnpreguntas = (Button) v.findViewById(R.id.btnpreguntas);
@@ -67,10 +48,7 @@ public class settingsFragment extends Fragment {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-
-
         googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
-
         prefs = this.getActivity().getSharedPreferences("Preferences",Context.MODE_PRIVATE);
 
         //trozo de codigo para rescatar parametros de la cuenta de usuario
@@ -82,10 +60,8 @@ public class settingsFragment extends Fragment {
             String personEmail = acct.getEmail();
             String personId = acct.getId();
             Uri personPhoto = acct.getPhotoUrl();
-
             Toast.makeText(getContext(), "Nombre"+personFamilyName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
         }
-
 
         //botton salir de la app
         btnsalir.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +78,6 @@ public class settingsFragment extends Fragment {
                         dialog2.setCancelable(false);
                         dialog2.show();
                         dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
                         Button btnsalir = viewsync.findViewById(R.id.btncancelarnotificacion);
                         Button btncontinuar = viewsync.findViewById(R.id.btnconfirmarnotificacion);
 
@@ -123,7 +98,6 @@ public class settingsFragment extends Fragment {
             }
         });
 
-
         //boton para cambiar el tiempo de actualizacion de la app
         btntiemposync.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,9 +110,7 @@ public class settingsFragment extends Fragment {
                 builder.setView(viewsync);
                 AlertDialog dialog = builder.create();
                 dialog.show();
-
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
                 TextView azyncactual= (TextView) viewsync.findViewById(R.id.txttiempoactualizacion);
                 azyncactual.setText("Tiempo de Actualizacion Actual: "+tiempo);
                 Button btn15segundos = viewsync.findViewById(R.id.alertbtn15);
@@ -178,7 +150,6 @@ public class settingsFragment extends Fragment {
                     btn1minuto.setBackgroundResource(R.drawable.bg_btnsync);
                 }});
 
-
                 btnguardarcambios.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -196,8 +167,6 @@ public class settingsFragment extends Fragment {
                         dialog.dismiss();
                     }
                 });
-
-
             }
         });
 
@@ -209,7 +178,6 @@ public class settingsFragment extends Fragment {
                 showSelectedFragment(new preguntasFragment());
             }
         });
-
 
         btnsobrenosotros.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,7 +208,6 @@ public class settingsFragment extends Fragment {
         }
     }
 
-
     private void saveOnPreferences(int tiempoasync) {
         SharedPreferences.Editor editor = asycprefs.edit();
         editor.putInt("tiempo", tiempoasync);
@@ -259,7 +226,6 @@ public class settingsFragment extends Fragment {
     private int gettiempoasync() {
         return asycprefs.getInt("tiempo", 0);
     }
-
 
     //metodo el cual se llama cuando se apreta cerrar sesion
     private void signOut() {
@@ -287,7 +253,6 @@ public class settingsFragment extends Fragment {
     }
 
 
-
     //metodo que te dirije al login /no te deja volver con el boton
     public void logout(){
         Intent intent= new Intent(getView().getContext(), loginActivity.class);
@@ -305,7 +270,6 @@ public class settingsFragment extends Fragment {
 
     }
 
-
     private void revokeAccess() {
         googleSignInClient.revokeAccess()
                 .addOnCompleteListener(getActivity(), task -> {
@@ -317,15 +281,12 @@ public class settingsFragment extends Fragment {
                     removesharedpreferenced();
                     startActivity(intent);
                 });
-
     }
-
 
     //metodo para borrar las credenciales guardadas
     public  void removesharedpreferenced(){
         prefs.edit().clear().apply();
     }
-
 
 
 }

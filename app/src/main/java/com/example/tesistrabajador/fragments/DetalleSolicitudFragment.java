@@ -1,6 +1,4 @@
 package com.example.tesistrabajador.fragments;
-
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,14 +7,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,33 +21,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.example.tesistrabajador.R;
+import com.example.tesistrabajador.clases.GlobalInfo;
 import com.example.tesistrabajador.clases.Solicitud;
-import com.example.tesistrabajador.clases.Usuario;
 import com.example.tesistrabajador.interfaces.tesisAPI;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Query;
 
 public class DetalleSolicitudFragment extends Fragment {
-    SweetAlertDialog dp;
-    Solicitud solicitud = new Solicitud();
-    private TextView numerosolicitud,fechasolicitud,fechadetallesolicitud,cliente,trabajador,rubro,precio,estadosolicitud,descripciondetallesolicitud,diagnosticodetallesolicitud,soluciondetallesolicitud;
+    private TextView numerosolicitud,fechasolicitud,fechadetallesolicitud,trabajador,rubro,precio,estadosolicitud,descripciondetallesolicitud,diagnosticodetallesolicitud,soluciondetallesolicitud;
     private ImageView imgperfiltrabajador,imgclientesacada;
     SharedPreferences prefs;
     private Button btncomollegar, btnfinalizar,btnconfirmarpago;
     private int idsolicitud=0;
-    final static String rutaservidor= "http://proyectotesis.ddns.net";
+    final static String rutaservidor= GlobalInfo.Rutaservidor;
     private String rutperfil ="",contrasenaperfil="";
     double latitud=0.0,longitud=0.0;
     int pago = 0;
@@ -59,9 +48,7 @@ public class DetalleSolicitudFragment extends Fragment {
     NetworkInfo activeNetwork;
     ConnectivityManager cm ;
 
-    public DetalleSolicitudFragment() {
-        // Required empty public constructor
-    }
+    public DetalleSolicitudFragment() { }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -86,7 +73,6 @@ public class DetalleSolicitudFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_detalle_solicitud, container, false);
         btnfinalizar = (Button) v.findViewById(R.id.btnfinalizarsolicitud);
         btnconfirmarpago = (Button) v.findViewById(R.id.confirmarpagoefectivo);
@@ -97,17 +83,13 @@ public class DetalleSolicitudFragment extends Fragment {
             idsolicitud = datosRecuperados.getInt("idsolicitud");
         }
         btncomollegar = (Button) v.findViewById(R.id.btncomollegar);
-
         cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE ){
-            //se carga la solicitud
             cargardetallesolicitud();
-        }else{
-            //no tiene coneccion a internet
-            Toast.makeText(v.getContext(), "Asegurese de que tenga una coneccion a internet", Toast.LENGTH_LONG).show();
-        }
-            btncomollegar.setOnClickListener(new View.OnClickListener() {
+        }else{ Toast.makeText(v.getContext(), "Asegurese de que tenga una coneccion a internet", Toast.LENGTH_LONG).show(); }
+
+        btncomollegar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //se envia la latitud y longitud para poder generar la ruta
@@ -122,8 +104,6 @@ public class DetalleSolicitudFragment extends Fragment {
                             .commit();
                 }
             });
-
-
         btnfinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -147,21 +127,17 @@ public class DetalleSolicitudFragment extends Fragment {
                         dialog3.dismiss();
                     }
                 });
-
-                //metodo el cual finaliza la solicitud por parte del trabajador
                 btnfinalizar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                         activeNetwork = cm.getActiveNetworkInfo();
                         if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE ){
-
                             int precio = Integer.parseInt(preciofinal.getText().toString());
                             String solucionopcional = solucion.getText().toString();
                             if(precio != 0){
                                 Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl("http://proyectotesis.ddns.net/")
+                                        .baseUrl(GlobalInfo.Rutaservidor)
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
@@ -169,7 +145,6 @@ public class DetalleSolicitudFragment extends Fragment {
                                 call.enqueue(new Callback<String>() {
                                     @Override
                                     public void onResponse( Call<String>call, Response<String> response) {
-                                        //si esta malo se ejecuta este trozo
                                         if(!response.isSuccessful()){
                                             AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
                                             LayoutInflater inflater = getLayoutInflater();
@@ -225,11 +200,8 @@ public class DetalleSolicitudFragment extends Fragment {
                                                     dialog3.dismiss();
                                                 }
                                             });
-
-
                                         }
                                     }
-
                                     //si falla el request a la pagina mostrara este error
                                     @Override
                                     public void onFailure(Call<String> call, Throwable t) {
@@ -262,23 +234,12 @@ public class DetalleSolicitudFragment extends Fragment {
                                  //       Toast.makeText(getContext(), "error/detalle/finalizar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 });
-
-
                             }else{
                                 Toast.makeText(v.getContext(), "Ingrese un numero valido", Toast.LENGTH_LONG).show();
                             }
-
-                        }else{
-
-                        }
-
+                        }else{ }
                     }
                 });
-
-
-
-
-
             }
         });
 
@@ -313,11 +274,9 @@ public class DetalleSolicitudFragment extends Fragment {
                     public void onClick(View view) {
                         if(r1.isChecked()==true){
                             pago=1;
-                           // Toast.makeText(v.getContext(), "1", Toast.LENGTH_LONG).show();
                         }
                         if(r2.isChecked()==true){
                             pago=0;
-                          //  Toast.makeText(v.getContext(), "0", Toast.LENGTH_LONG).show();
                         }
                         if(r1.isChecked()==false && r2.isChecked()==false){
                             Toast.makeText(v.getContext(), "seleccione una opcion por favor.", Toast.LENGTH_LONG).show();
@@ -326,7 +285,7 @@ public class DetalleSolicitudFragment extends Fragment {
                             activeNetwork = cm.getActiveNetworkInfo();
                             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE ){
                                 Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl("http://proyectotesis.ddns.net/")
+                                        .baseUrl(GlobalInfo.Rutaservidor)
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
@@ -358,7 +317,6 @@ public class DetalleSolicitudFragment extends Fragment {
 
                                         //    Toast.makeText(getContext(), "error/detalle/finalizar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
                                         }
-                                        //de lo contrario se ejecuta esta parte
                                         else {
                                             String respusta = response.body();
                                             btnfinalizar.setVisibility(View.GONE);
@@ -412,21 +370,18 @@ public class DetalleSolicitudFragment extends Fragment {
                                     }
                                 });
                             }else{
-
                             }
                         }
                     }
                 });
             }
         });
-
-
         return v;
     }
 
     private void cargardetallesolicitud() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
+                .baseUrl(GlobalInfo.Rutaservidor)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
@@ -488,7 +443,6 @@ public class DetalleSolicitudFragment extends Fragment {
                     }else {
                         precio.setText("Precio aprox: " + solicituds.getPrecio());
                     }
-
                     estadosolicitud.setText("Estado : "+solicituds.getEstado());
                     descripciondetallesolicitud.setText(solicituds.getDescripcionP());
                     if(solicituds.getSolucion() == null){
@@ -497,7 +451,6 @@ public class DetalleSolicitudFragment extends Fragment {
                         cardsolucion.setVisibility(View.VISIBLE);
                         soluciondetallesolicitud.setText(solicituds.getSolucion());
                     }
-
                     latitud=(solicituds.getLatitud());
                     longitud=solicituds.getLongitud();
                     //carga de la foto del trabajor
@@ -508,9 +461,7 @@ public class DetalleSolicitudFragment extends Fragment {
                         //carga de foto cargada por el usuario
                         Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getIdFoto())).into(imgclientesacada);
                     }
-
                     Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getFotoT())).into(imgperfiltrabajador);
-
                 }
             }
             @Override
@@ -536,18 +487,8 @@ public class DetalleSolicitudFragment extends Fragment {
             //    Toast.makeText(getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-
-
     }
 
-    //metodo que permite elejir un fragment
-    private void showSelectedFragment(Fragment fragment){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                //permite regresar hacia atras entre los fragments
-                //.addToBackStack(null)
-                .commit();
-    }
 
     private void setcredentiasexist() {
         String rutq = getuserrutprefs();

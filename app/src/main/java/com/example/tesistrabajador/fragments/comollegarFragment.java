@@ -4,33 +4,25 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-
-import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
 import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.mapclasses.FetchURL;
 import com.example.tesistrabajador.mapclasses.TaskLoadedCallback;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.material.snackbar.Snackbar;
-
 
 public class comollegarFragment extends Fragment implements OnMapReadyCallback, TaskLoadedCallback {
-
 
     GoogleMap map;
     SupportMapFragment mapFragment;
@@ -40,16 +32,11 @@ public class comollegarFragment extends Fragment implements OnMapReadyCallback, 
     boolean actualposition = true;
     Double latitud = 0.0, longitud = 0.0, latitudorigen, longitudorigen;
     int REQUESTCODE = 111;
-    public comollegarFragment() {
-        // Required empty public constructor
-    }
-
+    public comollegarFragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -66,50 +53,21 @@ public class comollegarFragment extends Fragment implements OnMapReadyCallback, 
             longitud = args.getDouble("longitudcliente");
         }
         btncomollegarcliente = (Button) v.findViewById(R.id.btncomollegarcliente);
-
         mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-/*
-        btncomollegarcliente = v.findViewById(R.id.btncomollegarcliente);
-        btncomollegarcliente.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new FetchURL(comollegarFragment.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
-            }
-        });
-        //27.658143,85.3199503
-        //27.667491,85.3208583
-        place1 = new MarkerOptions().position(new LatLng(27.658143, 85.3199503)).title("Location 1");
-        place2 = new MarkerOptions().position(new LatLng(27.667491, 85.3208583)).title("Location 2");
-*/
         return v;
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-
-
         map.getUiSettings().setZoomControlsEnabled(true);
-
-
         int permisolocation = ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
-
         if(permisolocation != PackageManager.PERMISSION_GRANTED){
-
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUESTCODE);
-
         }
 
-
-
         map.setMyLocationEnabled(true);
-
-        //map.addMarker(place1);
-        //map.addMarker(place2);
-
         btncomollegarcliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,17 +81,13 @@ public class comollegarFragment extends Fragment implements OnMapReadyCallback, 
         map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
-
                 if(actualposition){
                     latitudorigen= location.getLatitude();
                     longitudorigen= location.getLongitude();
                     actualposition=false;
-
                     LatLng miposicion = new LatLng(latitudorigen,longitudorigen);
-
                     map.addMarker(new MarkerOptions().position(miposicion).title("estoy aqui!"));
                     map.animateCamera(CameraUpdateFactory.newLatLngZoom(miposicion,15));
-
                     map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                         @Override
                         public void onMapClick(LatLng latLng) {
@@ -144,23 +98,18 @@ public class comollegarFragment extends Fragment implements OnMapReadyCallback, 
                             MarkerOptions markerOptions = new MarkerOptions();
                             //se setea la posicion al marcador
                             markerOptions.position(latLng);
-
                             latitudorigen=latLng.latitude;
                             longitudorigen=latLng.longitude;
                             //descripcion del titulo
                             markerOptions.title(latLng.latitude+" ; "+latLng.longitude);
                             //borrar los click anteriors
                             map.clear();
-
                             //zoom al marcador
                             map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,17));
                             //añadir el marcador al mapa
                             map.addMarker(markerOptions);
-
                         }
                     });
-
-
                 }
             }
         });
@@ -183,7 +132,6 @@ public class comollegarFragment extends Fragment implements OnMapReadyCallback, 
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + getString(R.string.map_key);
         return url;
     }
-
 
     @Override
     public void onTaskDone(Object... values) {

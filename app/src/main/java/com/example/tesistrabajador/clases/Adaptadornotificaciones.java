@@ -16,22 +16,18 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import com.example.tesistrabajador.R;
 import com.example.tesistrabajador.fragments.DetalleSolicitudFragment;
 import com.example.tesistrabajador.fragments.solicitudesFragment;
 import com.example.tesistrabajador.interfaces.tesisAPI;
-
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,8 +36,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Adaptadornotificaciones  extends BaseAdapter implements Serializable {
-
-    SweetAlertDialog dp;
     private static LayoutInflater inflater = null;
     Context contexto;
     ArrayList<Notificacion> listanotificaciones;
@@ -50,20 +44,16 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
     int pago = 0;
     Notificacion notificacion = new Notificacion();
 
-
     public Adaptadornotificaciones(Context contexto, ArrayList<Notificacion> listanotificaciones) {
         this.contexto = contexto;
         this.listanotificaciones = listanotificaciones;
         inflater = (LayoutInflater) contexto.getSystemService(contexto.LAYOUT_INFLATER_SERVICE);
-
     }
 
-    //metodo el cual se utiliza para actualizar la lista con los cambios
     public void refresh(ArrayList<Notificacion> listanotificaciones) {
         this.listanotificaciones = listanotificaciones;
         this.notifyDataSetChanged();
     }
-
     //metodo el cual limpia la lista con los elementos que tenga dentro
     public void clearData() {
         listanotificaciones.clear();
@@ -89,8 +79,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
         prefs = contexto.getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         setcredentiasexist();
         final View vista = inflater.inflate(R.layout.elementonotificacion, null);
-        //datos del elemento en el cual se cargaran los trabajadores
-        //  TextView cliente = (TextView) vista.findViewById(R.id.txtclientesolicituddetalle);
         CardView card = (CardView) vista.findViewById(R.id.cardnotificacion);
         TextView mensaje = (TextView) vista.findViewById(R.id.mensajenotificacion);
         mensaje.setText(listanotificaciones.get(i).getMensaje());
@@ -106,18 +94,11 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
             card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
                     String textocomparar = "Solicitud "+idsolicitud+" fue cancelada";
-
                     String textocompararconfirmada = "Solicitud "+idsolicitud+" ha sido confirmada";
-
                     String textonuevasolicitud = "Solicitud "+idsolicitud+ " ha sido finalizada." ;
-
                     String textosolicitudpagada = "Solicitud "+idsolicitud+" ha sido pagada mediante WebPay.";
 
-
-                    //se ocupa la llamada de eliminarsolipermanente
                     if (listanotificaciones.get(i).getMensaje().equals(textocomparar)) {
                          int idsolicitud = listanotificaciones.get(i).getIdSolicitud();
                         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
@@ -134,7 +115,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                             @Override
                             public void onClick(View v) {
                                 Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl("http://proyectotesis.ddns.net/")
+                                        .baseUrl(GlobalInfo.Rutaservidor)
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
@@ -161,7 +142,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                     dialog3.dismiss();
                                                 }
                                             });
-
                                         //    Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                                         } else {
                                             listanotificaciones.remove(i);
@@ -169,7 +149,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                             dialog.dismiss();
                                         }
                                     }
-
                                     @Override
                                     public void onFailure(Call<String> call, Throwable t) {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
@@ -182,7 +161,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                         TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
                                         texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
                                         Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
-
                                         btncerrar.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -194,15 +172,10 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                     }
                                 });
                                 dialog.dismiss();
-
                             }
                         });
-
                     }
-
-                    //ocupo la misma llamda que en la lista de notificaciones
                     if(listanotificaciones.get(i).getMensaje().equals(textocompararconfirmada)){
-
                         Bundle bundle = new Bundle();
                         //id de la solicitud para que se pueda buscar en el detalle
                         bundle.putInt("idsolicitud", idsolicitud);
@@ -213,25 +186,9 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                         ft.addToBackStack(null);
                         ft.replace(R.id.container, detalleSolicitudFragment);
                         ft.commit();
-
                     }
 
-                    //
                     if(listanotificaciones.get(i).getMensaje().equals(textonuevasolicitud)){
-                       /* Bundle bundle = new Bundle();
-                        //id de la solicitud para que se pueda buscar en el detalle
-                        bundle.putInt("idsolicitud", idsolicitud);
-                        DetalleSolicitudFragment detalleSolicitudFragment = new DetalleSolicitudFragment();
-                        detalleSolicitudFragment.setArguments(bundle);
-                        FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
-                        FragmentTransaction ft = fm.beginTransaction();
-                        ft.addToBackStack(null);
-                        ft.replace(R.id.container, detalleSolicitudFragment);
-                        ft.commit();
-                         */
-
-
-                        //alert para saber si el pago estuvo weno
                         AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                         View viewsync = inflater.inflate(R.layout.alertdialogconfirmarpago, null);
                         builder.setView(viewsync);
@@ -254,29 +211,20 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                         confirmacionpago.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if(r1.isChecked()==true){
-                                    pago=1;
-                                //    Toast.makeText(v.getContext(), "1", Toast.LENGTH_LONG).show();
-                                }
-                                if(r2.isChecked()==true){
-                                    pago=0;
-                                  //  Toast.makeText(v.getContext(), "0", Toast.LENGTH_LONG).show();
-                                }
+                                if(r1.isChecked()==true){ pago=1; }
+                                if(r2.isChecked()==true){ pago=0; }
                                 if(r1.isChecked()==false && r2.isChecked()==false){
                                     Toast.makeText(v.getContext(), "seleccione una opcion por favor.", Toast.LENGTH_LONG).show();
                                 }else{
                                     Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl("http://proyectotesis.ddns.net/")
+                                            .baseUrl(GlobalInfo.Rutaservidor)
                                             .addConverterFactory(GsonConverterFactory.create())
                                             .build();
                                     tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-                                    //metodo para llamar a la funcion que queramos
-                                    //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )
                                     Call<String> call = tesisAPI.ConfirmarPago(rutusuario,contrasena,idsolicitud,pago);
                                     call.enqueue(new Callback<String>() {
                                         @Override
                                         public void onResponse( Call<String>call, Response<String> response) {
-                                            //si esta malo se ejecuta este trozo
                                             if(!response.isSuccessful()){
                                                 AlertDialog.Builder builder2 = new AlertDialog.Builder(contexto);
                                                 View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
@@ -294,18 +242,11 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                     public void onClick(View v) {
                                                         dialog7.dismiss();
                                                         dialog8.dismiss();
-                                                        //enviar a la lista de solicitudes
-
                                                     }
                                                 });
-
                                              //   Toast.makeText(contexto, "error/detalle/finalizar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
                                             }
-                                            //de lo contrario se ejecuta esta parte
                                             else {
-                                                //respuesta del request
-
-                                                String respusta = response.body();
                                                 AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                                                 View viewsync2 = inflater.inflate(R.layout.alertdialogperfilactualizado, null);
                                                 builder.setView(viewsync2);
@@ -327,18 +268,13 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                         ft.addToBackStack(null);
                                                         ft.replace(R.id.container, solicitudesFragment,"solicitudtag");
                                                         ft.commit();
-
-
                                                     }
                                                 });
-
                                             }
                                         }
-                                        //si falla el request a la pagina mostrara este error
                                         @Override
                                         public void onFailure(Call<String> call, Throwable t) {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
-
                                             View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
                                             builder.setView(viewsync);
                                             AlertDialog dialog10 = builder.create();
@@ -348,25 +284,20 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                             TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
                                             texto.setText("Ha ocurrido un error con la coneccion del servidor. Estamos trabajando para solucionarlo.");
                                             Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
-
                                             btncerrar.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
                                                     dialog7.dismiss();
                                                     dialog10.dismiss(); }
                                             });
-
                                          //   Toast.makeText(contexto, "error/detalle/finalizar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
                                         }
                                     });
                                 }
                             }
                         });
-
                     }
-
                     if(listanotificaciones.get(i).getMensaje().equals(textosolicitudpagada)){
-                        //se ocupa el metodo para borrar la notificacion
                         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                         View viewsync = inflater.inflate(R.layout.alernotificacioncancelada, null);
                         builder.setView(viewsync);
@@ -376,13 +307,12 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                         TextView textoalertnotificacion = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
                         Button dismiss = viewsync.findViewById(R.id.btnocultaralert2);
                         textoalertnotificacion.setText("La notificacion con el id: " + notificacion.getId() + " ha sido pagada por el cliente lo cual significa que la solitud ha sido completada en su totalidad");
-
                         dismiss.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 int idnotificacion = listanotificaciones.get(i).getId();
                                 Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl("http://proyectotesis.ddns.net/")
+                                        .baseUrl(GlobalInfo.Rutaservidor)
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
@@ -409,14 +339,10 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                     dialog8.dismiss();
                                                 }
                                             });
-
                                           //  Toast.makeText(v.getContext(), "error :" + response.code()+" "+idnotificacion, Toast.LENGTH_LONG).show();
                                         } else {
-
                                             listanotificaciones.remove(i);
                                             refresh(listanotificaciones);
-
-                                            //alertdialog personalizado
                                             AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
                                             View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
                                             builder.setView(viewsync);
@@ -431,22 +357,12 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                             btncerraralert.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
-                                                   // listanotificaciones.remove(i);
-                                                   // refresh(listanotificaciones);
-                                                   // solicitudesFragment solicitudesFragment = new solicitudesFragment();
-                                                   // FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
-                                                   // FragmentTransaction ft = fm.beginTransaction();
-                                                   // ft.replace(R.id.container, solicitudesFragment,"solicitudtag");
-                                                   // ft.commit();
                                                     dialog5.dismiss();
                                                     dialog2.dismiss();
-
                                                 }
                                             });
                                         }
-                                    }
-
-                                    @Override
+                                    }@Override
                                     public void onFailure(Call<String> call, Throwable t) {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                                         View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
@@ -458,7 +374,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                         TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
                                         texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
                                         Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
-
                                         btncerrar.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -466,21 +381,13 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                 dialog9.dismiss();
                                             }
                                         });
-
                                       //  Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 });
-
                             }
                         });
-
-
-
                     }
-
-                    //este metodo es el que se realiza para decidir
                     if(!listanotificaciones.get(i).getMensaje().equals(textocomparar) && !listanotificaciones.get(i).getMensaje().equals(textosolicitudpagada) && !listanotificaciones.get(i).getMensaje().equals(textocompararconfirmada)  && !listanotificaciones.get(i).getMensaje().equals(textonuevasolicitud) ){
-
                         AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
                         View viewsync = inflater.inflate(R.layout.alertconfirmacionnotificacion,null);
                         builder.setView(viewsync);
@@ -492,27 +399,23 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                         Button btncancelar = viewsync.findViewById(R.id.btncancelarnotificacion);
                         EditText preciotrabajador = viewsync.findViewById(R.id.preciotrabajadornotificacion);
                         Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
-
                         textoalertnotificacion.setText("Si Apreta el boton confirmar devera especificar un precio aprox.Si selecciona cancelar se eliminara esta solicitud");
-
                         dismiss.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 dialog.dismiss();
                             }
                         });
-
                         btnconfirmar.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
                                 if(!preciotrabajador.getText().toString().isEmpty() ){
                                     int precio = Integer.parseInt(preciotrabajador.getText().toString());
                                     Calendar calendar = Calendar.getInstance();
                                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                                     final String Fechasolicitud = sdf.format(calendar.getTime());
                                     Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl("http://proyectotesis.ddns.net/")
+                                            .baseUrl(GlobalInfo.Rutaservidor)
                                             .addConverterFactory(GsonConverterFactory.create())
                                             .build();
                                     tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
@@ -539,7 +442,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                         dialog4.dismiss();
                                                     }
                                                 });
-
                                                 Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                                             } else {
                                                 solicitudesFragment soli = new solicitudesFragment();
@@ -559,7 +461,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                 TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
                                                 texto.setText("Felicitaciones Ha enviado su respuesta satisfactoriamente!");
                                                 Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
-
                                                 btncerraralert.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
@@ -569,7 +470,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                 });
                                             }
                                         }
-
                                         @Override
                                         public void onFailure(Call<String> call, Throwable t) {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
@@ -582,7 +482,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                             TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
                                             texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
                                             Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
-
                                             btncerrar.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
@@ -590,17 +489,14 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                     dialog4.dismiss();
                                                 }
                                             });
-
                                             Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                         }
                                     });
                                 }else{
                                     Toast.makeText(v.getContext(), "Si desea confirmar agregue un valor aproximado", Toast.LENGTH_LONG).show();
                                 }
-
                             }
                         });
-
                         btncancelar.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -624,7 +520,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                             TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
                                             texto.setText("Ha ocurrido un error con la respuesta al tratar de eliminar esta notificacion. intente en un momento nuevamente.");
                                             Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
-
                                             btncerrar.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
@@ -632,7 +527,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                     dialog5.dismiss();
                                                 }
                                             });
-
                                             Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                                         }
                                         else {
@@ -644,7 +538,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                             dialog.dismiss();
                                             listanotificaciones.remove(i);
                                             refresh(listanotificaciones);
-
                                             AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
                                             View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
                                             builder.setView(viewsync);
@@ -655,16 +548,12 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                             TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
                                             texto.setText("Felicitaciones Ha cancelado la solicitud satisfactoriamente!");
                                             Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
-
                                             btncerraralert.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     dialog3.dismiss();
-
                                                 }
                                             });
-
-
                                         }
                                     }
                                     @Override
@@ -679,7 +568,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                         TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
                                         texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
                                         Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
-
                                         btncerrar.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -687,23 +575,16 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                 dialog6.dismiss();
                                             }
                                         });
-
                                         Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 });
                             }
                         });
-
-
                     }
-
                 }
             });
-
-
         return vista;
     }
-
 
     private void setcredentiasexist() {
         String rutq = getuserrutprefs();
@@ -721,6 +602,5 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
     private String getusercontraseñaprefs() {
         return prefs.getString("ContraseNa", "");
     }
-
 
 }

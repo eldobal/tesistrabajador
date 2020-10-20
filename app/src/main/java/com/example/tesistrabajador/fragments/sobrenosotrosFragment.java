@@ -10,11 +10,6 @@ import android.view.ViewGroup;
 
 import com.example.tesistrabajador.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link sobrenosotrosFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class sobrenosotrosFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -29,15 +24,6 @@ public class sobrenosotrosFragment extends Fragment {
     public sobrenosotrosFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment sobrenosotrosFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static sobrenosotrosFragment newInstance(String param1, String param2) {
         sobrenosotrosFragment fragment = new sobrenosotrosFragment();

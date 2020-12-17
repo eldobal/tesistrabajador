@@ -170,7 +170,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                     Button btncancelar = viewsync.findViewById(R.id.btncancelarnotificacion);
                     EditText preciotrabajador = viewsync.findViewById(R.id.preciotrabajadornotificacion);
                     Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
-                    textoalertnotificacion.setText("Descripcion:"+descripcion+")");
+                    textoalertnotificacion.setText("Descripción de la solicitud: "+descripcion+"");
                     dismiss.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

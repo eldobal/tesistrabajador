@@ -97,7 +97,7 @@ public class solicitudesFragment extends Fragment  {
                                     reiniciarfragmentterminadas(rutusuario);
                                     timeractivado = true;
                                 }
-                            }else{ }
+                            }else{}
                         } else {
                             // not connected to the internet manejar dialog
                         }
@@ -153,11 +153,8 @@ public class solicitudesFragment extends Fragment  {
                     listaactivas = (ListView) v.findViewById(R.id.solicitudactual);
                     lista = (ListView) v.findViewById(R.id.listadosolicitudescliente);
                     //declaracion de los swiperefresh para intanciarlos
-                } else {
-
-                }
+                } else {}
             }
-
 
             spinneractivas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -182,7 +179,6 @@ public class solicitudesFragment extends Fragment  {
                 }
             });
 
-
             spinnerterminadas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -202,12 +198,9 @@ public class solicitudesFragment extends Fragment  {
                     }
                 }
                 @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
+                public void onNothingSelected(AdapterView<?> parent) { }
             });
-
         }
-
         return v;
     }
 
@@ -319,7 +312,6 @@ public class solicitudesFragment extends Fragment  {
                 TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
                 texto.setText("No se Han encontrado solicitudes con este estado. se mostrarà la lista por defecto");
                 Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
-
                 btncerrar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -353,7 +345,6 @@ public class solicitudesFragment extends Fragment  {
                 TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
                 texto.setText("No se Han encontrado solicitudes con este estado. se mostrarà la lista por defecto");
                 Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
-
                 btncerrar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -386,7 +377,6 @@ public class solicitudesFragment extends Fragment  {
                     TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
                     texto.setText("Ha ocurrido un error con la respuesta al tratar de traer las listas de solicitudes. intente en un momento nuevamente.");
                     Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
-
                     btncerrar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -448,7 +438,6 @@ public class solicitudesFragment extends Fragment  {
                         loadinglistaactiva.pauseAnimation();
                         listaactivavacia.setVisibility(View.INVISIBLE);
                         listaactivavacia.pauseAnimation();
-
                     }
                     if(listasolicitudactivasinterna.size()==0){
                         ordenarlista(0);
@@ -456,26 +445,15 @@ public class solicitudesFragment extends Fragment  {
                         loadinglistaactiva.pauseAnimation();
                         listaactivavacia.setVisibility(View.VISIBLE);
                         listaactivavacia.playAnimation();
-
                     }
                     spinneractivas.setVisibility(View.VISIBLE);
                     spinnerterminadas.setVisibility(View.VISIBLE);
                 }
             }
             @Override
-            public void onFailure(Call<List<Solicitud>> call, Throwable t) {
-            }
+            public void onFailure(Call<List<Solicitud>> call, Throwable t) { }
         });
 
-    }
-
-    //metodo que permite elejir un fragment
-    private void showSelectedFragment(Fragment fragment){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                //permite regresar hacia atras entre los fragments
-                //.addToBackStack(null)
-                .commit();
     }
 
     private void setcredentiasexist() {
@@ -487,23 +465,14 @@ public class solicitudesFragment extends Fragment  {
         }
     }
 
-    private String getuserrutprefs() {
-        return prefs.getString("Rut", "");
-    }
+    private String getuserrutprefs() { return prefs.getString("Rut", ""); }
 
-    private String getusercontraseñaprefs() {
-        return prefs.getString("ContraseNa", "");
-    }
+    private String getusercontraseñaprefs() { return prefs.getString("ContraseNa", ""); }
 
     private void settiempoasyncexist() {
         int tiempoasync = gettiempoasync();
-        if (tiempoasync!=0) {
-            azynctiempo=tiempoasync;
-        }
+        if (tiempoasync!=0) { azynctiempo=tiempoasync; }
     }
 
-    private int gettiempoasync() {
-        return asycprefs.getInt("tiempo", 0);
-    }
-
+    private int gettiempoasync() { return asycprefs.getInt("tiempo", 0); }
 }

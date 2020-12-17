@@ -96,7 +96,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                 public void onClick(View v) {
                     String textocomparar = "Solicitud "+idsolicitud+" fue cancelada";
                     String textocompararconfirmada = "Solicitud "+idsolicitud+" ha sido confirmada";
-                    String textonuevasolicitud = "Solicitud "+idsolicitud+ " ha sido finalizada." ;
+                    String textonuevasolicitud = "Solicitud "+idsolicitud+ " ha sido finalizada";
                     String textosolicitudpagada = "Solicitud "+idsolicitud+" ha sido pagada mediante WebPay.";
 
                     if (listanotificaciones.get(i).getMensaje().equals(textocomparar)) {
@@ -187,7 +187,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                         ft.replace(R.id.container, detalleSolicitudFragment);
                         ft.commit();
                     }
-
                     if(listanotificaciones.get(i).getMensaje().equals(textonuevasolicitud)){
                         AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                         View viewsync = inflater.inflate(R.layout.alertdialogconfirmarpago, null);

@@ -104,7 +104,7 @@ public class onepayFragment extends Fragment {
             }
         }
         //url la cual estara alojado el backend con la implementacion de transbank
-        String urltrasaccionfinalizada =GlobalInfo.Rutaservidorwebpayporpapgar;
+        String urltrasaccionfinalizada =GlobalInfo.Rutaservidorwebpayfinalizada;
         String urltransaccionerror  =GlobalInfo.Rutaservidorwebpayerror;
 
         //metodo en el cual el timer pregunta frecuentemente si la urlactual es igual a la urffinalizada
@@ -138,7 +138,7 @@ public class onepayFragment extends Fragment {
                                         public void onClick(View v) {
                                             dialog7.dismiss();
                                             //salir de esta pantalla
-                                            saveOnPreferencesgananciasporpagar(montopagarpref);
+                                            saveOnPreferencesgananciasporpagar(0);
                                             homeFragment homeFragment = new homeFragment();
                                             getFragmentManager().beginTransaction().replace(R.id.container, homeFragment)
                                                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)

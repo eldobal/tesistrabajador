@@ -13,7 +13,7 @@
 
         <RelativeLayout
             android:id="@+id/homerelative01"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="100dp"
             android:layout_width="match_parent"
             android:layout_height="125dp"
             android:padding="8dp">
@@ -124,6 +124,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:layout_marginTop="40"
             android:id="@+id/homerelative02"
             android:layout_below="@id/homerelative01"
             android:layout_width="match_parent"
@@ -217,6 +218,7 @@
 
 
         <RelativeLayout
+            android:visibility="gone"
             android:layout_below="@+id/homerelative02"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

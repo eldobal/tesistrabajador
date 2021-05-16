@@ -112,7 +112,7 @@ public class homeFragment extends Fragment {
                 });
             }
         };
-        timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
+        timer.schedule(task, 100, azynctiempo);  //ejecutar en intervalo definido por el programador
     }
 
     @Override
@@ -624,17 +624,17 @@ public class homeFragment extends Fragment {
                     UsuarioTrabajadorhome usuarioTrabajador = response.body();
                     String rutaurl=usuarioTrabajador.getFoto();
                     nombretrabajdor.setText(usuarioTrabajador.getNombre()+" "+usuarioTrabajador.getApellido());
-                    Glide.with(getContext()).load(String.valueOf(rutaservidor+rutaurl)).into(fotoperfil);
+                    Glide.with(getContext()).load(String.valueOf(rutaurl)).into(fotoperfil);
                     estadotrabajador=usuarioTrabajador.getEstado();
                     loadingperfil.setVisibility(View.INVISIBLE);
                     loadingperfil.pauseAnimation();
-                    if(estadotrabajador.equals("Disponible")){
+                    if(estadotrabajador.equals("DISPONIBLE")){
                         btncambiodeestado.setBackgroundResource(R.drawable.btn_homeactivo);
-                        btncambiodeestado.setText("Disponible");
+                        btncambiodeestado.setText("DISPONIBLE");
                     }
-                    if(estadotrabajador.equals("No disponible")){
+                    if(estadotrabajador.equals("NO DISPONIBLE")){
                         btncambiodeestado.setBackgroundResource(R.drawable.btn_homeinactivo);
-                        btncambiodeestado.setText("No Disponible");
+                        btncambiodeestado.setText("NO DISPONIBLE");
                     }
                 }
             }
@@ -706,7 +706,7 @@ public class homeFragment extends Fragment {
                         Solicitud1.setNombre(solicitud.getNombre());
                         Solicitud1.setApellido(solicitud.getApellido());
                         Solicitud1.setEstado(solicitud.getEstado());
-                        Solicitud1.setFotoT(rutaservidor+solicitud.getFotoT());
+                        Solicitud1.setFotoT(solicitud.getFotoT());
                         Solicitudactual.add(Solicitud1);
                     }
                     for (int i = 0; i < Solicitudactual.size(); i++) {

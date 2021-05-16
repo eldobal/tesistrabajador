@@ -142,7 +142,7 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
 
         mbottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomnavigation);
         //se carga como primer fragment la lista de Notificaciones
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,new listanotificacionesFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,new homeFragment()).commit();
         mbottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -176,7 +176,7 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
                 if(menuItem.getItemId()== R.id.menu_settings){
                     showSelectedFragment(new settingsFragment());
                 }
-                if(menuItem.getItemId()== R.id.menu_notificaciones){
+              /*  if(menuItem.getItemId()== R.id.menu_notificaciones){
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, listanotificacionesFragment, "notificacionestag")
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -184,7 +184,7 @@ public class menuActivity extends AppCompatActivity implements TaskLoadedCallbac
                             .addToBackStack(null)
                             .commit();
 
-                }
+                }*/
 
                 return true;
             }

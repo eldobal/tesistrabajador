@@ -10,6 +10,8 @@ import com.example.tesistrabajador.clases.UsuarioTrabajadorhome;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -17,10 +19,13 @@ import retrofit2.http.Query;
 public interface tesisAPI {
 
     //llamada que se utiliza en el perfilfragment del usuario
-    @GET("api/UsuarioAPI")
+    @GET("/login")
     Call<Usuario> getUsuario(@Query("RUTUSUARIO") String id,
                              @Query("Contrasena") String pass
     );
+
+
+
 
 
     //metodo para traer las notificaciones del cliente que esta ocupando la app /listanotificacion
@@ -31,9 +36,9 @@ public interface tesisAPI {
 
 
     //api que se encuentra en uso en adaptador /pendiente
-    @POST("api/SolicitudAPI")
+    @POST("/trabajadorconfirmar")
     Call<String> TrabajadorConfirmar(@Query("idSolicitud") int idsolicitud,
-                                     @Query("FechaD") String fechaconfirmacion,
+                                     @Query("Fecha") String fechaconfirmacion,
                                       @Query("Precio") int precio,
                                      @Query("RUT") String rut,
                                      @Query("Contrasena") String contrasena
@@ -58,26 +63,45 @@ public interface tesisAPI {
     );
 
     //metodo el cual trae el listado de ciudades / usando acutalmente para cargar el spiner de ciudades en el registrar usaurio
-    @GET("api/CiudadAPI/")
+    @GET("/ciudades")
     Call<List<Ciudad>> getCiudades();
 
 
-    @GET("api/UsuarioAPI")
+
+
+
+
+
+
+
+
+    /*   @GET("api/UsuarioAPI")
     Call<Usuario> getLoginTrabajador(@Query("RUT") String id,
                            @Query("pass") String pass
     );
+*/
+    @FormUrlEncoded
+    @POST("/loginT")
+    Call<Usuario> getLoginTrabajador(@Field("RUT") String id,
+                           @Field("Contrasena") String pass
+    );
 
 
-    @GET("api/SolicitudAPI")
-    Call<List<Solicitud>> TrabajadorSolicitudes(@Query("trabajadorRUT") String rut,
+
+
+
+
+
+    @GET("/trabajadorsolicitudes")
+    Call<List<Solicitud>> TrabajadorSolicitudes(@Query("RUT") String rut,
                                                 @Query("Contrasena") String Contrasena
 
     );
 
 
 
-    @GET("api/SolicitudAPI")
-    Call<Solicitud> getSolicitudTrabajador(@Query("idSolicitudT") int id,
+    @GET("/trabajadorsolicitud")
+    Call<Solicitud> getSolicitudTrabajador(@Query("idSolicitud") int id,
                                            @Query("RUT") String rut,
                                            @Query("Contrasena") String Contrasena
                                            );
@@ -107,9 +131,10 @@ public interface tesisAPI {
 
 
     //metodo para cancelar la solicitud del cliente
-    @GET("api/UsuarioAPI")
-    Call<UsuarioTrabajadorhome> TrabajadorHome(@Query("TRUT") String rut,
-                                               @Query("Contrasena") String Contrasena
+    @FormUrlEncoded
+    @POST("/trabajadorhome")
+    Call<UsuarioTrabajadorhome> TrabajadorHome(@Field("RUT") String rut,
+                                               @Field("Contrasena") String Contrasena
     );
 
 

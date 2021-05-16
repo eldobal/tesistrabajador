@@ -386,7 +386,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
             });
         }
 
-        if(listasolicitudes.get(i).getEstado().equals("COMPLETADA Y PAGADA") ||listasolicitudes.get(i).getEstado().equals("COMPLETADA Y NO PAGADA")  ){
+        if(listasolicitudes.get(i).getEstado().equals("COMPLETA Y PAGADA") ||listasolicitudes.get(i).getEstado().equals("COMPLETA Y NO PAGADA")  ){
             detalle.setText("DETALLE");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
             numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));

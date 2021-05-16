@@ -13,12 +13,12 @@ public class Solicitud{
     private int Precio;
     private String metodoPago;
     private String FechaA;
-    private String estado;
-    private String DescripcionP;
+    private String EstadoSolicitud;
+    private String Descripcion;
     private String Diagnostico;
     private String Solucion;
     private String idFoto;
-    private String FotoT;
+    private String Foto;
     private double latitud;
     private double longitud;
 
@@ -32,7 +32,7 @@ public class Solicitud{
         this.idSolicitud= idSolicitud;
         this.FechaS= FechaS;
         this.Rubro=Rubro;
-        this.DescripcionP= DescripcionP;
+        this.Descripcion= Descripcion;
         this.RUT= RUT;
         this.Precio= Precio;
         this.idFoto= idFoto;
@@ -40,10 +40,10 @@ public class Solicitud{
         this.FechaA=FechaA;
         this.Diagnostico=Diagnostico;
         this.Solucion=Solucion;
-        this.estado= estado;
+        this.EstadoSolicitud= EstadoSolicitud;
         this.Nombre= Nombre;
         this.Apellido= Apellido;
-        this.FotoT=FotoT;
+        this.Foto=Foto;
         this.latitud=latitud;
         this.longitud=longitud;
     }
@@ -122,19 +122,19 @@ public class Solicitud{
     }
 
     public String getEstado() {
-        return estado;
+        return EstadoSolicitud;
     }
 
     public void setEstado(String estado) {
-        this.estado = estado;
+        this.EstadoSolicitud = estado;
     }
 
     public String getDescripcionP() {
-        return DescripcionP;
+        return Descripcion;
     }
 
-    public void setDescripcionP(String descripcionP) {
-        DescripcionP = descripcionP;
+    public void setDescripcionP(String descripcion) {
+        Descripcion = descripcion;
     }
 
     public String getDiagnostico() {
@@ -162,11 +162,11 @@ public class Solicitud{
     }
 
     public String getFotoT() {
-        return FotoT;
+        return Foto;
     }
 
     public void setFotoT(String fotoT) {
-        FotoT = fotoT;
+        Foto = fotoT;
     }
 
     public double getLatitud() {

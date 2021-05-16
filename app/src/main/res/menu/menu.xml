@@ -18,13 +18,13 @@
 
     </item>
 
-    <item android:id="@+id/menu_notificaciones"
+   <!-- <item android:id="@+id/menu_notificaciones"
         android:title="Notificaciones"
         android:icon="@drawable/ic_notification"
         >
 
     </item>
-
+-->
     <item android:id="@+id/menu_settings"
         android:title="Configuracion"
         android:icon="@drawable/ic_help"

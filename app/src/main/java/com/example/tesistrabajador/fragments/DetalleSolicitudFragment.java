@@ -459,9 +459,9 @@ public class DetalleSolicitudFragment extends Fragment {
                     }else{
                         cardfoto.setVisibility(View.VISIBLE);
                         //carga de foto cargada por el usuario
-                        Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getIdFoto())).into(imgclientesacada);
+                        Glide.with(getContext()).load(String.valueOf(solicituds.getIdFoto())).into(imgclientesacada);
                     }
-                    Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getFotoT())).into(imgperfiltrabajador);
+                    Glide.with(getContext()).load(String.valueOf(solicituds.getFotoT())).into(imgperfiltrabajador);
                 }
             }
             @Override

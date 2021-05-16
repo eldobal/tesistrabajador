@@ -20,11 +20,11 @@ public class UsuarioTrabajador {
     private String Ciudad;
 
 
-    @SerializedName("id_idCiudad")
+    @SerializedName("idCiudad")
     private int idCiudad;
-    @SerializedName("id_EstadoUsuario")
+    @SerializedName("EstadoUsuario")
     private int idEstado;
-    @SerializedName("id_TipoUsuario")
+    @SerializedName("TipoUsuario")
     private int idTipo;
 
 

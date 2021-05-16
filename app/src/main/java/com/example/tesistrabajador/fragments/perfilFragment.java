@@ -293,7 +293,7 @@ public class perfilFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-        Call<Usuario> call = tesisAPI.getUsuario(rutperfil,contrasenaperfil);
+        Call<Usuario> call = tesisAPI.getLoginTrabajador(rutperfil,contrasenaperfil);
         call.enqueue(new Callback<Usuario>() {
             @Override
             public void onResponse( Call<Usuario>call, Response<Usuario> response) {
@@ -330,7 +330,7 @@ public class perfilFragment extends Fragment {
                     rutaurl = usuarios.getFoto();
                     loadingdots2.setVisibility(View.INVISIBLE);
                     loadingdots2.cancelAnimation();
-                    Glide.with(getContext()).load(String.valueOf(rutaservidor+rutaurl)).into(fotoperfil);
+                    Glide.with(getContext()).load(String.valueOf(rutaurl)).into(fotoperfil);
                     boolean encontrado = false;
                     for(int i=1; i<listaciudades.size()&&encontrado==false;i++){
                         if(listaciudades.get(i).getIdCiudad() ==idCiudad){

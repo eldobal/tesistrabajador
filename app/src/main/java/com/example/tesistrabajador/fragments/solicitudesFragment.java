@@ -399,7 +399,7 @@ public class solicitudesFragment extends Fragment  {
                         Solicitud1.setApellido(solicitud.getApellido());
                         Solicitud1.setEstado(solicitud.getEstado());
                         Solicitud1.setDescripcionP(solicitud.getDescripcionP());
-                        Solicitud1.setFotoT(rutaservidor+solicitud.getFotoT());
+                        Solicitud1.setFotoT(solicitud.getFotoT());
                         Solicitudesterminadas.add(Solicitud1);
                     }
                     for (int i = 0; i < Solicitudesterminadas.size(); i++) {
@@ -407,7 +407,7 @@ public class solicitudesFragment extends Fragment  {
                         soli = Solicitudesterminadas.get(i);
                         if ( soli.getEstado().equals("PENDIENTE")  || soli.getEstado().equals("CONFIRMADA") ) {
                             listasolicitudactivasinterna.add(soli);
-                        } if(soli.getEstado().equals("COMPLETADA Y PAGADA") || soli.getEstado().equals("COMPLETADA Y NO PAGADA")  ) {
+                        } if(soli.getEstado().equals("COMPLETA Y PAGADA") || soli.getEstado().equals("COMPLETA Y NO PAGADA")  ) {
                             listasolicitudterminadasinterna.add(soli);
                         }
                     }

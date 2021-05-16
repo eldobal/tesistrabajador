@@ -185,17 +185,17 @@ public class Adaptador extends BaseAdapter implements Serializable {
                             if(!preciotrabajador.getText().toString().isEmpty() ){
                                 int precio = Integer.parseInt(preciotrabajador.getText().toString());
                                 Calendar calendar = Calendar.getInstance();
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                                 final String Fechasolicitud = sdf.format(calendar.getTime());
                                 Retrofit retrofit = new Retrofit.Builder()
                                         .baseUrl(GlobalInfo.Rutaservidor)
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-                                Call<String> call = tesisAPI.TrabajadorConfirmar(idsolicitud, Fechasolicitud, precio,rutusuario,contrasena);
-                                call.enqueue(new Callback<String>() {
+                                Call<Object> call = tesisAPI.TrabajadorConfirmar(idsolicitud, Fechasolicitud, precio,rutusuario,contrasena);
+                                call.enqueue(new Callback<Object>() {
                                     @Override
-                                    public void onResponse(Call<String> call, Response<String> response) {
+                                    public void onResponse(Call<Object> call, Response<Object> response) {
                                         if (!response.isSuccessful()) {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                                             View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
@@ -246,7 +246,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     }
 
                                     @Override
-                                    public void onFailure(Call<String> call, Throwable t) {
+                                    public void onFailure(Call<Object> call, Throwable t) {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                                         View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
                                         builder.setView(viewsync);

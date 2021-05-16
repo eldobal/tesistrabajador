@@ -141,10 +141,10 @@ public class DetalleSolicitudFragment extends Fragment {
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 tesisAPI tesisAPI = retrofit.create(com.example.tesistrabajador.interfaces.tesisAPI.class);
-                                Call<String> call = tesisAPI.finalizarSolicitud(rutperfil,contrasenaperfil,idsolicitud,precio,solucionopcional);
-                                call.enqueue(new Callback<String>() {
+                                Call<Object> call = tesisAPI.finalizarSolicitud(rutperfil,contrasenaperfil,idsolicitud,precio,solucionopcional);
+                                call.enqueue(new Callback<Object>() {
                                     @Override
-                                    public void onResponse( Call<String>call, Response<String> response) {
+                                    public void onResponse( Call<Object>call, Response<Object> response) {
                                         if(!response.isSuccessful()){
                                             AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
                                             LayoutInflater inflater = getLayoutInflater();
@@ -176,7 +176,7 @@ public class DetalleSolicitudFragment extends Fragment {
                                         //de lo contrario se ejecuta esta parte
                                         else {
                                             //respuesta del request
-                                            String respusta = response.body();
+                                            Object respusta = response.body();
                                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                             View viewsync2 = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
                                             builder.setView(viewsync2);
@@ -204,7 +204,7 @@ public class DetalleSolicitudFragment extends Fragment {
                                     }
                                     //si falla el request a la pagina mostrara este error
                                     @Override
-                                    public void onFailure(Call<String> call, Throwable t) {
+                                    public void onFailure(Call<Object> call, Throwable t) {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                         LayoutInflater inflater = getLayoutInflater();
                                         View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);

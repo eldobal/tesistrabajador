@@ -36,12 +36,13 @@ public interface tesisAPI {
 
 
     //api que se encuentra en uso en adaptador /pendiente
+    @FormUrlEncoded
     @POST("/trabajadorconfirmar")
-    Call<String> TrabajadorConfirmar(@Query("idSolicitud") int idsolicitud,
-                                     @Query("Fecha") String fechaconfirmacion,
-                                      @Query("Precio") int precio,
-                                     @Query("RUT") String rut,
-                                     @Query("Contrasena") String contrasena
+    Call<Object> TrabajadorConfirmar(@Field("idSolicitud") int idsolicitud,
+                                     @Field("Fecha") String fechaconfirmacion,
+                                      @Field("Precio") int precio,
+                                     @Field("RUT") String rut,
+                                     @Field("Contrasena") String contrasena
     );
 
     //api que se usa en la llamada actualizarperfil de perfilfragment
@@ -140,12 +141,13 @@ public interface tesisAPI {
 
 
     //metodo para finalizar la solicitud desde el cliente
-    @POST("api/SolicitudAPI")
-    Call<String> finalizarSolicitud(@Query("RUT") String rut,
-                                       @Query("Contrasena") String contrasena,
-                                       @Query("SolicitudFinalizar") int idsolicitud,
-                                       @Query("PrecioFinal") int preciofinal,
-                                       @Query("Solucion") String solucion
+    @FormUrlEncoded
+    @POST("/finalizarsolicitud")
+    Call<Object> finalizarSolicitud(@Field("RUT") String rut,
+                                       @Field("Contrasena") String contrasena,
+                                       @Field("idSolicitud") int idsolicitud,
+                                       @Field("Precio") int preciofinal,
+                                       @Field("Solucion") String solucion
     );
 
     //metodo para confirmar si el pago esta correcto
